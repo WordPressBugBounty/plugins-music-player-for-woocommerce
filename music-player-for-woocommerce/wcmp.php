@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.3.2
+Version: 1.3.3
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -31,7 +31,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.3.2' );
+define( 'WCMP_VERSION', '1.3.3' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -147,6 +147,22 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				}
 				return $output;
 			}, 10, 4 );
+
+			/** ListeSpeed Cache integration **/
+			add_filter( 'litespeed_optimize_js_excludes', function( $p ){
+				$p[] = 'jquery.js';
+				$p[] = 'jquery.min.js';
+				$p[] = '/mediaelement/';
+				$p[] = plugin_dir_url( __FILE__ ) . 'js/public.js';
+				return $p;
+			} );
+			add_filter( 'litespeed_optm_js_defer_exc', function( $p ){
+				$p[] = 'jquery.js';
+				$p[] = 'jquery.min.js';
+				$p[] = '/mediaelement/';
+				$p[] = plugin_dir_url( __FILE__ ) . 'js/public.js';
+				return $p;
+			} );
 
 		} // End __constructor
 
@@ -485,6 +501,11 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				 update_option( 'wcmp_global_settings', $global_settings );
 				 $this->_global_attrs = $global_settings;
 				 do_action( 'wcmp_save_setting' );
+
+				 /** Purge LiteSpeed Cache **/
+				 if (class_exists('\LiteSpeed\Purge')) {
+					\LiteSpeed\Purge::purge_all();
+				 }
 			} // Save settings
 
 			print '<div class="wrap">'; // Open Wrap
