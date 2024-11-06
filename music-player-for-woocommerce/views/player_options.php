@@ -6,6 +6,15 @@ if ( ! defined( 'WCMP_PLUGIN_URL' ) ) {
 // include resources
 wp_enqueue_style( 'wcmp-admin-style', plugin_dir_url( __FILE__ ) . '../css/style.admin.css', array(), '1.0.175' );
 
+if (
+	isset( $_REQUEST['post'] ) &&
+	is_numeric( $_REQUEST['post'] ) &&
+	( $post_id = intval( $_REQUEST['post'] ) ) &&
+	( $check_post = get_post( $post_id ) )
+) {
+	$post = $check_post;
+}
+
 if ( empty( $post ) ) {
 	global $post;
 }
