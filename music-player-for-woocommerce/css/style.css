@@ -30,6 +30,8 @@
 .wcmp-even-row td{padding:5px;vertical-align:middle;}
 .wcmp-odd-row td{background-color:#FAFAFA; border-top: 1px solid #DADADA; border-bottom: 1px solid #DADADA;}
 .wcmp-column-player-title{/* width:100%; */ vertical-align:middle;}
+.wcmp-column-player-title:not(td){display:flex;}
+.wcmp-column-player-title .wcmp-file-duration {flex-grow: 1;text-align:right;font-size:16px;align-self:center;}
 .wcmp-column-player-mejs-classic{width:30px; min-height:30px;}
 .wcmp-column-player-mejs-ted{width:54px; min-height:28px;}
 .wcmp-column-player-mejs-wmp{width:45px; min-height:40px;}
