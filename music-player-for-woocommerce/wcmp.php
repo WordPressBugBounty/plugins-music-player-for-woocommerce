@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.3.6
+Version: 1.3.7
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -31,7 +31,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.3.6' );
+define( 'WCMP_VERSION', '1.3.7' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -724,6 +724,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					'loop'                      => 0,
 					'purchased_times'           => 0,
 					'download_links'            => 0,
+					'duration'					=> 1,
 				),
 				$atts
 			);
@@ -938,7 +939,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 							$file_title = esc_html( apply_filters( 'wcmp_widget_file_name', $file['name'], $product->ID, $index ) );
 							$output    .= '
 								<div class="wcmp-widget-product-file">
-									' . $audio_tag . '<span class="wcmp-file-name">' . $file_title . '</span><span class="wcmp-file-duration">' . esc_html( $duration ) . '</span>' . '<div style="clear:both;"></div>
+									' . $audio_tag . '<span class="wcmp-file-name">' . $file_title . '</span>' . ( ! isset( $atts['duration'] ) || $atts['duration'] == 1 ? '<span class="wcmp-file-duration">' . esc_html( $duration ) . '</span>' : '' ) . '<div style="clear:both;"></div>
 								</div><!--product file -->
 							';
 						}
@@ -992,7 +993,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 									$get_times( $product->ID, $product_purchased_times )
 								) . '</span>' : ''
 							)
-							. '<span class="wcmp-file-duration">' . esc_html( $duration ) . '</span>'
+							. ( ! isset( $atts['duration'] ) || $atts['duration'] == 1 ? '<span class="wcmp-file-duration">' . esc_html( $duration ) . '</span>' : '' )
 							. '<div style="clear:both;"/></li>';
 						}
 						if ( ! empty( $featured_image ) ) {
