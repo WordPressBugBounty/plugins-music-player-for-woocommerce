@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.3.7
+Version: 1.3.8
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -16,6 +16,16 @@ $codepeople_promote_banner_plugins['codepeople-music-player-for-woocommerce'] = 
 	'plugin_name' => 'Music Player for WooCommerce',
 	'plugin_url'  => 'https://wordpress.org/support/plugin/music-player-for-woocommerce/reviews/#new-post',
 );
+
+add_action( 'init', function(){
+	add_filter( 'get_post_metadata', function( $v, $object_id, $meta_key, $single, $meta_type ){
+		if ( '_elementor_element_cache' == $meta_key ) {
+			global $wpdb;
+			if ( $wpdb->get_var( $wpdb->prepare('SELECT COUNT(*) FROM ' . $wpdb->postmeta . ' WHERE post_id=%d AND meta_key="_elementor_element_cache" AND meta_value LIKE "%wcmp%";', $object_id ) ) ) return false;
+		}
+		return $v;
+	}, 10, 5 );
+} );
 
 // Feedback system
 require_once 'feedback/cp-feedback.php';
@@ -31,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.3.7' );
+define( 'WCMP_VERSION', '1.3.8' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
