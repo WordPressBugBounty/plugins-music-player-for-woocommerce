@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.3.8
+Version: 1.3.9
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.3.8' );
+define( 'WCMP_VERSION', '1.3.9' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -190,7 +190,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				return;
 			}
 
-			add_action( 'after_setup_theme', function() {
+			add_action( 'init', function() {
 				load_plugin_textdomain( 'music-player-for-woocommerce', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 			});
 
