@@ -86,19 +86,19 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 					<td colspan="2">
 						<table class="widefat" style="border:2px solid #E6DB55;">
 							<tr>
-								<td width="30%"><?php esc_html_e( 'Include the players only for registered users', 'music-player-for-woocommerce' ); ?></td>
-								<td style="border:2px solid #E6DB55;border-left:0;"><input aria-label="<?php esc_attr_e( 'Include the players only for registered users', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_registered_only" <?php print( ( $registered_only ) ? 'CHECKED' : '' ); ?> /></td>
+								<td width="30%"><label for="_wcmp_registered_only"><?php esc_html_e( 'Include the players only for registered users', 'music-player-for-woocommerce' ); ?></label></td>
+								<td style="border:2px solid #E6DB55;border-left:0;"><input aria-label="<?php esc_attr_e( 'Include the players only for registered users', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_registered_only" name="_wcmp_registered_only" <?php print( ( $registered_only ) ? 'CHECKED' : '' ); ?> /></td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 				<tr>
-					<td width="30%"><?php esc_html_e( 'Apply fade out to playing audio when possible', 'music-player-for-woocommerce' ); ?></td>
-					<td><input aria-label="<?php esc_attr_e( 'Apply fade out to playing audio when possible', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_fade_out" <?php print( ( $fade_out ) ? 'CHECKED' : '' ); ?> /></td>
+					<td width="30%"><label for="_wcmp_fade_out"><?php esc_html_e( 'Apply fade out to playing audio when possible', 'music-player-for-woocommerce' ); ?></label></td>
+					<td><input aria-label="<?php esc_attr_e( 'Apply fade out to playing audio when possible', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_fade_out" name="_wcmp_fade_out" <?php print( ( $fade_out ) ? 'CHECKED' : '' ); ?> /></td>
 				</tr>
 				<tr>
-					<td width="30%"><?php esc_html_e( 'Text for product purchased times in playlists', 'music-player-for-woocommerce' ); ?></td>
-					<td><input aria-label="<?php esc_attr_e( 'Purchased times text', 'music-player-for-woocommerce' ); ?>" type="text" name="_wcmp_purchased_times_text" value="<?php print esc_attr( $purchased_times_text ); ?>" style="width:100%;" /><br>
+					<td width="30%"><label for="_wcmp_purchased_times_text"><?php esc_html_e( 'Text for product purchased times in playlists', 'music-player-for-woocommerce' ); ?></label></td>
+					<td><input aria-label="<?php esc_attr_e( 'Purchased times text', 'music-player-for-woocommerce' ); ?>" type="text" id="_wcmp_purchased_times_text" name="_wcmp_purchased_times_text" value="<?php print esc_attr( $purchased_times_text ); ?>" style="width:100%;" /><br>
 					<i><?php esc_html_e( 'Texts to display when the playlist shortcode includes the purchased_times attribute.<br>Ex.', 'music-player-for-woocommerce' ); ?>[wcmp-playlist products_ids="*" controls="track" purchased_times="1"]</i>
 					</td>
 				</tr>
@@ -298,54 +298,54 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 			<table class="widefat wcmp-player-settings" style="border:1px solid #e1e1e1;">
 				<tr><td colspan="2"><h2><?php esc_html_e( 'Player Settings', 'music-player-for-woocommerce' ); ?></h2></td></tr>
 				<tr>
-					<td width="30%"><?php esc_html_e( 'Include music player in all products', 'music-player-for-woocommerce' ); ?></td>
-					<td><div class="wcmp-tooltip"><span class="wcmp-tooltiptext"><?php esc_html_e( 'The player is shown only if the product is "downloadable" with at least an audio file between the "Downloadable files", or you have selected your own audio files', 'music-player-for-woocommerce' ); ?></span><input aria-label="<?php esc_attr_e( 'Enable player', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_enable_player" <?php echo ( ( $enable_player ) ? 'checked' : '' ); ?> /></div></td>
+					<td width="30%"><label for="_wcmp_enable_player"><?php esc_html_e( 'Include music player in all products', 'music-player-for-woocommerce' ); ?></label></td>
+					<td><div class="wcmp-tooltip"><span class="wcmp-tooltiptext"><?php esc_html_e( 'The player is shown only if the product is "downloadable" with at least an audio file between the "Downloadable files", or you have selected your own audio files', 'music-player-for-woocommerce' ); ?></span><input aria-label="<?php esc_attr_e( 'Enable player', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_enable_player" name="_wcmp_enable_player" <?php echo ( ( $enable_player ) ? 'checked' : '' ); ?> /></div></td>
 				</tr>
 				<tr>
 					<td width="30%"><?php esc_html_e( 'Include in', 'music-player-for-woocommerce' ); ?></td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Products pages only', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_show_in" value="single" <?php echo ( ( 'single' == $show_in ) ? 'checked' : '' ); ?> />
-						<?php _e( 'single-entry pages <i>(Product\'s page only)</i>', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><br />
+						<label><input aria-label="<?php esc_attr_e( 'Products pages only', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_show_in" value="single" <?php echo ( ( 'single' == $show_in ) ? 'checked' : '' ); ?> />
+						<?php _e( 'single-entry pages <i>(Product\'s page only)</i>', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></label><br />
 
-						<input aria-label="<?php esc_attr_e( 'Multiple-entry pages', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_show_in" value="multiple" <?php echo ( ( 'multiple' == $show_in ) ? 'checked' : '' ); ?> />
-						<?php _e( 'multiple entries pages <i>(Shop pages, archive pages, but not in the product\'s page)</i>', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><br />
+						<label><input aria-label="<?php esc_attr_e( 'Multiple-entry pages', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_show_in" value="multiple" <?php echo ( ( 'multiple' == $show_in ) ? 'checked' : '' ); ?> />
+						<?php _e( 'multiple entries pages <i>(Shop pages, archive pages, but not in the product\'s page)</i>', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></label><br />
 
-						<input aria-label="<?php esc_attr_e( 'Product and multiple-entry pages', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_show_in" value="all" <?php echo ( ( 'all' == $show_in ) ? 'checked' : '' ); ?> />
-						<?php _e( 'all pages <i>(with single or multiple-entries)</i>', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<label><input aria-label="<?php esc_attr_e( 'Product and multiple-entry pages', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_show_in" value="all" <?php echo ( ( 'all' == $show_in ) ? 'checked' : '' ); ?> />
+						<?php _e( 'all pages <i>(with single or multiple-entries)</i>', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
 					</td>
 				</tr>
 				<tr>
-					<td width="30%"><?php esc_html_e( 'Include players in cart', 'music-player-for-woocommerce' ); ?></td>
+					<td width="30%"><label for="_wcmp_players_in_cart"><?php esc_html_e( 'Include players in cart', 'music-player-for-woocommerce' ); ?></label></td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Include players in cart', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_players_in_cart" <?php echo ( ( $players_in_cart ) ? 'checked' : '' ); ?> />
+						<input aria-label="<?php esc_attr_e( 'Include players in cart', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_players_in_cart" name="_wcmp_players_in_cart" <?php echo ( ( $players_in_cart ) ? 'checked' : '' ); ?> />
 					</td>
 				</tr>
 				<tr>
-					<td width="30%"><?php esc_html_e( 'Merge in grouped products', 'music-player-for-woocommerce' ); ?></td>
-					<td><input aria-label="<?php esc_attr_e( 'Merge in grouped products', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_merge_in_grouped" <?php echo ( ( $merge_grouped ) ? 'checked' : '' ); ?> /><br /><em><?php esc_html_e( 'In grouped products, display the "Add to cart" buttons and quantity fields in the players rows', 'music-player-for-woocommerce' ); ?></em></td>
+					<td width="30%"><label for="_wcmp_merge_in_grouped"><?php esc_html_e( 'Merge in grouped products', 'music-player-for-woocommerce' ); ?></label></td>
+					<td><input aria-label="<?php esc_attr_e( 'Merge in grouped products', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_merge_in_grouped" name="_wcmp_merge_in_grouped" <?php echo ( ( $merge_grouped ) ? 'checked' : '' ); ?> /><br /><em><?php esc_html_e( 'In grouped products, display the "Add to cart" buttons and quantity fields in the players rows', 'music-player-for-woocommerce' ); ?></em></td>
 				</tr>
 				<tr>
 					<td valign="top" width="30%"><?php esc_html_e( 'Player layout', 'music-player-for-woocommerce' ); ?></td>
 					<td>
 						<table>
 							<tr>
-								<td><input aria-label="<?php esc_attr_e( 'Skin 1', 'music-player-for-woocommerce' ); ?>" name="_wcmp_player_layout" type="radio" value="mejs-classic" <?php echo ( ( 'mejs-classic' == $player_style ) ? 'checked' : '' ); ?> /></td>
-								<td style="width:100%;padding-left:20px;"><img alt="<?php esc_attr_e( 'Skin 1', 'music-player-for-woocommerce' ); ?>" src="<?php print esc_url( WCMP_PLUGIN_URL ); ?>/views/assets/skin1.png" /></td>
+								<td><input aria-label="<?php esc_attr_e( 'Skin 1', 'music-player-for-woocommerce' ); ?>" id="skin1" name="_wcmp_player_layout" type="radio" value="mejs-classic" <?php echo ( ( 'mejs-classic' == $player_style ) ? 'checked' : '' ); ?> /></td>
+								<td style="width:100%;padding-left:20px;"><label for="skin1"><img alt="<?php esc_attr_e( 'Skin 1', 'music-player-for-woocommerce' ); ?>" src="<?php print esc_url( WCMP_PLUGIN_URL ); ?>/views/assets/skin1.png" /></label></td>
 							</tr>
 
 							<tr>
-								<td><input aria-label="<?php esc_attr_e( 'skin 2', 'music-player-for-woocommerce' ); ?>" name="_wcmp_player_layout" type="radio" value="mejs-ted" <?php echo ( ( 'mejs-ted' == $player_style ) ? 'checked' : '' ); ?> /></td>
-								<td style="width:100%;padding-left:20px;"><img alt="<?php esc_attr_e( 'Skin 2', 'music-player-for-woocommerce' ); ?>" src="<?php print esc_url( WCMP_PLUGIN_URL ); ?>/views/assets/skin2.png" /></td>
+								<td><input aria-label="<?php esc_attr_e( 'Skin 2', 'music-player-for-woocommerce' ); ?>" id="skin2" name="_wcmp_player_layout" type="radio" value="mejs-ted" <?php echo ( ( 'mejs-ted' == $player_style ) ? 'checked' : '' ); ?> /></td>
+								<td style="width:100%;padding-left:20px;"><label for="skin2"><img alt="<?php esc_attr_e( 'Skin 2', 'music-player-for-woocommerce' ); ?>" src="<?php print esc_url( WCMP_PLUGIN_URL ); ?>/views/assets/skin2.png" /></label></td>
 							</tr>
 
 							<tr>
-								<td><input aria-label="<?php esc_attr_e( 'Skin 3', 'music-player-for-woocommerce' ); ?>" name="_wcmp_player_layout" type="radio" value="mejs-wmp" <?php echo ( ( 'mejs-wmp' == $player_style ) ? 'checked' : '' ); ?> /></td>
-								<td style="width:100%;padding-left:20px;"><img alt="<?php esc_attr_e( 'Skin 3', 'music-player-for-woocommerce' ); ?>" src="<?php print esc_url( WCMP_PLUGIN_URL ); ?>/views/assets/skin3.png" /></td>
+								<td><input aria-label="<?php esc_attr_e( 'Skin 3', 'music-player-for-woocommerce' ); ?>" id="skin3" name="_wcmp_player_layout" type="radio" value="mejs-wmp" <?php echo ( ( 'mejs-wmp' == $player_style ) ? 'checked' : '' ); ?> /></td>
+								<td style="width:100%;padding-left:20px;"><label for="skin3"><img alt="<?php esc_attr_e( 'Skin 3', 'music-player-for-woocommerce' ); ?>" src="<?php print esc_url( WCMP_PLUGIN_URL ); ?>/views/assets/skin3.png" /></label></td>
 							</tr>
 
 							<tr>
-								<td colspan="2" style="border-top: 1px solid #DADADA;border-bottom: 1px solid #DADADA;"><input aria-label="<?php esc_attr_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?>" name="_wcmp_single_player" type="checkbox" <?php echo ( ( $single_player ) ? 'checked' : '' ); ?> />
-								<span style="padding-left:20px;"><?php esc_html_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?>
+								<td colspan="2" style="border-top: 1px solid #DADADA;border-bottom: 1px solid #DADADA;"><label><input aria-label="<?php esc_attr_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?>" name="_wcmp_single_player" type="checkbox" <?php echo ( ( $single_player ) ? 'checked' : '' ); ?> />
+								<span style="padding-left:20px;"><?php esc_html_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?></label>
 								</td>
 							</tr>
 						</table>
@@ -366,28 +366,28 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 				</tr>
 				<tr>
 					<td width="30%">
-						<?php esc_html_e( 'Play all', 'music-player-for-woocommerce' ); ?>
+						<label for="_wcmp_play_all"><?php esc_html_e( 'Play all', 'music-player-for-woocommerce' ); ?></label>
 					</td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Play all', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_play_all" <?php if ( $play_all ) {
+						<input aria-label="<?php esc_attr_e( 'Play all', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_play_all" name="_wcmp_play_all" <?php if ( $play_all ) {
 							echo 'CHECKED';} ?> />
 					</td>
 				</tr>
 				<tr>
 					<td width="30%">
-						<?php esc_html_e( 'Loop', 'music-player-for-woocommerce' ); ?>
+						<label for="_wcmp_loop"><?php esc_html_e( 'Loop', 'music-player-for-woocommerce' ); ?></label>
 					</td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Loop', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_loop" <?php if ( $loop ) {
+						<input aria-label="<?php esc_attr_e( 'Loop', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_loop" name="_wcmp_loop" <?php if ( $loop ) {
 							echo 'CHECKED';} ?> />
 					</td>
 				</tr>
 				<tr>
 					<td width="30%">
-						<?php esc_html_e( 'Allow multiple players to play simultaneously', 'music-player-for-woocommerce' ); ?>
+						<label for="_wcmp_play_simultaneously"><?php esc_html_e( 'Allow multiple players to play simultaneously', 'music-player-for-woocommerce' ); ?></label>
 					</td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Allow multiple players to play simultaneously', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_play_simultaneously" <?php if ( $play_simultaneously ) {
+						<input aria-label="<?php esc_attr_e( 'Allow multiple players to play simultaneously', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_play_simultaneously" name="_wcmp_play_simultaneously" <?php if ( $play_simultaneously ) {
 							echo 'CHECKED';} ?> /><br />
 						<i><?php
 							esc_html_e( 'By default, only one player would be playing at once. By pressing the play button of a player, the other players would stop. By ticking the checkbox, multiple players could play simultaneously.', 'music-player-for-woocommerce' );
@@ -395,19 +395,19 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 					</td>
 				</tr>
 				<tr>
-					<td><?php esc_html_e( 'Player volume (from 0 to 1)', 'music-player-for-woocommerce' ); ?></td>
+					<td><label for="_wcmp_player_volume" ><?php esc_html_e( 'Player volume (from 0 to 1)', 'music-player-for-woocommerce' ); ?></label></td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Player volume', 'music-player-for-woocommerce' ); ?>" type="number" name="_wcmp_player_volume" min="0" max="1" step="0.01" value="<?php echo esc_attr( $volume ); ?>" />
+						<input aria-label="<?php esc_attr_e( 'Player volume', 'music-player-for-woocommerce' ); ?>" type="number" id="_wcmp_player_volume" name="_wcmp_player_volume" min="0" max="1" step="0.01" value="<?php echo esc_attr( $volume ); ?>" />
 					</td>
 				</tr>
 				<tr>
 					<td width="30%"><?php esc_html_e( 'Player controls', 'music-player-for-woocommerce' ); ?></td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Play/pause button', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="button" <?php echo ( ( 'button' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'the play/pause button only', 'music-player-for-woocommerce' ); ?><br />
-						<input aria-label="<?php esc_attr_e( 'All controls', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="all" <?php echo ( ( 'all' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'all controls', 'music-player-for-woocommerce' ); ?><br />
-						<input aria-label="<?php esc_attr_e( 'Depending on context', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="default" <?php echo ( ( 'default' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'the play/pause button only, or all controls depending on context', 'music-player-for-woocommerce' ); ?>
+						<label><input aria-label="<?php esc_attr_e( 'Play/pause button', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="button" <?php echo ( ( 'button' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'the play/pause button only', 'music-player-for-woocommerce' ); ?></label><br />
+						<label><input aria-label="<?php esc_attr_e( 'All controls', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="all" <?php echo ( ( 'all' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'all controls', 'music-player-for-woocommerce' ); ?></label><br />
+						<label><input aria-label="<?php esc_attr_e( 'Depending on context', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="default" <?php echo ( ( 'default' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'the play/pause button only, or all controls depending on context', 'music-player-for-woocommerce' ); ?></label>
 						<div class="wcmp-on-cover" style="margin-top:10px;">
-							<input aria-label="<?php esc_attr_e( 'On cover', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_player_on_cover" value="default" <?php
+							<label><input aria-label="<?php esc_attr_e( 'On cover', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_player_on_cover" value="default" <?php
 							echo ( ( ! empty( $on_cover ) && ( 'button' == $player_controls || 'default' == $player_controls ) ) ? 'checked' : '' );
 							?> />
 							<?php esc_html_e( 'for play/pause button players display them on cover images.', 'music-player-for-woocommerce' ); ?>
@@ -415,14 +415,14 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 							<?php
 							esc_html_e( '(This feature is experimental, and will depend on the theme active on the website.)', 'music-player-for-woocommerce' );
 							?>
-							</i>
+							</i></label>
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<td width="30%"><?php esc_html_e( 'Display the player\'s title', 'music-player-for-woocommerce' ); ?></td>
+					<td width="30%"><label for="_wcmp_player_title"><?php esc_html_e( 'Display the player\'s title', 'music-player-for-woocommerce' ); ?></label></td>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'Display the player title', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_player_title" <?php echo ( ( ! empty( $player_title ) ) ? 'checked' : '' ); ?> />
+						<input aria-label="<?php esc_attr_e( 'Display the player title', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_player_title" name="_wcmp_player_title" <?php echo ( ( ! empty( $player_title ) ) ? 'checked' : '' ); ?> />
 					</td>
 				</tr>
 				<tr>
@@ -474,7 +474,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 							<tr>
 								<td>
 									<div><h2><?php esc_html_e( 'Scope', 'music-player-for-woocommerce' ); ?></h2></div>
-									<div><div class="wcmp-tooltip"><span class="wcmp-tooltiptext"><?php esc_html_e( 'Ticking the checkbox the previous settings are applied to all products, even if they have a player enabled.', 'music-player-for-woocommerce' ); ?></span><input aria-label="<?php esc_attr_e( 'Apply the previous settings to all products', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_apply_to_all_players" <?php print $apply_to_all_players == 1 ? 'CHECKED' : ''; ?> /></div> <?php esc_html_e( 'Apply the above settings to all product pages on the website, including existing ones.', 'music-player-for-woocommerce' ); ?></div>
+									<div><label><div class="wcmp-tooltip"><span class="wcmp-tooltiptext"><?php esc_html_e( 'Ticking the checkbox the previous settings are applied to all products, even if they have a player enabled.', 'music-player-for-woocommerce' ); ?></span><input aria-label="<?php esc_attr_e( 'Apply the previous settings to all products', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_apply_to_all_players" <?php print $apply_to_all_players == 1 ? 'CHECKED' : ''; ?> /></div> <?php esc_html_e( 'Apply the above settings to all product pages on the website, including existing ones.', 'music-player-for-woocommerce' ); ?></label></div>
 								</td>
 							</tr>
 						</table>
@@ -494,8 +494,8 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 				</tr>
 				<tr>
 					<td>
-					<input aria-label="<?php esc_attr_e( 'Show "playback Counter" in the WooCommerce products list', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_playback_counter_column" <?php print( ( $playback_counter_column ) ? 'CHECKED' : '' ); ?> />
-					<?php esc_html_e( 'Show "playback Counter" in the WooCommerce products list', 'music-player-for-woocommerce' ); ?>
+					<label><input aria-label="<?php esc_attr_e( 'Show "playback Counter" in the WooCommerce products list', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_playback_counter_column" <?php print( ( $playback_counter_column ) ? 'CHECKED' : '' ); ?> />
+					<?php esc_html_e( 'Show "playback Counter" in the WooCommerce products list', 'music-player-for-woocommerce' ); ?></label>
 					</td>
 				</tr>
 				<tr>
