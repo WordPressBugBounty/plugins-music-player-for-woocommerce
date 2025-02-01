@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.4.0
+Version: 1.4.1
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.4.0' );
+define( 'WCMP_VERSION', '1.4.1' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -867,9 +867,9 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 						if ( empty( $tax_query ) ) {
 							$tax_query = [
-								'taxonomy' => 'product_cat',
+								'taxonomy' => 'product_tag',
 								'field'    => 'slug',
-								'terms'    => $product_cat_slugs,
+								'terms'    => $product_tags_slugs,
 								'operator' => 'IN',
 							];
 						} else {
@@ -889,11 +889,12 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 							'post_type'		 => $this->_get_post_types( false ),
 							'posts_per_page' => -1,
 							'fields'         => 'ids',
-							'tax_query'      => $tax_query,
+							'tax_query'      => [$tax_query],
 						];
 
 						$query_products_ids = new WP_Query( $products_ids_args );
 						$products_ids = $query_products_ids->posts;
+						if ( empty( $products_ids ) ) return $output;
 						$query .= ' AND posts.ID IN (' . implode( ',', $products_ids ) . ')';
 					}
 

@@ -4,7 +4,7 @@ Donate link: https://wcmp.dwbooster.com
 Tags:WooCommerce,music player,audio,music,song,player,audio player,media player,mp3,m3u,m3u8,wav,oga,ogg,dokan,wcfm
 Requires at least: 3.5.0
 Tested up to: 6.7
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -249,6 +249,7 @@ Each time save the data of a product, the files for demo are deleted and generat
 
 == Changelog ==
 
+= 1.4.1 =
 = 1.4.0 =
 
 * Implements two new attributes in the Playlist shortcode for filtering the products by the product categories and tags.
