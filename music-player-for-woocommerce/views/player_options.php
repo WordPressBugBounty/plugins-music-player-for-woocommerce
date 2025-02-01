@@ -59,7 +59,7 @@ $on_cover = intval( $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post-
 			<div class="wcmp-highlight-box">
 				<?php
 				_e( '<p>The player uses the audio files associated with the product.</p>', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput
-				_e( '<hr style="border: 0;border-top: 1px solid #E6DB55;"><p style="font-size:1.4em;"><i>The free distribution of the "Music Player for WooCommerce" plugin requires configuring the product as downloadable and including an audio file in the list of files to download.</i></p><hr style="border: 0;border-top: 1px solid #E6DB55;">', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput
+				_e( '<hr style="border: 0;border-top: 1px solid #E6DB55;"><p style="font-size:1.2em;"><i>The free distribution of the "Music Player for WooCommerce" plugin requires configuring the product as downloadable and including an audio file in the list of files to download.</i></p><hr style="border: 0;border-top: 1px solid #E6DB55;">', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput
 
 				if ( defined( 'ELEMENTOR_VERSION' ) ) {
 					_e( '<p style="font-size:1.1em;"><i>If you designed the products template with <b>Elementor</b>, insert the playlist shortcode in the template without the <i>products_ids</i> attribute:<br><b>[wcmp-playlist player_style="mejs-classic"]</b>.</i></p><hr style="border: 0;border-top: 1px solid #E6DB55;">', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput

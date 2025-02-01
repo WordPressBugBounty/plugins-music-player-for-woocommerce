@@ -74,12 +74,63 @@
                             },
                             [
                                 el(
+                                    'b',
+                                    {
+                                        key: 'wcmp_inspector_help_main_attributes',
+										style: { 'text-transform': 'uppercase' }
+                                    },
+									'Main playlist attributes',
+									el(
+										'hr',
+										{
+											key: 'wcmp_inspector_help_separator'
+										}
+									)
+                                ),
+                                el(
                                     'p',
                                     {
-                                        key: 'wcmp_inspector_help'
+                                        key: 'wcmp_inspector_help_ids_attr'
 
                                     },
-                                    'To include specific products in the playlist enter their IDs in the products_ids attributes, separated by comma symbols (,)'
+									el(
+										'b',
+										{
+											key: 'wcmp_inspector_help_ids_attr_b'
+										},
+										'products_ids: '
+									),
+									wcmp_gutenberg_editor_config.ids_attr_description
+                                ),
+                                el(
+                                    'p',
+                                    {
+                                        key: 'categories_attr_description_cat_attr'
+
+                                    },
+									el(
+										'b',
+										{
+											key: 'categories_attr_description_cat_attr_b'
+										},
+										'product_categories: '
+									),
+									wcmp_gutenberg_editor_config.categories_attr_description
+                                ),
+                                el(
+                                    'p',
+                                    {
+                                        key: 'tags_attr_description_tag_attr'
+
+                                    },
+									el(
+										'b',
+										{
+											key: 'tags_attr_description_tag_attr_b'
+										},
+										'product_tags: '
+									),
+									wcmp_gutenberg_editor_config.tags_attr_description
                                 ),
                                 el(
                                     'p',
@@ -87,14 +138,15 @@
                                         key   : 'wcmp_inspector_more_help',
                                         style : {fontWeight: 'bold'}
                                     },
-                                    'More information visiting the follwing link:'
+                                    wcmp_gutenberg_editor_config.more_details
                                 ),
                                 el(
                                     'a',
                                     {
                                         key		: 'wcmp_inspector_help_link',
                                         href	: 'https://wcmp.dwbooster.com/documentation#playlist-shortcode',
-                                        target	: '_blank'
+                                        target	: '_blank',
+										style   : {'marginBottom' : '20px', 'display' : 'block'}
                                     },
                                     'CLICK HERE'
                                 ),

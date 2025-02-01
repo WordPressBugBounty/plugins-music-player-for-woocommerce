@@ -77,7 +77,17 @@ if ( ! class_exists( 'WCMP_BUILDERS' ) ) {
 
 			wp_enqueue_script( 'wcmp-admin-gutenberg-editor', plugin_dir_url( __FILE__ ) . 'gutenberg/gutenberg.js', array( 'wp-blocks', 'wp-element' ), WCMP_VERSION, true );
 
-			wp_localize_script( 'wcmp-admin-gutenberg-editor', 'wcmp_gutenberg_editor_config', array( 'url' => $url ) );
+			wp_localize_script(
+				'wcmp-admin-gutenberg-editor',
+				'wcmp_gutenberg_editor_config',
+				array(
+					'url' => $url,
+					'ids_attr_description' => __( 'This feature allows you to select the specific products whose players you want to include in the playlist. You can enter multiple product IDs, separated by commas, or use an asterisk "*" symbol to load all available products effortlessly (e.g. products_ids="*").', 'music-player-for-woocommerce'),
+					'categories_attr_description' => __( 'This feature enables you to load all products belonging to one or multiple categories at once, eliminating the need to enter their IDs individually. To filter by product categories, simply input their slugs, separated by commas (e.g. product_categories="category-1,category-2")', 'music-player-for-woocommerce'),
+					'tags_attr_description' => __( 'Just like filtering by product categories, you can also filter products by tags. To do this, simply enter the tag slugs, separated by commas (e.g. product_tags="tag-1,tag-2")', 'music-player-for-woocommerce'),
+					'more_details' => __( 'The remaining attributes of the playlist are detailed in the following link:', 'music-player-for-woocommerce'),
+				)
+			);
 		} // End gutenberg_editor
 
 		public function gutenberg_pre_render_block( $content, $block ) {

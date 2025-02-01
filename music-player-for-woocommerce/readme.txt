@@ -4,7 +4,7 @@ Donate link: https://wcmp.dwbooster.com
 Tags:WooCommerce,music player,audio,music,song,player,audio player,media player,mp3,m3u,m3u8,wav,oga,ogg,dokan,wcfm
 Requires at least: 3.5.0
 Tested up to: 6.7
-Stable tag: 1.3.11
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -156,6 +156,14 @@ The shortcode attributes are:
 
 	`[wcmp-playlist products_ids="*"]`
 
+*	product_categories: this feature enables you to load all products belonging to one or multiple categories at once, eliminating the need to enter their IDs individually. To filter by product categories, simply input their slugs, separated by commas:
+
+	`[wcmp-playlist products_ids="*" product_categories="category-1,category-2"]`
+
+*	product_tags: Just like filtering by product categories, you can also filter products by tags. To do this, simply enter the tag slugs, separated by commas:
+
+	`[wcmp-playlist products_ids="*" product_tags="tag-1,tag-2"]`
+
 *	player_style: select the layout of music players (the playlist displays only the play/pause control):
 
 	`[wcmp-playlist products_ids="*" player_style="mejs-classic"]`
@@ -241,6 +249,10 @@ Each time save the data of a product, the files for demo are deleted and generat
 
 == Changelog ==
 
+= 1.4.0 =
+
+* Implements two new attributes in the Playlist shortcode for filtering the products by the product categories and tags.
+
 = 1.3.11 =
 
 * Enhances the user experience when editing the global player settings.
@@ -290,41 +302,3 @@ Each time save the data of a product, the files for demo are deleted and generat
 
 * Updates the plugin settings page to make it more user-friendly.
 * Enhance the troubleshooting area to make it easier to resolve conflicts with third-party plugins and themes.
-
-= 1.2.9 =
-
-* Modifies the download links management.
-
-= 1.2.8 =
-
-* Redesign the gray skin to remove pixelate controls.
-
-= 1.2.7 =
-
-* The modification ensures that the player is not included when is_admin is true.
-
-= 1.2.6 =
-
-* Redesign the third skin the remove the pixelate icons of controls and background.
-
-= 1.2.5 =
-
-* Implement validation rules to prevent inserting players twice.
-
-= 1.2.4 =
-= 1.2.3 =
-
-* Implements the integration with WooCommerce Product Table by Barn2 Plugins integration.
-
-= 1.2.2 =
-
-* Fixes an issue with the styles of the time and duration on players.
-* Modifies the instructions in the players' settings.
-
-= 1.2.1 =
-
-* Allows exporting/importing all players' metadata when the WooCommerce products are exported/imported.
-
-= 1.2.0 =
-
-* Modifies the module that loads the players on the products' pages.

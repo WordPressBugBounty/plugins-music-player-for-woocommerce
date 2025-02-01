@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.3.11
+Version: 1.4.0
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.3.11' );
+define( 'WCMP_VERSION', '1.4.0' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -699,6 +699,8 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			if (
 				empty( $atts['products_ids'] ) &&
 				empty( $atts['purchased_products'] ) &&
+				empty( $atts['product_categories'] ) &&
+				empty( $atts['product_tags'] ) &&
 				! empty( $post ) &&
 				in_array( $post->post_type, $post_types )
 			) {
@@ -735,11 +737,15 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					'purchased_times'           => 0,
 					'download_links'            => 0,
 					'duration'					=> 1,
+					'product_categories'		=> '',
+					'product_tags'				=> '',
 				),
 				$atts
 			);
 
 			$products_ids              = $atts['products_ids'];
+			$product_categories        = $atts['product_categories'];
+			$product_tags              = $atts['product_tags'];
 			$purchased_products        = $atts['purchased_products'];
 			$highlight_current_product = $atts['highlight_current_product'];
 			$continue_playing          = $atts['continue_playing'];
@@ -766,10 +772,24 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 			// get the produts ids
 			$products_ids = preg_replace( '/[^\d\,\*]/', '', $products_ids );
-			$products_ids = preg_replace( '/(\,\,)+/', '', $products_ids );
+			$products_ids = preg_replace( '/\,+/', ',', $products_ids );
 			$products_ids = trim( $products_ids, ',' );
 
-			if ( strlen( $products_ids ) == 0 ) {
+			// get the produt categories
+			$product_categories = preg_replace( '/\s*\,\s*/', ',', $product_categories );
+			$product_categories = preg_replace( '/\,+/', ',', $product_categories );
+			$product_categories = trim( $product_categories, ',' );
+
+			// get the produt tags
+			$product_tags = preg_replace( '/\s*\,\s*/', ',', $product_tags );
+			$product_tags = preg_replace( '/\,+/', ',', $product_tags );
+			$product_tags = trim( $product_tags, ',' );
+
+			if (
+				strlen( $products_ids ) == 0 &&
+				strlen( $product_categories ) == 0 &&
+				strlen( $product_tags ) == 0
+			) {
 				return $output;
 			}
 
@@ -826,6 +846,57 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					$query .= ' AND posts.ID IN (' . $products_ids . ')';
 					$query .= ' ORDER BY FIELD(posts.ID,' . $products_ids . ')';
 				} else {
+
+					$tax_query = [];
+
+					// Product categories
+					if ( '' != $product_categories ) {
+						$product_cat_slugs = explode( ',', $product_categories );
+
+						$tax_query = [
+							'taxonomy' => 'product_cat',
+							'field'    => 'slug',
+							'terms'    => $product_cat_slugs,
+							'operator' => 'IN',
+						];
+					}
+
+					// Product tags
+					if ( '' != $product_tags ) {
+						$product_tags_slugs = explode( ',', $product_tags );
+
+						if ( empty( $tax_query ) ) {
+							$tax_query = [
+								'taxonomy' => 'product_cat',
+								'field'    => 'slug',
+								'terms'    => $product_cat_slugs,
+								'operator' => 'IN',
+							];
+						} else {
+							$tax_query = [
+								'relation' => 'AND',
+								$tax_query,
+								['taxonomy' => 'product_tag',
+								'field'    => 'slug',
+								'terms'    => $product_tags_slugs,
+								'operator' => 'IN',]
+							];
+						}
+					}
+
+					if ( ! empty( $tax_query ) ) {
+						$products_ids_args = [
+							'post_type'		 => $this->_get_post_types( false ),
+							'posts_per_page' => -1,
+							'fields'         => 'ids',
+							'tax_query'      => $tax_query,
+						];
+
+						$query_products_ids = new WP_Query( $products_ids_args );
+						$products_ids = $query_products_ids->posts;
+						$query .= ' AND posts.ID IN (' . implode( ',', $products_ids ) . ')';
+					}
+
 					$query .= ' ORDER BY posts.post_title ASC';
 				}
 			}
