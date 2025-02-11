@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.4.1
+Version: 1.4.2
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.4.1' );
+define( 'WCMP_VERSION', '1.4.2' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -739,10 +739,12 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					'duration'					=> 1,
 					'product_categories'		=> '',
 					'product_tags'				=> '',
+					'title'						=> '',
 				),
 				$atts
 			);
 
+			$playlist_title			   = trim( $atts['title'] );
 			$products_ids              = $atts['products_ids'];
 			$product_categories        = $atts['product_categories'];
 			$product_tags              = $atts['product_tags'];
@@ -1089,6 +1091,11 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				}
 				$output .= '</div>';
 			}
+
+			if ( ! empty( $playlist_title ) && ! empty( $output ) ) {
+				$output  = '<div class="wcmp-widget-playlist-title">' . esc_html( $playlist_title ) . '</div>' . $output;
+			}
+
 			return $output;
 		} // End replace_playlist_shortcode
 

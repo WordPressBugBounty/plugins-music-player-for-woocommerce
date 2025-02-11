@@ -4,7 +4,7 @@ Donate link: https://wcmp.dwbooster.com
 Tags:WooCommerce,music player,audio,music,song,player,audio player,media player,mp3,m3u,m3u8,wav,oga,ogg,dokan,wcfm
 Requires at least: 3.5.0
 Tested up to: 6.7
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -152,45 +152,59 @@ The `[wcmp-playlist]` shortcode allows to include a playlist on the pages' conte
 
 The shortcode attributes are:
 
-*	products_ids: define the ids of products to include in the playlist, separated by comma, or the * symbol to include all products:
+*	products_ids: enter the ids of products to include in the playlist, separated by comma, or the * symbol to include all products
 
 	`[wcmp-playlist products_ids="*"]`
 
-*	product_categories: this feature enables you to load all products belonging to one or multiple categories at once, eliminating the need to enter their IDs individually. To filter by product categories, simply input their slugs, separated by commas:
+*	title: enter the title text to display prominently above the playlist
+
+	`[wcmp-playlist products_ids="*" title="My Playlist"]`
+
+*	product_categories: this feature enables you to load all products belonging to one or multiple categories at once, eliminating the need to enter their IDs individually. To filter by product categories, simply input their slugs, separated by commas
 
 	`[wcmp-playlist products_ids="*" product_categories="category-1,category-2"]`
 
-*	product_tags: Just like filtering by product categories, you can also filter products by tags. To do this, simply enter the tag slugs, separated by commas:
+*	product_tags: just like filtering by product categories, you can also filter products by tags. To do this, simply enter the tag slugs, separated by commas
 
 	`[wcmp-playlist products_ids="*" product_tags="tag-1,tag-2"]`
 
-*	player_style: select the layout of music players (the playlist displays only the play/pause control):
+*	layout: allows to select the new or original layouts with the values: new or classic ("new" is the value by default)
+
+	`[wcmp-playlist products_ids="*" layout="new"]`
+
+*	player_style: select the layout of music players (the playlist displays only the play/pause control)
 
 	`[wcmp-playlist products_ids="*" player_style="mejs-classic"]`
 
-*	highlight_current_product: if the playlist is included in a product's page, the corresponding item would be highlighted in the playlist:
+*	highlight_current_product: if the playlist is included in a product's page, the corresponding item would be highlighted in the playlist
 
 	`[wcmp-playlist products_ids="*" highlight_current_product="1"]`
+
+*	continue_playing: if there is a song playing when navigates, the player will continue playing after loading the webpage in the same position
+
+	`[wcmp-playlist products_ids="*" continue_playing="1"]`
+
+Note: In mobiles devices where the direct action of user is required for playing audios and videos, the plugin cannot start playing dynamically.
+
+*	controls: allows to configure the controls to be used with the players on playlist. The possible values are: track or all, to include only a play/pause button or all player's controls respectively:
+
+	`[wcmp-playlist products_ids="*" controls="track"]`
+
+*	loop: plays all playlist items in an endless loop. The accepted values are: 1 or 0
+
+	`[wcmp-playlist products_ids="*" loop="1"]`
 
 *	cover: allows to include the featured images in the playlist. The possible values are: 0 or 1, 0 is the value by default
 
 	`[wcmp-playlist products_ids="*" cover="1"]`
 
-*	continue_playing: if there is a song playing when navigates, the player will continue playing after loading the webpage in the same position:
+*	purchased_only: includes only the audio files associated with the purchased products (Plugin commercial version)
 
-	`[wcmp-playlist products_ids="*" continue_playing="1"]`
+	`[wcmp-playlist products_ids="*" purchased_only="1"]`
 
-*	controls: allows to define the controls to be used with the players on playlist. The possible values are: track or all, to include only a play/pause button or all player's controls respectively.
-*	layout: allows to select the new or original layouts with the values: new or classic ("new" is the value by default):
+*	purchased_products: generates the list of products purchased by the logged user (Plugin commercial version)
 
-	`[wcmp-playlist products_ids="*" layout="classic"]`
-
-*	purchased_products: generates the list of products purchased by the logged user. `purchased_products="1"`
-
-	`[wcmp-playlist purchased_products="1" layout="classic"]`
-
-
-Note: In mobiles devices where the direct action of user is required for playing audios and videos, the plugin cannot start playing dynamically.
+	`[wcmp-playlist purchased_products="1"]`
 
 
 **Hooks (actions and filters)**
@@ -248,6 +262,10 @@ Each time save the data of a product, the files for demo are deleted and generat
 10. Inserting the playlist Visual Composer
 
 == Changelog ==
+
+= 1.4.2 =
+
+* Introduces a title attribute in the Playlist shortcode, allowing users to specify a title that will be displayed prominently above the playlist.
 
 = 1.4.1 =
 = 1.4.0 =
