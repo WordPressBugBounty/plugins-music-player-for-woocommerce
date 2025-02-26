@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.4.2
+Version: 1.4.3
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.4.2' );
+define( 'WCMP_VERSION', '1.4.3' );
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -1126,21 +1126,26 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		// ******************** WOOCOMMERCE ACTIONS ************************
 
 		public function woocommerce_user_download( $product_id ) {
-			$download_links = '';
+			$download_links = [];
 			if ( is_user_logged_in() ) {
 				if ( empty( $this->_current_user_downloads ) && function_exists( 'wc_get_customer_available_downloads' ) ) {
 					$current_user = wp_get_current_user();
 					$this->_current_user_downloads = wc_get_customer_available_downloads( $current_user->ID );
 				}
+
 				foreach ( $this->_current_user_downloads as $download ) {
 					if ( $download['product_id'] == $product_id ) {
-						$download_links = '<a href="' . $download['download_url'] . '" target="_blank" class="wcmp-download-link">' . esc_html__( 'download', 'music-player-for-woocommerce' ) . '</a>';
-						break;
+						$download_links[ $download['download_id'] ] = $download['download_url'];
 					}
 				}
 			}
 
-			return $download_links;
+			$download_links = array_unique( $download_links );
+			if ( count( $download_links ) ) {
+				$download_links = array_values( $download_links );
+				return '<a href="javascript:void(0);" data-download-links="' . esc_attr( json_encode( $download_links ) ) . '" class="wcmp-download-link">' . esc_html__( 'download', 'music-player-for-woocommerce' ) . '</a>';
+			}
+			return '';
 
 		}
 

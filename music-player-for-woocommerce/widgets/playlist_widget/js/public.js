@@ -79,5 +79,25 @@ jQuery( window ).on(
 				}
 			);
 		}
+
+		// Download multiple.
+		$( document ).on( 'click', '.wcmp-download-link', function( evt ) {
+			let e = $( evt.target );
+			let files = e.attr( 'data-download-links' );
+
+			if ( files ) {
+				files = JSON.parse( files );
+				if ( Array.isArray( files ) ) {
+					for ( let i in files ) {
+						let link = document.createElement('a');
+						link.href = files[i];
+						link.download = files[i];
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+					}
+				}
+			}
+		});
 	}
 );
