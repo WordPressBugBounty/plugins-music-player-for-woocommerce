@@ -87,7 +87,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 						<table class="widefat" style="border:2px solid #E6DB55;">
 							<tr>
 								<td width="30%"><label for="_wcmp_registered_only"><?php esc_html_e( 'Include the players only for registered users', 'music-player-for-woocommerce' ); ?></label></td>
-								<td style="border:2px solid #E6DB55;border-left:0;"><input aria-label="<?php esc_attr_e( 'Include the players only for registered users', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_registered_only" name="_wcmp_registered_only" <?php print( ( $registered_only ) ? 'CHECKED' : '' ); ?> /></td>
+								<td><input aria-label="<?php esc_attr_e( 'Include the players only for registered users', 'music-player-for-woocommerce' ); ?>" type="checkbox" id="_wcmp_registered_only" name="_wcmp_registered_only" <?php print( ( $registered_only ) ? 'CHECKED' : '' ); ?> /></td>
 							</tr>
 						</table>
 					</td>
