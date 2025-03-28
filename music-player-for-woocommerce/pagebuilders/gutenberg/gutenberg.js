@@ -44,8 +44,8 @@
 
 			children.push(
 				el(
-					'div', {className: 'wcmp-iframe-container', key:'wcmp_iframe_container'},
-					el('div', {className: 'wcmp-iframe-overlay', key:'wcmp_iframe_overlay'}),
+					'div', {className: 'wcmp-iframe-container', key:'wcmp_iframe_container', style:{position:'relative'}},
+					el('div', {className: 'wcmp-iframe-overlay', key:'wcmp_iframe_overlay', style:{position:'absolute',top:0,right:0,bottom:0,left:0}}),
 					el('iframe',
 						{
 							key: 'wcmp_iframe',
