@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.4.5
+Version: 1.5.0
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,10 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.4.5' );
+define( 'WCMP_VERSION', '1.5.0' );
+
+// Load Tools
+require_once 'inc/tools.inc.php';
 
 // Load widgets
 require_once 'widgets/playlist_widget.php';
@@ -1732,15 +1735,30 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		 * Check if the file is an audio file and return its type or false
 		 */
 		private function _is_audio( $file_path ) {
-			if ( preg_match( '/\.(mp3|ogg|oga|wav|wma|mp4)$/i', $file_path, $match ) ) {
-				return $match[1];
-			}
-			if ( preg_match( '/\.m4a$/i', $file_path ) ) {
-				return 'mp4';
-			}
-			if ( $this->_is_playlist( $file_path ) ) {
-				return 'hls';
-			}
+			$aux = function ( $file_path ) {
+				if ( preg_match( '/\.(mp3|ogg|oga|wav|wma|mp4)$/i', $file_path, $match ) ) {
+					return $match[1];
+				}
+				if ( preg_match( '/\.m4a$/i', $file_path ) ) {
+					return 'mp4';
+				}
+				if ( $this->_is_playlist( $file_path ) ) {
+					return 'hls';
+				}
+				return false;
+			};
+
+			$file_name = $this->_demo_file_name( $file_path );
+			$demo_file_path = $this->_files_directory_path . $file_name;
+			if ( $this->_valid_demo( $demo_file_path ) ) return $aux( $demo_file_path );
+
+			$ext = $aux( $file_path );
+			if ( $ext ) return $ext;
+
+			$file_path = WooCommerceMusicPlayerTools::get_google_drive_file_name( $file_path );
+
+			$ext = $aux( $file_path );
+			if ( $ext ) return $ext;
 
 			// From troubleshoot
 			$extension                      = pathinfo( $file_path, PATHINFO_EXTENSION );
@@ -1896,7 +1914,12 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			if ( empty( $args['url'] ) ) {
 				return;
 			}
+
 			$url = $args['url'];
+			$original_url = $url;
+
+			$url = WooCommerceMusicPlayerTools::get_google_drive_download_url( $url );
+
 			$url = do_shortcode( $url );
 
 			if ( file_exists( $url ) ) {
@@ -1909,7 +1932,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				$url_fixed = $url;
 			}
 
-			$file_name = $this->_demo_file_name( $url );
+			$file_name = $this->_demo_file_name( $original_url );
 			$text      = 'The requested URL was not found on this server';
 			$file_path = $this->_files_directory_path . $file_name;
 
