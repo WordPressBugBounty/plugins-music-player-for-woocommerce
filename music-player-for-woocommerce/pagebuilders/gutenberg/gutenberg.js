@@ -77,7 +77,7 @@
                                     'b',
                                     {
                                         key: 'wcmp_inspector_help_main_attributes',
-										style: { 'text-transform': 'uppercase' }
+										style: { 'textTransform': 'uppercase' }
                                     },
 									'Main playlist attributes',
 									el(
