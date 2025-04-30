@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.5.1
+Version: 1.6.0
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.5.1' );
+define( 'WCMP_VERSION', '1.6.0' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -365,7 +365,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 			add_meta_box( 'wcmp_woocommerce_metabox', __( 'Music Player for WooCommerce', 'music-player-for-woocommerce' ), array( &$this, 'woocommerce_player_settings' ), $this->_get_post_types(), 'normal' );
 			add_action( 'save_post', array( &$this, 'save_post' ), 10, 3 );
-			add_action( 'delete_post', array( &$this, 'delete_post' ) );
+			add_action( 'after_delete_post', function($post_id, $post_obj) { $this->delete_post($post_id); }, 10, 2 );
 			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( &$this, 'help_link' ) );
 
 			// Products list "Playback Counter"
@@ -536,7 +536,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				return;
 			}
 
-			$this->delete_post( $post_id );
+			$this->delete_post( $post_id, true );
 
 			// Save the player options
 			$enable_player = ( isset( $_REQUEST['_wcmp_enable_player'] ) ) ? 1 : 0;
@@ -578,10 +578,17 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			add_post_meta( $post_id, '_wcmp_on_cover', $on_cover, true );
 		} // End save_post
 
-		public function delete_post( $post_id ) {
+		public function delete_post( $post_id, $force = false ) {
 			$post       = get_post( $post_id );
 			$post_types = $this->_get_post_types();
-			if ( ! isset( $post ) || ! in_array( $post->post_type, $post_types ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			if (
+				isset( $post) &&
+				(
+					! $force ||
+					! in_array( $post->post_type, $post_types ) ||
+					! current_user_can( 'edit_post', $post_id )
+				)
+			) {
 				return;
 			}
 
