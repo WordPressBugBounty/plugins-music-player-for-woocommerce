@@ -34,5 +34,12 @@ if ( function_exists('wpfc_clear_all_cache') ) {
     wpfc_clear_all_cache();
 }
 
+// Elementor Cache
+if ( class_exists('\Elementor\Plugin') ) {
+	try {
+		\Elementor\Plugin::$instance->files_manager->clear_cache();
+	} catch ( Exception $err ) {}
+}
+
 // Cache Enabler
 do_action('cache_enabler_clear_complete_cache');
