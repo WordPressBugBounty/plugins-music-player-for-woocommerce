@@ -4,7 +4,8 @@
 .wcmp-player.track.mejs-wmp .mejs-controls::before{background:transparent !important;}
 .wcmp-player.mejs-wmp:not(.track),
 .wcmp-player.mejs-ted:not(.track){min-height:65px !important;}
-.wcmp-player.mejs-container{background: transparent !important;margin-bottom:0;}
+.wcmp-player.mejs-container:not(.wcmp-custom-skin){background: transparent !important;}
+.wcmp-player.mejs-container{margin-bottom:0;}
 .wcmp-player.track{width:25px !important;height:26px !important;position:relative;float:left;margin-right:5px;overflow:hidden;}
 .wcmp-player.track.mejs-ted{width:49px !important;height:28px !important;border-radius:16%;}
 .wcmp-player.track.mejs-ted .mejs-controls{height:28px !important; background:transparent !important;}

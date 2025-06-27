@@ -12,3 +12,25 @@ table.wp-list-table.fixed{table-layout:auto;}
 .column-wcmp_playback_counter{ white-space:nowrap; }
 .column-wcmp_playback_counter>a{ display:flex !important;}
 .wcmp-playback-counter{display:block;text-align:center;}
+
+/* LOADING ANIMATION */
+
+.wcmp-skin-generate-btn,
+.wcmp-skin-preview-btn{display:flex;flex-direction:row;align-items:center;}
+.wcmp-skin-generate-btn:disabled::after,
+.wcmp-skin-preview-btn:disabled::after{
+	content: " ";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 2px solid transparent;
+    border-top: 2px solid #999999;
+    border-radius: 50%;
+    animation: wcmp-spin 1s linear infinite;
+    margin: 0 0 0 10px;
+}
+
+@keyframes wcmp-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

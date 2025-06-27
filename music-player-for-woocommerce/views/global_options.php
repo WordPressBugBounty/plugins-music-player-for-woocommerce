@@ -344,6 +344,140 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 							</tr>
 
 							<tr>
+								<td><input aria-label="<?php esc_attr_e( 'Custom Skin', 'music-player-for-woocommerce' ); ?>" id="custom_skin" name="_wcmp_player_layout" type="radio" value="wcmp-custom-skin" <?php echo ( ( 'wcmp-custom-skin' == $player_style ) ? 'checked' : '' ); ?> /></td>
+								<td style="width:100%;padding-left:20px;"><i id="wcmp-custom-skin-settings"></i>
+									<label for="custom_skin"><b><?php esc_html_e( 'Custom Skin (BETA)', 'music-player-for-woocommerce' ); ?></b></label>
+									<label for="wcmp_skin_generator_api_key" style="display:block;margin-top:10px;"><b><?php esc_html_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?></b> (<a href="https://aistudio.google.com/apikey" target="_blank"><?php esc_html_e( 'Click here to access the Google AI Studio and generate an API key.', 'music-player-for-woocommerce' ); ?></a>)</label>
+									<div style="display:flex;flex-direction:row;gap:5px;margin-top:10px;">
+										<input type="text" id="wcmp_skin_generator_api_key" name="wcmp_skin_generator_api_key" style="flex-grow:1;" placeholder="<?php esc_attr_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?>">
+										<button class="button-primary" type="button" onclick="wcmp_save_api_key();"><?php esc_html_e( 'Save API Key', 'music-player-for-woocommerce') ?></button>
+										<button class="button-secondary" type="button" onclick="wcmp_clear_api_key();"><?php esc_html_e( 'Clear API Key', 'music-player-for-woocommerce') ?></button>
+									</div>
+									<div style="margin:10px 0;"><?php esc_html_e( 'Video tutorial:', 'music-player-for-woocommerce' ); ?> <a href="https://youtu.be/1gEqK42xCTE" target="_blank"><?php esc_html_e( 'Click Here', 'music-player-for-woocommerce' ); ?></a></div>
+									<label for="_wcmp_skin_generator_description"><b><?php esc_html_e( 'Custom Skin Description', 'music-player-for-woocommerce' ); ?></b></label>
+									<div style="margin-top:10px;">
+										<textarea id="_wcmp_skin_generator_description" name="_wcmp_skin_generator_description" rows="5" style="width:100%;" placeholder="<?php esc_attr_e( 'Enter the skin description', 'music-player-for-woocommerce' ); ?>"><?php
+											print esc_textarea( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_skin_generator_description', '' ) );
+										?></textarea>
+									</div>
+									<div style="text-align:right;margin:5px 0;">
+										<button class="button-primary wcmp-skin-generate-btn" type="button" onclick="wcmp_generate_skin(this);"><?php esc_html_e( 'Generate Skin', 'music-player-for-woocommerce') ?></button>
+									</div>
+									<label for="_wcmp_custom_skin"><b><?php esc_html_e( 'Custom Skin Code', 'music-player-for-woocommerce' ); ?></b></label>
+									<div style="margin-top:10px;">
+										<textarea id="_wcmp_custom_skin" name="_wcmp_custom_skin" rows="5" style="width:100%;" placeholder="<?php esc_attr_e( 'Enter the skin description', 'music-player-for-woocommerce' ); ?>"><?php
+											print esc_textarea( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_custom_skin', '' ) );
+										?></textarea>
+									</div>
+									<div style="text-align:right;margin:5px 0;">
+										<button class="button-primary wcmp-skin-preview-btn" type="button" onclick="wcmp_player_preview(this);"><?php esc_html_e( 'Preview', 'music-player-for-woocommerce') ?></button>
+									</div>
+									<div class="wcmp_custom_skin_preview"></div>
+									<script>
+										function wcmp_save_api_key() {
+											let api_key = String(document.getElementsByName('wcmp_skin_generator_api_key')[0].value).trim();
+											localStorage.setItem('wcmp_skin_generator_api_key', api_key);
+											alert( '<?php print esc_js( 'API Key stored in the browser.', 'music-player-for-woocommerce' ); ?>' );
+										}
+										function wcmp_clear_api_key() {
+											localStorage.removeItem('wcmp_skin_generator_api_key');
+											document.getElementsByName('wcmp_skin_generator_api_key')[0].value = '';
+										}
+										async function wcmp_player_preview(btn) {
+											let previewContainer = jQuery('.wcmp_custom_skin_preview');
+											previewContainer.html('');
+
+											let customSkin = String( document.getElementsByName('_wcmp_custom_skin')[0].value ).trim();
+
+											if ( '' == customSkin ) {
+												alert( '<?php print esc_js( 'The custom skin code is empty.', 'music-player-for-woocommerce' ); ?>' );
+												return;
+											}
+											btn.disabled = true;
+											let url   = '<?php print esc_js( admin_url() ); ?>';
+											let nonce = '<?php print esc_js( wp_create_nonce( 'wcmp-custom-skin-preview' ) ); ?>';
+
+											url += ( url.indexOf('?') == -1 ? '?' : '&' ) + '_wcmp_nonce=' + encodeURIComponent( nonce );
+
+											let formData = new FormData();
+											formData.append( 'wcmp_custom_skin', customSkin );
+											formData.append( 'wcmp_skin_generator_action', 1 );
+
+											const response = await fetch(
+												url,
+												{
+													'method' : 'POST',
+													'body'   : formData
+												}
+											);
+											if ( response.ok ) {
+												const output = await response.text();
+												try {
+													const iframe  = jQuery( '<iframe style="width:100%;border:none;display:block;"></iframe>' );
+													const encodedHTML = encodeURIComponent(output);
+													iframe.appendTo(previewContainer);
+													iframe.attr('src', 'data:text/html;charset=utf-8,' + encodedHTML);
+												} catch ( err ) {
+													alert( err.message );
+												}
+											}
+											btn.disabled = false;
+										}
+										async function wcmp_generate_skin( btn ) {
+											let api_key = String(document.getElementsByName('wcmp_skin_generator_api_key')[0].value).trim();
+											let description = String(document.getElementsByName('_wcmp_skin_generator_description')[0].value).trim();
+
+											if ( '' == api_key || '' == description ) {
+												alert( '<?php print esc_js( 'API Key and Skin Description are required.', 'music-player-for-woocommerce' ); ?>' );
+											} else {
+												btn.disabled = true;
+												let url   = '<?php print esc_js( admin_url() ); ?>';
+												let nonce = '<?php print esc_js( wp_create_nonce( 'wcmp-ai-skin-generator' ) ); ?>';
+
+												url += ( url.indexOf('?') == -1 ? '?' : '&' ) + '_wcmp_nonce=' + encodeURIComponent( nonce );
+
+												let formData = new FormData();
+												formData.append( 'wcmp_skin_generator_api_key', api_key );
+												formData.append( 'wcmp_skin_generator_description', description );
+												formData.append( 'wcmp_skin_generator_action', 1 );
+
+												const response = await fetch(
+													url,
+													{
+														'method' : 'POST',
+														'body'   : formData
+													}
+												);
+	'					'
+												if ( response.ok ) {
+													const output = await response.text();
+													try {
+														let result = JSON.parse( output );
+														if ( 'error' in result ) {
+															throw new Error( result['error'] );
+														}
+
+														if ( 'success' in result ) {
+															document.getElementsByName('_wcmp_custom_skin')[0].value = result['success'];
+															// Display the player preview.
+															document.querySelector('.wcmp-skin-preview-btn').click();
+														}
+													} catch ( err ) {
+														alert( err.message );
+													}
+												}
+												btn.disabled = false;
+											}
+										}
+										(function() {
+											let api_key = localStorage.getItem('wcmp_skin_generator_api_key');
+											if(api_key) document.getElementsByName('wcmp_skin_generator_api_key')[0].value = api_key;
+										})();
+									</script>
+								</td>
+							</tr>
+
+							<tr>
 								<td colspan="2" style="border-top: 1px solid #DADADA;border-bottom: 1px solid #DADADA;"><label><input aria-label="<?php esc_attr_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?>" name="_wcmp_single_player" type="checkbox" <?php echo ( ( $single_player ) ? 'checked' : '' ); ?> />
 								<span style="padding-left:20px;"><?php esc_html_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?></label>
 								</td>

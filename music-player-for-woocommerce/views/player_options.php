@@ -225,6 +225,11 @@ $on_cover = intval( $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post-
 							</tr>
 
 							<tr>
+								<td><input aria-label="<?php esc_attr_e( 'Custom Skin', 'music-player-for-woocommerce' ); ?>" id="_wcmp_player_layout_04" name="_wcmp_player_layout" type="radio" value="wcmp-custom-skin" <?php echo ( ( 'wcmp-custom-skin' == $player_style ) ? 'checked' : '' ); ?> /></td>
+								<td style="width:100%;padding-left:20px;"><label for="_wcmp_player_layout_04"><b><?php esc_attr_e( 'Custom Skin', 'music-player-for-woocommerce' ); ?></b> (<a href="<?php print esc_attr( admin_url( 'options-general.php?page=music-player-for-woocommerce-settings#wcmp-custom-skin-settings' ) ); ?>" target="_blank"><?php esc_html_e( 'Configure custom skin', 'music-player-for-woocommerce' ); ?></a>)</label></td>
+							</tr>
+
+							<tr>
 								<td colspan="2" style="border-top: 1px solid #DADADA;border-bottom: 1px solid #DADADA;"><label><input aria-label="<?php esc_attr_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?>" name="_wcmp_single_player" type="checkbox" <?php echo ( ( $single_player ) ? 'checked' : '' ); ?> />
 								<span style="padding-left:20px;"><?php esc_html_e( 'Show a single player instead of one player per audio file.', 'music-player-for-woocommerce' ); ?></span></label>
 								</td>
