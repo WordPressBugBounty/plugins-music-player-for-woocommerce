@@ -94,7 +94,7 @@ if ( ! class_exists( 'WCMP_BUILDERS' ) ) {
 			if (
 				! empty( $block['blockName'] ) &&
 				stripos( $block['blockName'], 'woocommerce/' ) !== false &&
-				$GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_force_main_player_in_title', 1 )
+				$GLOBALS['WooCommerceMusicPlayer']->get_on_title()
 			) {
 				add_filter( 'woocommerce_product_title', array( $GLOBALS['WooCommerceMusicPlayer'], 'woocommerce_product_title' ), 10, 2 );
 				$GLOBALS['WooCommerceMusicPlayer']->enqueue_resources();

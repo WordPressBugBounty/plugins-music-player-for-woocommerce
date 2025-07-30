@@ -19,7 +19,7 @@ if ( empty( $post ) ) {
 	global $post;
 }
 
-$enable_player   = $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_enable_player', false );
+$enable_player   = $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_enable_player', true );
 $show_in         = $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_show_in', 'all' );
 $player_style    = $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_player_layout', WCMP_DEFAULT_PLAYER_LAYOUT );
 $single_player   = $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_single_player', WCMP_DEFAULT_SINGLE_PLAYER );

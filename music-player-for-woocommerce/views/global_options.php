@@ -10,7 +10,6 @@ wp_enqueue_script( 'wcmp-admin-js', plugin_dir_url( __FILE__ ) . '../js/admin.js
 $ffmpeg_system_path = defined( 'PHP_OS' ) && strtolower( PHP_OS ) == 'linux' && function_exists( 'shell_exec' ) ? @shell_exec( 'which ffmpeg' ) : '';
 
 $troubleshoot_default_extension = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_default_extension', false );
-$force_main_player_in_title     = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_force_main_player_in_title', 1 );
 $ios_controls                   = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_ios_controls', false );
 $troubleshoot_onload            = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_onload', false );
 $include_main_player_hook       = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_main_player_hook', '' ) );
@@ -18,7 +17,7 @@ $main_player_hook_title         = trim( $GLOBALS['WooCommerceMusicPlayer']->get_
 $disable_302         			= trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_disable_302', 0 ) );
 $include_all_players_hook       = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_all_players_hook', '' ) );
 
-$enable_player   = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_enable_player', false );
+$enable_player   = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_enable_player', true );
 $show_in         = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_show_in', 'all' );
 $players_in_cart = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_players_in_cart', false );
 $player_style    = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_player_layout', WCMP_DEFAULT_PLAYER_LAYOUT );
@@ -222,20 +221,6 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 				</tr>
 				<tr>
 					<td style="font-weight:600;">
-						<?php esc_html_e( 'Q: Are the store or product templates created with WooCommerce Gutenberg Blocks hiding the audio players? Check the box to force the plugin to load the players next to product titles.', 'music-player-for-woocommerce' ); ?>
-					</td>
-				</tr>
-				<tr>
-					<td style="padding-bottom:20px;">
-						<label>
-						<input aria-label="<?php esc_attr_e( 'For the WooCommerce Gutenberg Blocks, include the main player in the products titles', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_force_main_player_in_title" <?php if ( $force_main_player_in_title ) {
-							print 'CHECKED';} ?>/>
-						<?php esc_html_e( 'Includes the main player in front of products titles', 'music-player-for-woocommerce' ); ?>
-						</label>
-					</td>
-				</tr>
-				<tr>
-					<td style="font-weight:600;">
 						<?php esc_html_e( 'Q: Have you installed a custom WordPress theme that doesn\'t use the standard WooCommerce hooks and players are not visible on shop pages? If so, please enter the hook names separated by commas that the plugin should check to load the audio players on the shop pages.', 'music-player-for-woocommerce' ); ?>
 					</td>
 				</tr>
@@ -245,7 +230,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 						<i><?php _e( 'The plugin uses by default the <b>woocommerce_shop_loop_item_title</b> hook. If the player is not being displayed, enter the hook used by the theme active on your website.', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></i><br><br>
 						<label>
 						<input type="checkbox" name="_wcmp_main_player_hook_title" aria-label="<?php esc_attr_e( 'Force the player in the title', 'music-player-for-woocommerce' ); ?>" <?php if ( $main_player_hook_title ) {
-							print 'checked';} ?>> <?php esc_html_e( 'Forces the audio player to be displayed in the product title.', 'music-player-for-woocommerce' ); ?>
+							print 'checked';} ?>> <b><?php esc_html_e( 'Forces the audio player to be displayed in the product title.', 'music-player-for-woocommerce' ); ?></b>
 						</label>
 					</td>
 				</tr>

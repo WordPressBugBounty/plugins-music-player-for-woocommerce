@@ -32,12 +32,6 @@ if ( ! class_exists( 'WCMP_MVX_ADDON' ) ) {
 						preg_match( '/\bdashboard\b/i', $_SERVER['REQUEST_URI'] )
 					) {
 						$GLOBALS['WooCommerceMusicPlayer']->init_force_in_title( 0 );
-						add_filter( 'wcmp_global_attr', function( $value, $attr ) {
-							if ( '_wcmp_force_main_player_in_title' == $attr ) {
-								return 0;
-							}
-							return $value;
-						}, 10, 2 );
 					}
 				}
 			}
