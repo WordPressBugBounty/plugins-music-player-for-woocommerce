@@ -336,5 +336,43 @@
 		if(jQuery('audio[data-product]:not([playernumber])').length) wcmp_force_init();
 	});
 
-	jQuery(document).on('scroll wpfAjaxSuccess woof_ajax_done yith-wcan-ajax-filtered wpf_ajax_success berocket_ajax_products_loaded berocket_ajax_products_infinite_loaded lazyload.wcpt', wcmp_force_init);
+	function containsWcmpPlayer(node) {
+		if (node.nodeType === Node.ELEMENT_NODE) {
+			if (node.tagName === 'AUDIO' && node.classList && node.classList.contains('wcmp-player')) {
+				return true;
+			}
+
+			var audioElements = node.querySelectorAll('audio.wcmp-player');
+			return audioElements.length > 0;
+		}
+
+		return false;
+	}
+
+	function handleMutations(mutations) {
+		let added_player = false;
+		for (let i = 0; i < mutations.length; i++) {
+			let mutation = mutations[i];
+			if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+				for (let j = 0; j < mutation.addedNodes.length; j++) {
+					if ( containsWcmpPlayer(mutation.addedNodes[j]) ) {
+						added_player = true;
+					}
+				}
+			}
+		}
+
+		if ( added_player ) {
+			wcmp_force_init();
+		}
+	}
+
+	var observer = new MutationObserver(handleMutations);
+
+	var config = {
+	  childList: true,
+	  subtree: true
+	};
+
+    observer.observe(document, config);
 })()

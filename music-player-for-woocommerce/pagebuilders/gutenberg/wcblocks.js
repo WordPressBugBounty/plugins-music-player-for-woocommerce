@@ -22,7 +22,7 @@ jQuery(function(){
 										});
 										wcmp_force_init();
 									}
-								}catch(err){}
+								}catch(err){console.log(err);}
 							}
 						}
 					}

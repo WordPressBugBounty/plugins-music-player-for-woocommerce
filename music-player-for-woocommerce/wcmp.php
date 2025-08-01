@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.7.1
+Version: 1.7.2
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.7.1' );
+define( 'WCMP_VERSION', '1.7.2' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -316,15 +316,17 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 					// ---- MAIN PLAYER ----
 
-					$include_main_player_hook = preg_replace( '/[\t\s]/', '', $this->get_global_attr( '_wcmp_main_player_hook', '' ) );
-					if ( empty( $include_main_player_hook ) ) {
-						$include_main_player_hook = 'woocommerce_shop_loop_item_title';
-					}
+					if ( ! $this->get_on_title() ) {
+						$include_main_player_hook = preg_replace( '/[\t\s]/', '', $this->get_global_attr( '_wcmp_main_player_hook', '' ) );
+						if ( empty( $include_main_player_hook ) ) {
+							$include_main_player_hook = 'woocommerce_shop_loop_item_title';
+						}
 
-					$include_main_player_hook = explode( ',', $include_main_player_hook );
-					foreach ( $include_main_player_hook as $_hook_name ) {
-						if ( ! empty( $_hook_name ) ) {
-							add_action( $_hook_name, array( &$this, 'include_main_player' ), 11 );
+						$include_main_player_hook = explode( ',', $include_main_player_hook );
+						foreach ( $include_main_player_hook as $_hook_name ) {
+							if ( ! empty( $_hook_name ) ) {
+								add_action( $_hook_name, array( &$this, 'include_main_player' ), 11 );
+							}
 						}
 					}
 
@@ -1247,12 +1249,23 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				try {
 					if (
 						( wp_doing_ajax() || ! is_admin() ) &&
-						! is_cart() &&
-						! is_page( 'cart' ) &&
-						! is_checkout() &&
+						(
+							(
+								! is_cart() &&
+								! is_page( 'cart' ) &&
+								! is_checkout()
+							) ||
+							(
+								(
+									is_cart() ||
+									is_page( 'cart' ) ||
+									is_checkout()
+								) &&
+								$this->get_global_attr( '_wcmp_players_in_cart', false )
+							)
+						) &&
 						empty( $_REQUEST['wcmp_nonce'] )
 					) {
-
 						if ( is_product() && get_queried_object_id() == $product->get_id() ) {
 							return $value;
 							/***********************************
@@ -1313,8 +1326,8 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			$id = $product->get_id();
 
 			// Inserted Previously
-			if ( in_array( $id, $this->_inserted_main_players ) ) return '';
-			$this->_inserted_main_players[] = $id;
+			// if ( in_array( $id, $this->_inserted_main_players ) ) return '';
+			// $this->_inserted_main_players[] = $id;
 
 			$files = $this->_get_product_files(
 				array(

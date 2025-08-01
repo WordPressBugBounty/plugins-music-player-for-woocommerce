@@ -1,6 +1,8 @@
 .wcmp-player{width:100% !important;}
 .wcmp-player-container{width:100%;overflow-x:clip;}
+.wc-block-components-product-name:has(.wcmp-player-container),
 .wp-block-post-title:has(.wcmp-player-container){word-break:normal;}
+.wc-block-components-product-name .wcmp-player-container:has(.wcmp-player.track),
 .wp-block-post-title .wcmp-player-container:has(.wcmp-player.track){display:inline;}
 
 .wcmp-player.track.mejs-wmp .mejs-controls,
