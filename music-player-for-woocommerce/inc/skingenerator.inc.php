@@ -7,7 +7,7 @@ if ( !is_admin() ) {
 if ( ! class_exists( 'WCMP_SKIN_GENERATOR' ) ) {
 	class WCMP_SKIN_GENERATOR {
 
-		static private $model 			= "models/gemini-2.0-flash-lite"; // models/gemini-2.0-flash-001
+		static private $model 			= "models/gemini-2.5-flash-lite"; // models/gemini-2.0-flash-001
 		static private $base_url		= "https://generativelanguage.googleapis.com/v1beta/";
 
 		static public function model_inference( $skin_description, $api_key ) {
