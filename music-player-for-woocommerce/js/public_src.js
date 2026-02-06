@@ -32,6 +32,106 @@
 			}
 		}
 
+		function _createVisualizer() {
+			$('.wcmp-player-visualizer').each(function() {
+				let e = $(this);
+				if( e.data('processed')) return;
+				e.data('processed', 1);
+				$(this).append('<div class="wcmp-player-visualizer-bars-container"></div>');
+				const NUM_BARS = 32; // # bars per side (total = 64)
+				const visualizer = $(this).find('.wcmp-player-visualizer-bars-container')[0];
+				const audioElem = $(this).next("audio")[0];
+
+				// Create bars
+				for (let i = 0; i < NUM_BARS * 2; i++) {
+					const div = document.createElement("div");
+					div.className = "wcmp-player-visualizer-bar";
+					visualizer.appendChild(div);
+				}
+
+				const bars = Array.from(visualizer.children);
+				let audioCtx, analyser, src, dataArray, smoothed;
+				let animationId = null;
+
+				function setupAudio() {
+					if (audioCtx) return;
+					audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+					analyser = audioCtx.createAnalyser();
+					analyser.fftSize = 2048;
+					analyser.smoothingTimeConstant = 0.6;
+
+					src = audioCtx.createMediaElementSource(audioElem);
+					src.connect(analyser);
+					analyser.connect(audioCtx.destination);
+
+					dataArray = new Uint8Array(analyser.frequencyBinCount);
+					smoothed = new Float32Array(NUM_BARS).fill(0);
+				}
+
+				function draw() {
+					if (!analyser) return;
+					analyser.getByteFrequencyData(dataArray);
+
+					const bins = dataArray.length;
+					const minHz = 50;    // ignore low frequencies
+					const maxHz = 12000; // ignore high frequencies
+					const halfBars = NUM_BARS;
+
+					for (let i = 0; i < halfBars; i++) {
+						// Logarithmic mapping within useful frequency range
+						const startFreq = minHz + (i / halfBars) * (maxHz - minHz);
+						const endFreq   = minHz + ((i + 1) / halfBars) * (maxHz - minHz);
+
+						const startIndex = Math.floor((startFreq / (audioCtx.sampleRate/2)) * bins);
+						const endIndex   = Math.min(bins - 1, Math.floor((endFreq / (audioCtx.sampleRate/2)) * bins));
+
+						let sum = 0;
+						let count = 0;
+						for (let j = startIndex; j <= endIndex; j++) { sum += dataArray[j]; count++; }
+						let avg = count ? sum / count : 0;
+
+						// Visual compensation for balance
+						const boost = Math.pow(i / halfBars, 1.4) * 1.5 + 0.7;
+						avg *= boost;
+
+						// Smoothing for fluid animation
+						smoothed[i] = smoothed[i] * 0.75 + avg * 0.25;
+
+						const normalized = Math.min(1, smoothed[i]/255);
+						const height = normalized * (visualizer.clientHeight - 10);
+
+						// Assign symmetrical bars
+						const leftBar  = bars[halfBars - 1 - i];
+						const rightBar = bars[halfBars + i];
+						[leftBar, rightBar].forEach(function(bar){
+							bar.style.height = Math.max(0, height) + "px";
+							bar.style.opacity = 0.3 + normalized * 0.8;
+						});
+					}
+
+					animationId = requestAnimationFrame(draw);
+				}
+
+				function startVisualizer() {
+					setupAudio();
+					if (audioCtx.state === "suspended") audioCtx.resume();
+					if (!animationId) draw();
+				}
+
+				function stopVisualizer() {
+					if (animationId) {
+						cancelAnimationFrame(animationId);
+						animationId = null;
+						bars.forEach(function(bar){bar.style.height = "0";});
+					}
+				}
+
+				audioElem.addEventListener("play", startVisualizer);
+				audioElem.addEventListener("pause", stopVisualizer);
+				audioElem.addEventListener("ended", stopVisualizer);
+			});
+		}
+
 		/**
 		 * Play next player
 		 */
@@ -105,6 +205,10 @@
 		}
 
 		//------------------------ MAIN CODE ------------------------
+
+		// Generate the visualizers
+		_createVisualizer();
+
 		var play_all = (typeof wcmp_global_settings != 'undefined') ? wcmp_global_settings[ 'play_all' ] : true, // Play all songs
 			pause_others = (typeof wcmp_global_settings != 'undefined') ? !(wcmp_global_settings['play_simultaneously']*1) : true,
 			fade_out = (typeof wcmp_global_settings != 'undefined') ? wcmp_global_settings['fade_out']*1 : true,

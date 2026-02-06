@@ -1,0 +1,101 @@
+{
+    "name": "wcmp/wcmp-divi5",
+    "d4Shortcode": "et_pb_wcmp_divi_module",
+    "title": "Music Player for WooCommerce",
+    "titles": "Music Player for WooCommerce",
+    "category": "module",
+    "moduleClassName": "wcmp-divi5",
+    "moduleOrderClassName": "wcmp-divi5",
+
+    "attributes": {
+        "module": {
+            "type": "object",
+            "selector": "{{selector}}",
+            "default": {
+                "meta": {
+                    "adminLabel": {
+                        "desktop": {
+                            "value": "Music Player for WooCommerce"
+                        }
+                    }
+                }
+            },
+            "settings": {
+                "meta": {},
+                "decoration": {}
+            }
+        },
+
+        "wcmp_products_ids": {
+            "type": "object",
+            "selector": "{{selector}} .wcmp_products_ids",
+            "attributes": {
+                "class": "wcmp_products_ids"
+            },
+            "tagName": "input",
+            "inlineEditor": "plainText",
+            "settings": {
+                "innerContent": {
+                    "groupType": "group-item",
+                    "item": {
+                        "groupName": "mainContent",
+                        "priority": 20,
+                        "render": true,
+                        "attrName": "wcmp_products_ids.innerContent",
+                        "label": "Products ids",
+                        "description": "Enter the products ids separated by comma, or the * sign to include all products.",
+                        "features": {
+                            "dynamicContent": false
+                        },
+                        "component": {
+                            "name": "divi/text",
+                            "type": "field"
+                        }
+                    }
+                },
+                "decoration": {
+                    "bodyFont": {}
+                }
+            }
+        },
+
+        "wcmp_attributes": {
+            "type": "object",
+            "selector": "{{selector}} .wcmp_attributes",
+            "attributes": {
+                "class": "wcmp_attributes"
+            },
+            "tagName": "input",
+            "inlineEditor": "plainText",
+            "settings": {
+                "innerContent": {
+                    "groupType": "group-item",
+                    "item": {
+                        "groupName": "mainContent",
+                        "priority": 30,
+                        "render": true,
+                        "attrName": "wcmp_attributes.innerContent",
+                        "label": "Additional Attributes",
+                        "description": "controls=\"track\" layout=\"new\"",
+                        "features": {
+                            "dynamicContent": false
+                        },
+                        "component": {
+                            "name": "divi/text",
+                            "type": "field"
+                        }
+                    }
+                },
+                "decoration": {
+                    "bodyFont": {}
+                }
+            }
+        }
+    },
+
+    "settings": {
+        "content": "auto",
+        "design": false,
+        "advanced": false
+    }
+}

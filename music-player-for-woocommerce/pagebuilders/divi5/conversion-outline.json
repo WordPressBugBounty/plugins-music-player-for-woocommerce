@@ -1,0 +1,6 @@
+{
+    "module": {
+        "wcmp_products_ids": "wcmp_products_ids.innerContent.*",
+        "wcmp_attributes": "wcmp_attributes.innerContent.*"
+    }
+}

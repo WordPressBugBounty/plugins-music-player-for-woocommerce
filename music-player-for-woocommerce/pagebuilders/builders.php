@@ -8,12 +8,21 @@ if ( ! class_exists( 'WCMP_BUILDERS' ) ) {
 		private static $_instance;
 
 		private function __construct(){}
+
 		private static function instance() {
 			if ( ! isset( self::$_instance ) ) {
 				self::$_instance = new self();
 			}
 			return self::$_instance;
 		} // End instance
+
+		public static function get_preview_url() {
+			$url  = WCMP_WEBSITE_URL;
+			$url  = wp_nonce_url( $url, 'wcmp_generate_preview',  'wcmp-preview-nonce' );
+			$url .= '&wcmp-preview=';
+
+			return $url;
+		} // End get_preview_url
 
 		public static function run() {
 			$instance = self::instance();
@@ -37,9 +46,6 @@ if ( ! class_exists( 'WCMP_BUILDERS' ) ) {
 				include_once dirname( __FILE__ ) . '/beaverbuilder/wcmp.inc.php';
 			}
 
-			// DIVI
-			add_action( 'et_builder_ready', array( $instance, 'divi_editor' ) );
-
 		} // End init
 
 		public function after_setup_theme() {
@@ -51,6 +57,65 @@ if ( ! class_exists( 'WCMP_BUILDERS' ) ) {
 
 			// Visual Composer
 			add_action( 'vcv:api', array( $instance, 'visualcomposer_editor' ) );
+
+			// DIVI
+			if ( function_exists( 'et_get_theme_version' ) ) {
+				if ( version_compare( et_get_theme_version(), '5.0', '>=' ) ) { // DIVI 5
+					add_action( 'et_builder_ready', array($instance, 'divi_editor') );
+					add_action( 'divi_visual_builder_assets_before_enqueue_scripts',
+						function() {
+							if ( et_core_is_fb_enabled() && et_builder_d5_enabled() ) {
+
+								wp_register_script( 'wcmp-divi5-editor-config', '', array(), null, true );
+								wp_enqueue_script( 'wcmp-divi5-editor-config' );
+								$script = 'var wcmp_divi5_player_preview_url = "' . self::get_preview_url() . '";';
+								wp_add_inline_script( 'wcmp-divi5-editor-config', $script );
+
+								\ET\Builder\VisualBuilder\Assets\PackageBuildManager::register_package_build(
+									[
+										'name'    => 'wcmp-divi-5-module-visual-builder',
+										'version' => '1.0.0',
+										'script'  => [
+											'src' => plugins_url('/pagebuilders/divi5/divi.js', WCMP_PLUGIN_PATH),
+											'deps'=> [
+												'react',
+												'jquery',
+												'divi-module-library',
+												'wp-hooks',
+												'divi-rest',
+											],
+											'enqueue_top_window' => false,
+											'enqueue_app_window' => true,
+										],
+									]
+								);
+							}
+						}
+					);
+
+					// Register module.
+					add_action(
+						'divi_module_library_modules_dependency_tree',
+						function( $dependency_tree ) {
+							// Load Divi 5 modules.
+							require_once dirname(WCMP_PLUGIN_PATH) . '/pagebuilders/divi5/index.php';
+							$dependency_tree->add_dependency( new WCMP_DIVI5() );
+						}
+					);
+
+					add_filter(
+						'divi.moduleLibrary.conversion.moduleConversionOutlineFile',
+						function( $conversion_outline_file, $module_name ) {
+							if ( 'wcmp/wcmp_divi' === $module_name ) {
+								return dirname(WCMP_PLUGIN_PATH) . '/pagebuilders/divi5/conversion-outline.json';
+							}
+							return $conversion_outline_file;
+						}, 10, 2
+					);
+				} else { // DIVI 4
+					add_action( 'et_builder_ready', array($instance, 'divi_editor') );
+				}
+			}
 		} // End after_setup_theme
 
 		/**************************** DIVI ****************************/
@@ -72,8 +137,7 @@ if ( ! class_exists( 'WCMP_BUILDERS' ) ) {
 		public function gutenberg_editor() {
 			wp_enqueue_style( 'wcmp-gutenberg-editor-css', plugin_dir_url( __FILE__ ) . 'gutenberg/gutenberg.css', array(), WCMP_VERSION );
 
-			$url  = WCMP_WEBSITE_URL;
-			$url .= ( ( strpos( $url, '?' ) === false ) ? '?' : '&' ) . 'wcmp-preview=';
+			$url = self::get_preview_url();
 
 			wp_enqueue_script( 'wcmp-admin-gutenberg-editor', plugin_dir_url( __FILE__ ) . 'gutenberg/gutenberg.js', array( 'wp-blocks', 'wp-element' ), WCMP_VERSION, true );
 

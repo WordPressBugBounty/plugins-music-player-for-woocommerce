@@ -49,7 +49,8 @@ $preload  = $GLOBALS['WooCommerceMusicPlayer']->get_product_attr(
 		'none'
 	)
 );
-$on_cover = intval( $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_on_cover', 0 ) );
+$on_cover 	= intval( $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_on_cover', 0 ) );
+$visualizer = intval( $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post->ID, '_wcmp_visualizer', 0 ) );
 ?>
 <input type="hidden" name="wcmp_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wcmp_updating_product' ) ); ?>" />
 <table class="widefat" style="border-left:0;border-right:0;border-bottom:0;padding-bottom:0;">
@@ -277,6 +278,7 @@ $on_cover = intval( $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post-
 				<tr>
 					<td><?php esc_html_e( 'Player controls', 'music-player-for-woocommerce' ); ?></td>
 					<td>
+						<hr>
 						<label><input aria-label="<?php esc_attr_e( 'Play/pause button', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="button" <?php echo ( ( 'button' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'the play/pause button only', 'music-player-for-woocommerce' ); ?></label><br />
 						<label><input aria-label="<?php esc_attr_e( 'All controls', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="all" <?php echo ( ( 'all' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'all controls', 'music-player-for-woocommerce' ); ?></label><br />
 						<label><input aria-label="<?php esc_attr_e( 'Depending on context', 'music-player-for-woocommerce' ); ?>" type="radio" name="_wcmp_player_controls" value="default" <?php echo ( ( 'default' == $player_controls ) ? 'checked' : '' ); ?> /> <?php esc_html_e( 'the play/pause button only, or all controls depending on context', 'music-player-for-woocommerce' ); ?></label>
@@ -291,6 +293,12 @@ $on_cover = intval( $GLOBALS['WooCommerceMusicPlayer']->get_product_attr( $post-
 							?>
 							</i></label>
 						</div>
+						<div class="wcmp-visualizer" style="margin-top:10px;">
+							<label><input aria-label="<?php esc_attr_e( 'Visualizer control', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_visualizer" value="ok" <?php echo ! empty( $visualizer ) ? 'checked' : ''; ?> />
+							<?php esc_html_e( 'For "all controls" mode, display the visualizer component over the player.', 'music-player-for-woocommerce' ); ?>
+							</label>
+						</div>
+						<hr>
 					</td>
 				</tr>
 				<tr>

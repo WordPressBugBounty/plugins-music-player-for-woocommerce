@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.7.3
+Version: 1.7.9
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -32,7 +32,7 @@ require_once 'feedback/cp-feedback.php';
 new WCMP_FEEDBACK( 'music-player-for-woocommerce', __FILE__, 'https://wcmp.dwbooster.com/contact-us' );
 
 // CONSTANTS
-
+define( 'WCMP_PLUGIN_PATH', __FILE__ );
 define( 'WCMP_WEBSITE_URL', get_home_url( get_current_blog_id(), '', is_ssl() ? 'https' : 'http' ) );
 define( 'WCMP_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'WCMP_DEFAULT_PLAYER_LAYOUT', 'mejs-classic' );
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.7.3' );
+define( 'WCMP_VERSION', '1.7.9' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -78,7 +78,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 		private $_hooks = array();
 
-		/**
+        /**
 		 * WCMP constructor
 		 *
 		 * @access public
@@ -184,6 +184,17 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		public function activation() {
 			$this->_clearDir( $this->_files_directory_path );
 			$this->_createDir();
+
+            // Check if the ladning page was opened previously, and redirect to the settings page if not.
+            if ( ! get_option( 'wcmp-landing-page' ) ) {
+                // Check if there is any player configured previously (this means that the user has used the plugin before).
+                global $wpdb;
+                if ( 0 == $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key LIKE '%_wcmp_%'" ) ) {
+                    set_transient( 'wcmp-landing-page', true, 24 * 60 * 60 );
+                    set_transient( 'wcmp-landing-page-redirect', true, 24 * 60 * 60 );
+                    update_option( 'wcmp-landing-page', 1 );
+                }
+            }
 		}
 
 		public function deactivation() {
@@ -364,6 +375,13 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				return;
 			}
 
+            // Redirect to the landing page if activated.
+            if ( get_transient( 'wcmp-landing-page-redirect' ) ) {
+                delete_transient( 'wcmp-landing-page-redirect' );
+                wp_safe_redirect(admin_url('options-general.php?page=music-player-for-woocommerce-settings'));
+            }
+
+            // Clear transients
 			$this->clear_expired_transients();
 
 			add_meta_box( 'wcmp_woocommerce_metabox', __( 'Music Player for WooCommerce', 'music-player-for-woocommerce' ), array( &$this, 'woocommerce_player_settings' ), $this->_get_post_types(), 'normal' );
@@ -407,125 +425,207 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		} // End menu_links
 
 		public function settings_page() {
+            $delete_landing_page_transient = false;
+            if ( isset( $_GET['close-landing-page'] ) ) delete_transient('wcmp-landing-page');
 			if (
-				isset( $_POST['wcmp_nonce'] ) &&
-				wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcmp_nonce'] ) ), 'wcmp_updating_plugin_settings' )
+				isset( $_POST['wcmp_nonce'] )
 			) {
+                $updated_settings = false;
+                $wcmp_nonce = sanitize_text_field( wp_unslash( $_POST['wcmp_nonce'] ) );
 				$_REQUEST = stripslashes_deep( $_REQUEST );
-				// Save the player settings
-				$registered_only                = ( isset( $_REQUEST['_wcmp_registered_only'] ) ) ? 1 : 0;
-				$fade_out                       = ( isset( $_REQUEST['_wcmp_fade_out'] ) ) ? 1 : 0;
-				$purchased_times_text           = sanitize_text_field( isset( $_REQUEST['_wcmp_purchased_times_text'] ) ? wp_unslash( $_REQUEST['_wcmp_purchased_times_text'] ) : '' );
-				$troubleshoot_default_extension = ( isset( $_REQUEST['_wcmp_default_extension'] ) ) ? true : false;
-				$ios_controls                   = ( isset( $_REQUEST['_wcmp_ios_controls'] ) ) ? true : false;
-				$troubleshoot_onload            = ( isset( $_REQUEST['_wcmp_onload'] ) ) ? true : false;
-				$include_main_player_hook       = ( isset( $_REQUEST['_wcmp_main_player_hook'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_main_player_hook'] ) ) : '';
-				$main_player_hook_title         = ( isset( $_REQUEST['_wcmp_main_player_hook_title'] ) ) ? 1 : 0;
-				$disable_302         			= ( isset( $_REQUEST['_wcmp_disable_302'] ) ) ? 1 : 0;
-				$include_all_players_hook       = ( isset( $_REQUEST['_wcmp_all_players_hook'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_all_players_hook'] ) ) : '';
 
-				$enable_player    = ( isset( $_REQUEST['_wcmp_enable_player'] ) ) ? 1 : 0;
-				$show_in          = ( isset( $_REQUEST['_wcmp_show_in'] ) && in_array( $_REQUEST['_wcmp_show_in'], array( 'single', 'multiple' ) ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_show_in'] ) ) : 'all';
-				$players_in_cart  = ( isset( $_REQUEST['_wcmp_players_in_cart'] ) ) ? true : false;
-				$player_style     = (
-						isset( $_REQUEST['_wcmp_player_layout'] ) &&
-						in_array( $_REQUEST['_wcmp_player_layout'], $this->_player_layouts )
-					) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_player_layout'] ) ) : WCMP_DEFAULT_PLAYER_LAYOUT;
-				$custom_skin_desc = ( isset( $_REQUEST['_wcmp_skin_generator_description'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_skin_generator_description'] ) ) : '' );
-				$custom_skin 	  = ( isset( $_REQUEST['_wcmp_custom_skin'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_custom_skin'] ) ) : '' );
-				 $single_player   = ( isset( $_REQUEST['_wcmp_single_player'] ) ) ? 1 : 0;
-				 $player_controls = (
-						isset( $_REQUEST['_wcmp_player_controls'] ) &&
-						in_array( $_REQUEST['_wcmp_player_controls'], $this->_player_controls )
-					) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_player_controls'] ) ) : WCMP_DEFAULT_PLAYER_CONTROLS;
+                if ( wp_verify_nonce( $wcmp_nonce, 'wcmp_updating_plugin_settings_landing_page' ) ) { // phpcs:ignore()
+                    $delete_landing_page_transient = true;
+                    $enable_player      = 1;
+                    $main_player_hook_title = 1;
+                    $fade_out           = 1;
+                    $visualizer         = isset($_REQUEST['_wcmp_visualizer']) ? 1 : 0;
+                    $player_title       = (isset($_REQUEST['_wcmp_player_title'])) ? 1 : 0;
+                    $play_all           = 1;
+                    $show_in            = 'all';
+                    $player_style       = (
+                        isset($_REQUEST['_wcmp_player_layout']) &&
+                        in_array($_REQUEST['_wcmp_player_layout'], $this->_player_layouts)
+                    ) ? sanitize_text_field(wp_unslash($_REQUEST['_wcmp_player_layout'])) : WCMP_DEFAULT_PLAYER_LAYOUT;
+                    $player_controls    = (
+                        isset($_REQUEST['_wcmp_player_controls']) &&
+                        in_array($_REQUEST['_wcmp_player_controls'], $this->_player_controls)
+                    ) ? sanitize_text_field(wp_unslash($_REQUEST['_wcmp_player_controls'])) : WCMP_DEFAULT_PLAYER_CONTROLS;
+                    $volume                 = 1;
+                    $preload                = 'none';
+                    $apply_to_all_players   = 1;
 
-				 $on_cover = ( ( 'button' == $player_controls || 'default' == $player_controls ) && isset( $_REQUEST['_wcmp_player_on_cover'] ) ) ? 1 : 0;
+                    $global_settings = get_option('wcmp_global_settings', []);
+                    $global_settings = array_merge(
+                        $global_settings,
+                        array(
+                            '_wcmp_fade_out'                   => $fade_out,
+                            '_wcmp_enable_player'              => $enable_player,
+                            '_wcmp_show_in'                    => $show_in,
+                            '_wcmp_player_layout'              => $player_style,
+                            '_wcmp_player_volume'              => $volume,
+                            '_wcmp_player_controls'            => $player_controls,
+                            '_wcmp_player_title'               => $player_title,
+                            '_wcmp_play_all'                   => $play_all,
+                            '_wcmp_preload'                    => $preload,
+                            '_wcmp_visualizer'                 => $visualizer,
+                            '_wcmp_main_player_hook_title'     => $main_player_hook_title,
+                            '_wcmp_apply_to_all_players'       => $apply_to_all_players,
+                        )
+                    );
 
-				 $player_title        = ( isset( $_REQUEST['_wcmp_player_title'] ) ) ? 1 : 0;
-				 $merge_grouped       = ( isset( $_REQUEST['_wcmp_merge_in_grouped'] ) ) ? 1 : 0;
-				 $play_all            = ( isset( $_REQUEST['_wcmp_play_all'] ) ) ? 1 : 0;
-				 $loop                = ( isset( $_REQUEST['_wcmp_loop'] ) ) ? 1 : 0;
-				 $play_simultaneously = ( isset( $_REQUEST['_wcmp_play_simultaneously'] ) ) ? 1 : 0;
-				 $volume              = ( isset( $_REQUEST['_wcmp_player_volume'] ) && is_numeric( $_REQUEST['_wcmp_player_volume'] ) ) ? floatval( $_REQUEST['_wcmp_player_volume'] ) : 1;
-				 $preload             = (
-						isset( $_REQUEST['_wcmp_preload'] ) &&
-						in_array( $_REQUEST['_wcmp_preload'], array( 'none', 'metadata', 'auto' ) )
-					) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_preload'] ) ) : 'none';
+                    if ($apply_to_all_players) {
+                        $this->_clearDir($this->_files_directory_path);
 
-				 $apply_to_all_players = ( isset( $_REQUEST['_wcmp_apply_to_all_players'] ) ) ? 1 : 0;
+                        $products_ids = array(
+                            'post_type'     => $this->_get_post_types(),
+                            'numberposts'   => -1,
+                            'post_status'   => array('publish', 'pending', 'draft', 'future'),
+                            'fields'        => 'ids',
+                            'cache_results' => false,
+                        );
 
-				 $global_settings = array(
-					 '_wcmp_registered_only'            => $registered_only,
-					 '_wcmp_fade_out'                   => $fade_out,
-					 '_wcmp_purchased_times_text'       => $purchased_times_text,
-					 '_wcmp_enable_player'              => $enable_player,
-					 '_wcmp_show_in'                    => $show_in,
-					 '_wcmp_players_in_cart'            => $players_in_cart,
-					 '_wcmp_player_layout'              => $player_style,
-					 '_wcmp_skin_generator_description'	=> $custom_skin_desc,
-					 '_wcmp_custom_skin'				=> $custom_skin,
-					 '_wcmp_player_volume'              => $volume,
-					 '_wcmp_single_player'              => $single_player,
-					 '_wcmp_player_controls'            => $player_controls,
-					 '_wcmp_player_title'               => $player_title,
-					 '_wcmp_merge_in_grouped'           => $merge_grouped,
-					 '_wcmp_play_all'                   => $play_all,
-					 '_wcmp_loop'                       => $loop,
-					 '_wcmp_play_simultaneously'        => $play_simultaneously,
-					 '_wcmp_preload'                    => $preload,
-					 '_wcmp_on_cover'                   => $on_cover,
-					 '_wcmp_default_extension'          => $troubleshoot_default_extension,
-					 '_wcmp_ios_controls'               => $ios_controls,
-					 '_wcmp_onload'                     => $troubleshoot_onload,
-					 '_wcmp_main_player_hook'           => $include_main_player_hook,
-					 '_wcmp_main_player_hook_title'     => $main_player_hook_title,
-					 '_wcmp_disable_302'     			=> $disable_302,
-					 '_wcmp_all_players_hook'           => $include_all_players_hook,
-					 '_wcmp_playback_counter_column'      => ( isset( $_REQUEST['_wcmp_playback_counter_column'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_playback_counter_column'] ) ) : 0,
-					 '_wcmp_analytics_integration'      => ( isset( $_REQUEST['_wcmp_analytics_integration'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_integration'] ) ) : 'ua',
-					 '_wcmp_analytics_property'         => ( isset( $_REQUEST['_wcmp_analytics_property'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_property'] ) ) : '',
-					 '_wcmp_analytics_api_secret'       => ( isset( $_REQUEST['_wcmp_analytics_api_secret'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_api_secret'] ) ) : '',
-					 '_wcmp_apply_to_all_players'       => $apply_to_all_players,
-				 );
+                        $products = get_posts($products_ids);
+                        foreach ($products as $product_id) {
+                            update_post_meta($product_id, '_wcmp_enable_player', $enable_player);
+                            update_post_meta($product_id, '_wcmp_show_in', $show_in);
+                            update_post_meta($product_id, '_wcmp_player_layout', $player_style);
+                            update_post_meta($product_id, '_wcmp_player_controls', $player_controls);
+                            update_post_meta($product_id, '_wcmp_player_volume', $volume);
+                            update_post_meta($product_id, '_wcmp_player_title', $player_title);
+                            update_post_meta($product_id, '_wcmp_play_all', $play_all);
+                            update_post_meta($product_id, '_wcmp_preload', $preload);
+                            update_post_meta($product_id, '_wcmp_visualizer', $visualizer);
+                        }
+                    }
 
-				 if ( $apply_to_all_players ) {
-					 $this->_clearDir( $this->_files_directory_path );
+                    $updated_settings = true;
+                } elseif ( wp_verify_nonce( $wcmp_nonce, 'wcmp_updating_plugin_settings' ) ) { // phpcs:ignore()
+                    // Save the player settings
+                    $registered_only                = ( isset( $_REQUEST['_wcmp_registered_only'] ) ) ? 1 : 0;
+                    $fade_out                       = ( isset( $_REQUEST['_wcmp_fade_out'] ) ) ? 1 : 0;
+                    $purchased_times_text           = sanitize_text_field( isset( $_REQUEST['_wcmp_purchased_times_text'] ) ? wp_unslash( $_REQUEST['_wcmp_purchased_times_text'] ) : '' );
+                    $troubleshoot_default_extension = ( isset( $_REQUEST['_wcmp_default_extension'] ) ) ? true : false;
+                    $ios_controls                   = ( isset( $_REQUEST['_wcmp_ios_controls'] ) ) ? true : false;
+                    $troubleshoot_onload            = ( isset( $_REQUEST['_wcmp_onload'] ) ) ? true : false;
+                    $include_main_player_hook       = ( isset( $_REQUEST['_wcmp_main_player_hook'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_main_player_hook'] ) ) : '';
+                    $main_player_hook_title         = ( isset( $_REQUEST['_wcmp_main_player_hook_title'] ) ) ? 1 : 0;
+                    $disable_302         			= ( isset( $_REQUEST['_wcmp_disable_302'] ) ) ? 1 : 0;
+                    $include_all_players_hook       = ( isset( $_REQUEST['_wcmp_all_players_hook'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_all_players_hook'] ) ) : '';
 
-					 $products_ids = array(
-						 'post_type'     => $this->_get_post_types(),
-						 'numberposts'   => -1,
-						 'post_status'   => array( 'publish', 'pending', 'draft', 'future' ),
-						 'fields'        => 'ids',
-						 'cache_results' => false,
-					 );
+                    $enable_player    = ( isset( $_REQUEST['_wcmp_enable_player'] ) ) ? 1 : 0;
+                    $show_in          = ( isset( $_REQUEST['_wcmp_show_in'] ) && in_array( $_REQUEST['_wcmp_show_in'], array( 'single', 'multiple' ) ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_show_in'] ) ) : 'all';
+                    $players_in_cart  = ( isset( $_REQUEST['_wcmp_players_in_cart'] ) ) ? true : false;
+                    $player_style     = (
+                            isset( $_REQUEST['_wcmp_player_layout'] ) &&
+                            in_array( $_REQUEST['_wcmp_player_layout'], $this->_player_layouts )
+                        ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_player_layout'] ) ) : WCMP_DEFAULT_PLAYER_LAYOUT;
+                    $custom_skin_desc = ( isset( $_REQUEST['_wcmp_skin_generator_description'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_skin_generator_description'] ) ) : '' );
+                    $custom_skin 	  = ( isset( $_REQUEST['_wcmp_custom_skin'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_custom_skin'] ) ) : '' );
+                    $single_player   = ( isset( $_REQUEST['_wcmp_single_player'] ) ) ? 1 : 0;
+                    $player_controls = (
+                            isset( $_REQUEST['_wcmp_player_controls'] ) &&
+                            in_array( $_REQUEST['_wcmp_player_controls'], $this->_player_controls )
+                        ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_player_controls'] ) ) : WCMP_DEFAULT_PLAYER_CONTROLS;
 
-					 $products = get_posts( $products_ids );
-					 foreach ( $products as $product_id ) {
-						 update_post_meta( $product_id, '_wcmp_enable_player', $enable_player );
-						 update_post_meta( $product_id, '_wcmp_show_in', $show_in );
-						 update_post_meta( $product_id, '_wcmp_player_layout', $player_style );
-						 update_post_meta( $product_id, '_wcmp_single_player', $single_player );
-						 update_post_meta( $product_id, '_wcmp_player_controls', $player_controls );
-						 update_post_meta( $product_id, '_wcmp_player_volume', $volume );
-						 update_post_meta( $product_id, '_wcmp_player_title', $player_title );
-						 update_post_meta( $product_id, '_wcmp_merge_in_grouped', $merge_grouped );
-						 update_post_meta( $product_id, '_wcmp_play_all', $play_all );
-						 update_post_meta( $product_id, '_wcmp_loop', $loop );
-						 update_post_meta( $product_id, '_wcmp_preload', $preload );
-						 update_post_meta( $product_id, '_wcmp_on_cover', $on_cover );
-					 }
-				 }
+                    $on_cover = ( ( 'button' == $player_controls || 'default' == $player_controls ) && isset( $_REQUEST['_wcmp_player_on_cover'] ) ) ? 1 : 0;
+                    $visualizer = isset( $_REQUEST['_wcmp_visualizer'] ) ? 1 : 0;
 
-				 update_option( 'wcmp_global_settings', $global_settings );
-				 $this->_global_attrs = $global_settings;
-				 do_action( 'wcmp_save_setting' );
+                    $player_title        = ( isset( $_REQUEST['_wcmp_player_title'] ) ) ? 1 : 0;
+                    $merge_grouped       = ( isset( $_REQUEST['_wcmp_merge_in_grouped'] ) ) ? 1 : 0;
+                    $play_all            = ( isset( $_REQUEST['_wcmp_play_all'] ) ) ? 1 : 0;
+                    $loop                = ( isset( $_REQUEST['_wcmp_loop'] ) ) ? 1 : 0;
+                    $play_simultaneously = ( isset( $_REQUEST['_wcmp_play_simultaneously'] ) ) ? 1 : 0;
+                    $volume              = ( isset( $_REQUEST['_wcmp_player_volume'] ) && is_numeric( $_REQUEST['_wcmp_player_volume'] ) ) ? floatval( $_REQUEST['_wcmp_player_volume'] ) : 1;
+                    $preload             = (
+                            isset( $_REQUEST['_wcmp_preload'] ) &&
+                            in_array( $_REQUEST['_wcmp_preload'], array( 'none', 'metadata', 'auto' ) )
+                        ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_preload'] ) ) : 'none';
 
-				 /** Purge Cache **/
-				 include_once __DIR__ . '/inc/cache.inc.php';
+                    $apply_to_all_players = ( isset( $_REQUEST['_wcmp_apply_to_all_players'] ) ) ? 1 : 0;
+
+                    $global_settings = array(
+                        '_wcmp_registered_only'            => $registered_only,
+                        '_wcmp_fade_out'                   => $fade_out,
+                        '_wcmp_purchased_times_text'       => $purchased_times_text,
+                        '_wcmp_enable_player'              => $enable_player,
+                        '_wcmp_show_in'                    => $show_in,
+                        '_wcmp_players_in_cart'            => $players_in_cart,
+                        '_wcmp_player_layout'              => $player_style,
+                        '_wcmp_skin_generator_description'	=> $custom_skin_desc,
+                        '_wcmp_custom_skin'				=> $custom_skin,
+                        '_wcmp_player_volume'              => $volume,
+                        '_wcmp_single_player'              => $single_player,
+                        '_wcmp_player_controls'            => $player_controls,
+                        '_wcmp_player_title'               => $player_title,
+                        '_wcmp_merge_in_grouped'           => $merge_grouped,
+                        '_wcmp_play_all'                   => $play_all,
+                        '_wcmp_loop'                       => $loop,
+                        '_wcmp_play_simultaneously'        => $play_simultaneously,
+                        '_wcmp_preload'                    => $preload,
+                        '_wcmp_on_cover'                   => $on_cover,
+                        '_wcmp_visualizer'                 => $visualizer,
+                        '_wcmp_default_extension'          => $troubleshoot_default_extension,
+                        '_wcmp_ios_controls'               => $ios_controls,
+                        '_wcmp_onload'                     => $troubleshoot_onload,
+                        '_wcmp_main_player_hook'           => $include_main_player_hook,
+                        '_wcmp_main_player_hook_title'     => $main_player_hook_title,
+                        '_wcmp_disable_302'     			=> $disable_302,
+                        '_wcmp_all_players_hook'           => $include_all_players_hook,
+                        '_wcmp_playback_counter_column'      => ( isset( $_REQUEST['_wcmp_playback_counter_column'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_playback_counter_column'] ) ) : 0,
+                        '_wcmp_analytics_integration'      => ( isset( $_REQUEST['_wcmp_analytics_integration'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_integration'] ) ) : 'ua',
+                        '_wcmp_analytics_property'         => ( isset( $_REQUEST['_wcmp_analytics_property'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_property'] ) ) : '',
+                        '_wcmp_analytics_api_secret'       => ( isset( $_REQUEST['_wcmp_analytics_api_secret'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_api_secret'] ) ) : '',
+                        '_wcmp_apply_to_all_players'       => $apply_to_all_players,
+                    );
+
+                    if ( $apply_to_all_players ) {
+                        $this->_clearDir( $this->_files_directory_path );
+
+                        $products_ids = array(
+                            'post_type'     => $this->_get_post_types(),
+                            'numberposts'   => -1,
+                            'post_status'   => array( 'publish', 'pending', 'draft', 'future' ),
+                            'fields'        => 'ids',
+                            'cache_results' => false,
+                        );
+
+                        $products = get_posts( $products_ids );
+                        foreach ( $products as $product_id ) {
+                            update_post_meta( $product_id, '_wcmp_enable_player', $enable_player );
+                            update_post_meta( $product_id, '_wcmp_show_in', $show_in );
+                            update_post_meta( $product_id, '_wcmp_player_layout', $player_style );
+                            update_post_meta( $product_id, '_wcmp_single_player', $single_player );
+                            update_post_meta( $product_id, '_wcmp_player_controls', $player_controls );
+                            update_post_meta( $product_id, '_wcmp_player_volume', $volume );
+                            update_post_meta( $product_id, '_wcmp_player_title', $player_title );
+                            update_post_meta( $product_id, '_wcmp_merge_in_grouped', $merge_grouped );
+                            update_post_meta( $product_id, '_wcmp_play_all', $play_all );
+                            update_post_meta( $product_id, '_wcmp_loop', $loop );
+                            update_post_meta( $product_id, '_wcmp_preload', $preload );
+                            update_post_meta( $product_id, '_wcmp_on_cover', $on_cover );
+                            update_post_meta( $product_id, '_wcmp_visualizer', $visualizer );
+                        }
+                    }
+                    $updated_settings = true;
+                }
+
+                if ( $updated_settings ) {
+                    update_option( 'wcmp_global_settings', $global_settings );
+                    $this->_global_attrs = $global_settings;
+                    do_action( 'wcmp_save_setting' );
+				    /** Purge Cache **/
+				    include_once __DIR__ . '/inc/cache.inc.php';
+                }
 			} // Save settings
 
 			print '<div class="wrap">'; // Open Wrap
-			include_once dirname( __FILE__ ) . '/views/global_options.php';
+            if ( get_transient( 'wcmp-landing-page' ) ) {
+                include_once dirname( __FILE__ ) . '/inc/landing.inc.php';
+                if( $delete_landing_page_transient ) { delete_transient( 'wcmp-landing-page' ); }
+            } else {
+                include_once dirname( __FILE__ ) . '/views/global_options.php';
+            }
 			print '</div>'; // Close Wrap
 		} // End settings_page
 
@@ -568,6 +668,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 				) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_preload'] ) ) : 'none';
 
 			$on_cover = ( ( 'button' == $player_controls || 'default' == $player_controls ) && isset( $_REQUEST['_wcmp_player_on_cover'] ) ) ? 1 : 0;
+			$visualizer = isset( $_REQUEST['_wcmp_visualizer'] ) ? 1 : 0;
 
 			add_post_meta( $post_id, '_wcmp_enable_player', $enable_player, true );
 			add_post_meta( $post_id, '_wcmp_show_in', $show_in, true );
@@ -581,6 +682,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			add_post_meta( $post_id, '_wcmp_play_all', $play_all, true );
 			add_post_meta( $post_id, '_wcmp_loop', $loop, true );
 			add_post_meta( $post_id, '_wcmp_on_cover', $on_cover, true );
+			add_post_meta( $post_id, '_wcmp_visualizer', $visualizer, true );
 		} // End save_post
 
 		public function delete_post( $post_id, $force = false ) {
@@ -612,6 +714,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			delete_post_meta( $post_id, '_wcmp_play_all' );
 			delete_post_meta( $post_id, '_wcmp_loop' );
 			delete_post_meta( $post_id, '_wcmp_on_cover' );
+			delete_post_meta( $post_id, '_wcmp_visualizer' );
 
 			delete_post_meta( $post_id, '_wcmp_playback_counter' );
 		} // End delete_post
@@ -1025,6 +1128,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 								$this->get_player(
 									$audio_url,
 									array(
+										'product_id'      => $product->ID,
 										'player_controls' => $controls,
 										'player_style'    => $player_style,
 										'media_type'      => $file['media_type'],
@@ -1070,6 +1174,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 								$this->get_player(
 									$audio_url,
 									array(
+										'product_id'      => $product->ID,
 										'player_controls' => $controls,
 										'player_style'    => $player_style,
 										'media_type'      => $file['media_type'],
@@ -1174,6 +1279,16 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			 include_once 'views/player_options.php';
 		} // End woocommerce_player_settings
 
+		public function get_visualizer( $id, $controls = '' ) {
+			if ( empty($id) ) return ''; // No product.
+			if ( 'track' == $controls ) return ''; // Play/pause button only.
+
+			$visualizer = $this->get_product_attr( $id, '_wcmp_visualizer', -1 );
+			if ( -1 == $visualizer ) $visualizer = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_visualizer', 0 );
+			if ( $visualizer ) return '<div class="wcmp-player-visualizer"></div>';
+			return '';
+		} // End get_visualizer.
+
 		public function get_player(
 			$audio_url,
 			$args = array()
@@ -1187,8 +1302,9 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			);
 
 			$args = array_merge( $default_args, $args );
-			$id   = ( ! empty( $args['id'] ) ) ? 'id="' . esc_attr( $args['id'] ) . '"' : '';
-
+			$product_id = $args['product_id'] ?? 0;
+			$id   = $product_id ? 'id="' . esc_attr( $product_id ) . '"' : '';
+			$visualizer = $this->get_visualizer( $product_id, $args['player_controls'] );
 			$args['player_style'] = ( $args['player_style'] == 'wcmp-custom-skin' ? 'mejs-classic ' : '' ) . $args['player_style'];
 
 			$preload = ( ! empty( $args['preload'] ) ) ? $args['preload'] : $GLOBALS['WooCommerceMusicPlayer']->get_global_attr(
@@ -1198,7 +1314,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			);
 			$preload = apply_filters( 'wcmp_preload', $preload, $audio_url );
 
-			return '<audio ' . (
+			return $visualizer . '<audio ' . (
 					(
 						isset( $args['volume'] ) &&
 						is_numeric( $args['volume'] ) &&
@@ -1229,11 +1345,18 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		public function woocommerce_product_title( $value, $product ) {
 			global $wp;
 
-			if ( ! empty( $wp->query_vars['wcfm-products-manage'] )) {
-				return $value;
-			}
+            if (! empty($wp->query_vars['wcfm-products-manage'])) {
+                return $value;
+            }
 
-			if (
+            if (
+                ! empty($wp->query_vars['rest_route']) &&
+                stripos($wp->query_vars['rest_route'], '/v1/cart') !== false
+            ) {
+                return $value; // Do not modify title in REST API minicart endpoint.
+            }
+
+            if (
 				$this->get_on_title() &&
 				did_action('woocommerce_init') &&
 				false === stripos( $value, '<audio' )
@@ -1359,6 +1482,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					$this->get_player(
 						$audio_url,
 						array(
+							'product_id'	  => $id,
 							'player_controls' => $player_controls,
 							'player_style'    => $player_style,
 							'media_type'      => $file['media_type'],
@@ -1443,6 +1567,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 						$this->get_player(
 							$audio_url,
 							array(
+								'product_id'	  => $id,
 								'player_controls' => $player_controls,
 								'player_style'    => $player_style,
 								'media_type'      => $file['media_type'],
@@ -1474,6 +1599,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 							$this->get_player(
 								$audio_url,
 								array(
+									'product_id'	  => $id,
 									'player_style'    => $player_style,
 									'player_controls' => ( 'all' != $player_controls ) ? 'track' : '',
 									'media_type'      => $file['media_type'],
@@ -1629,9 +1755,12 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			$allowed_roles = array( 'editor', 'administrator', 'author' );
 
 			if ( array_intersect( $allowed_roles, $user->roles ) ) {
-				if ( ! empty( $_REQUEST['wcmp-preview'] ) ) {
+				if ( ! empty( $_REQUEST['wcmp-preview'] ) && ! empty( $_REQUEST['wcmp-preview-nonce'] ) ) {
 					// Sanitizing variable
 					$preview = sanitize_text_field( wp_unslash( $_REQUEST['wcmp-preview'] ) );
+					$nonce 	 = sanitize_text_field( wp_unslash( $_REQUEST['wcmp-preview-nonce'] ) );
+
+					if ( ! wp_verify_nonce( $nonce, 'wcmp_generate_preview' ) ) exit;
 
 					// Remove every shortcode that is not in the plugin
 					remove_all_shortcodes();

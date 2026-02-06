@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: music-player-for-woocommerce\n"
-"POT-Creation-Date: 2025-06-26 23:48+0200\n"
-"PO-Revision-Date: 2025-06-26 23:49+0200\n"
+"POT-Creation-Date: 2026-01-31 12:44+0100\n"
+"PO-Revision-Date: 2026-01-31 12:44+0100\n"
 "Last-Translator: CodePeople\n"
 "Language-Team: CodePeople\n"
 "Language: en_US\n"
@@ -87,25 +87,25 @@ msgid ""
 "checkbox to allow vendors to configure their music players."
 msgstr ""
 
-#: addons/dokan.addon.php:23 addons/mvx.addon.php:51 addons/wcfm.addon.php:35
+#: addons/dokan.addon.php:23 addons/mvx.addon.php:45 addons/wcfm.addon.php:35
 #: addons/wcv.addon.php:36
 msgid "Hide settings"
 msgstr ""
 
-#: addons/dokan.addon.php:23 addons/mvx.addon.php:51 addons/wcfm.addon.php:35
+#: addons/dokan.addon.php:23 addons/mvx.addon.php:45 addons/wcfm.addon.php:35
 #: addons/wcv.addon.php:36
 msgid "Hides the players settings from vendors interface."
 msgstr ""
 
-#: addons/dokan/player_options.php:11 views/player_options.php:341
+#: addons/dokan/player_options.php:11 views/player_options.php:349
 msgid "File Name"
 msgstr ""
 
-#: addons/dokan/player_options.php:12 views/player_options.php:347
+#: addons/dokan/player_options.php:12 views/player_options.php:355
 msgid "Choose file"
 msgstr ""
 
-#: addons/dokan/player_options.php:13 views/player_options.php:350
+#: addons/dokan/player_options.php:13 views/player_options.php:358
 msgid "Delete"
 msgstr ""
 
@@ -125,11 +125,11 @@ msgstr ""
 msgid "The player uses the audio files associated to the product."
 msgstr ""
 
-#: addons/dokan/player_options.php:66 views/player_options.php:77
+#: addons/dokan/player_options.php:66 views/player_options.php:78
 msgid "[+|-] Tips"
 msgstr ""
 
-#: addons/dokan/player_options.php:72 views/player_options.php:83
+#: addons/dokan/player_options.php:72 views/player_options.php:84
 msgid "[+|-] Using the audio files stored on Google Drive"
 msgstr ""
 
@@ -145,19 +145,19 @@ msgid ""
 "drive.google.com/open?id=FILE_ID</b>"
 msgstr ""
 
-#: addons/dokan/player_options.php:86 views/player_options.php:109
+#: addons/dokan/player_options.php:86 views/player_options.php:110
 msgid ""
 "Knowing the FILE_ID, extracted from the previous URL, enter the URL below, "
 "into the WooCommerce product, to allow the Music Player accessing to it:"
 msgstr ""
 
-#: addons/dokan/player_options.php:92 views/player_options.php:119
+#: addons/dokan/player_options.php:92 views/player_options.php:120
 msgid ""
 "<b>Note:</b> Pay attention to the use of the fake parameter: <b>&.mp3</b> as "
 "the last one in the URL"
 msgstr ""
 
-#: addons/dokan/player_options.php:99 views/player_options.php:127
+#: addons/dokan/player_options.php:99 views/player_options.php:128
 msgid "[+|-] Using the audio files stored on DropBox"
 msgstr ""
 
@@ -167,7 +167,7 @@ msgid ""
 "target=\"_blank\">dropbox.com </a>"
 msgstr ""
 
-#: addons/dokan/player_options.php:110 views/player_options.php:144
+#: addons/dokan/player_options.php:110 views/player_options.php:145
 msgid ""
 "Hover your cursor over the file or folder you'd like to share and click "
 "<b>Share</b> when it appears."
@@ -179,40 +179,40 @@ msgid ""
 "created, click Copy link."
 msgstr ""
 
-#: addons/dokan/player_options.php:118 views/player_options.php:160
+#: addons/dokan/player_options.php:118 views/player_options.php:161
 msgid "The link structure would be similar to:"
 msgstr ""
 
-#: addons/dokan/player_options.php:123 views/player_options.php:169
+#: addons/dokan/player_options.php:123 views/player_options.php:170
 msgid ""
 "Enter the URL into the WooCommerce product with the following structure:"
 msgstr ""
 
-#: addons/dokan/player_options.php:126 views/player_options.php:174
+#: addons/dokan/player_options.php:126 views/player_options.php:175
 msgid ""
 "<b>Note:</b> Pay attention to the use of the fake parameter: <b>&.mp3</b> as "
 "the last one in the URL. Furthermore, the parameter <b>dl=0</b>, has been "
 "modified as <b>dl=1</b>"
 msgstr ""
 
-#: addons/dokan/player_options.php:136 views/global_options.php:302
-#: views/player_options.php:189
+#: addons/dokan/player_options.php:136 views/global_options.php:288
+#: views/player_options.php:190
 msgid "Enable player"
 msgstr ""
 
-#: addons/dokan/player_options.php:136 views/global_options.php:302
+#: addons/dokan/player_options.php:136 views/global_options.php:288
 msgid ""
 "The player is shown only if the product is \"downloadable\" with at least an "
 "audio file between the \"Downloadable files\", or you have selected your own "
 "audio files"
 msgstr ""
 
-#: addons/dokan/player_options.php:136 views/player_options.php:188
+#: addons/dokan/player_options.php:136 views/player_options.php:189
 msgid "Include music player"
 msgstr ""
 
-#: addons/dokan/player_options.php:140 views/global_options.php:305
-#: views/player_options.php:192
+#: addons/dokan/player_options.php:140 views/global_options.php:291
+#: views/player_options.php:193
 msgid "Include in"
 msgstr ""
 
@@ -220,17 +220,17 @@ msgstr ""
 msgid "Include on products pages only"
 msgstr ""
 
-#: addons/dokan/player_options.php:143 views/global_options.php:308
-#: views/player_options.php:195
+#: addons/dokan/player_options.php:143 views/global_options.php:294
+#: views/player_options.php:196
 msgid "single-entry pages <i>(Product's page only)</i>"
 msgstr ""
 
-#: addons/dokan/player_options.php:145 views/player_options.php:197
+#: addons/dokan/player_options.php:145 views/player_options.php:198
 msgid "Include on multiple-entry pages"
 msgstr ""
 
-#: addons/dokan/player_options.php:146 views/global_options.php:311
-#: views/player_options.php:198
+#: addons/dokan/player_options.php:146 views/global_options.php:297
+#: views/player_options.php:199
 msgid ""
 "multiple entries pages <i>(Shop pages, archive pages, but not in the "
 "product's page)</i>"
@@ -240,105 +240,108 @@ msgstr ""
 msgid "Include on products and multiple-entry pages"
 msgstr ""
 
-#: addons/dokan/player_options.php:149 views/global_options.php:314
-#: views/player_options.php:201
+#: addons/dokan/player_options.php:149 views/global_options.php:300
+#: views/player_options.php:202
 msgid "all pages <i>(with single or multiple-entries)</i>"
 msgstr ""
 
 #: addons/dokan/player_options.php:153 addons/dokan/player_options.php:154
-#: views/global_options.php:324 views/global_options.php:325
-#: views/player_options.php:205 views/player_options.php:206
+#: views/global_options.php:310 views/global_options.php:311
+#: views/player_options.php:206 views/player_options.php:207
 msgid "Merge in grouped products"
 msgstr ""
 
-#: addons/dokan/player_options.php:155 views/global_options.php:325
-#: views/player_options.php:206
+#: addons/dokan/player_options.php:155 views/global_options.php:311
+#: views/player_options.php:207
 msgid ""
 "In grouped products, display the \"Add to cart\" buttons and quantity fields "
 "in the players rows"
 msgstr ""
 
-#: addons/dokan/player_options.php:158 views/global_options.php:328
-#: views/player_options.php:209 widgets/playlist_widget.php:90
+#: addons/dokan/player_options.php:158 views/global_options.php:314
+#: views/player_options.php:210 widgets/playlist_widget.php:90
 msgid "Player layout"
 msgstr ""
 
-#: addons/dokan/player_options.php:161 views/global_options.php:332
-#: views/global_options.php:333 views/player_options.php:213
-#: views/player_options.php:214
+#: addons/dokan/player_options.php:161 inc/landing.inc.php:438
+#: inc/landing.inc.php:439 views/global_options.php:318
+#: views/global_options.php:319 views/player_options.php:214
+#: views/player_options.php:215
 msgid "Skin 1"
 msgstr ""
 
-#: addons/dokan/player_options.php:166 views/global_options.php:337
-#: views/global_options.php:338 views/player_options.php:218
-#: views/player_options.php:219
+#: addons/dokan/player_options.php:166 inc/landing.inc.php:443
+#: inc/landing.inc.php:444 views/global_options.php:323
+#: views/global_options.php:324 views/player_options.php:219
+#: views/player_options.php:220
 msgid "Skin 2"
 msgstr ""
 
-#: addons/dokan/player_options.php:171 views/global_options.php:342
-#: views/global_options.php:343 views/player_options.php:223
-#: views/player_options.php:224
+#: addons/dokan/player_options.php:171 inc/landing.inc.php:448
+#: inc/landing.inc.php:449 views/global_options.php:328
+#: views/global_options.php:329 views/player_options.php:224
+#: views/player_options.php:225
 msgid "Skin 3"
 msgstr ""
 
-#: addons/dokan/player_options.php:177 views/global_options.php:490
-#: views/player_options.php:242 widgets/playlist_widget.php:106
+#: addons/dokan/player_options.php:177 views/global_options.php:476
+#: views/player_options.php:243 widgets/playlist_widget.php:106
 msgid "Preload"
 msgstr ""
 
-#: addons/dokan/player_options.php:179 views/global_options.php:493
-#: views/player_options.php:245
+#: addons/dokan/player_options.php:179 views/global_options.php:479
+#: views/player_options.php:246
 msgid "Preload - none"
 msgstr ""
 
-#: addons/dokan/player_options.php:181 views/global_options.php:495
-#: views/player_options.php:247
+#: addons/dokan/player_options.php:181 views/global_options.php:481
+#: views/player_options.php:248
 msgid "Preload - metadata"
 msgstr ""
 
-#: addons/dokan/player_options.php:183 views/global_options.php:497
-#: views/player_options.php:249
+#: addons/dokan/player_options.php:183 views/global_options.php:483
+#: views/player_options.php:250
 msgid "Preload - auto"
 msgstr ""
 
-#: addons/dokan/player_options.php:188 views/global_options.php:503
-#: views/global_options.php:506 views/player_options.php:255
-#: views/player_options.php:258 widgets/playlist_widget.php:102
+#: addons/dokan/player_options.php:188 views/global_options.php:489
+#: views/global_options.php:492 views/player_options.php:256
+#: views/player_options.php:259 widgets/playlist_widget.php:102
 msgid "Play all"
 msgstr ""
 
-#: addons/dokan/player_options.php:192 views/global_options.php:538
-#: views/player_options.php:278
+#: addons/dokan/player_options.php:192 views/global_options.php:524
+#: views/player_options.php:279
 msgid "Player controls"
 msgstr ""
 
-#: addons/dokan/player_options.php:194 views/global_options.php:540
-#: views/player_options.php:280
+#: addons/dokan/player_options.php:194 views/global_options.php:527
+#: views/player_options.php:282
 msgid "Play/pause button"
 msgstr ""
 
-#: addons/dokan/player_options.php:194 views/global_options.php:540
-#: views/player_options.php:280
+#: addons/dokan/player_options.php:194 views/global_options.php:527
+#: views/player_options.php:282
 msgid "the play/pause button only"
 msgstr ""
 
-#: addons/dokan/player_options.php:195 views/global_options.php:541
-#: views/player_options.php:281
+#: addons/dokan/player_options.php:195 views/global_options.php:528
+#: views/player_options.php:283
 msgid "All controls"
 msgstr ""
 
-#: addons/dokan/player_options.php:195 views/global_options.php:541
-#: views/player_options.php:281
+#: addons/dokan/player_options.php:195 views/global_options.php:528
+#: views/player_options.php:283
 msgid "all controls"
 msgstr ""
 
-#: addons/dokan/player_options.php:196 views/global_options.php:542
-#: views/player_options.php:282
+#: addons/dokan/player_options.php:196 views/global_options.php:529
+#: views/player_options.php:284
 msgid "Depending on context"
 msgstr ""
 
-#: addons/dokan/player_options.php:196 views/global_options.php:542
-#: views/player_options.php:282
+#: addons/dokan/player_options.php:196 views/global_options.php:529
+#: views/player_options.php:284
 msgid "the play/pause button only, or all controls depending on context"
 msgstr ""
 
@@ -346,20 +349,20 @@ msgstr ""
 msgid "Player on cover"
 msgstr ""
 
-#: addons/dokan/player_options.php:200 views/global_options.php:547
-#: views/player_options.php:287
+#: addons/dokan/player_options.php:200 views/global_options.php:534
+#: views/player_options.php:289
 msgid "for play/pause button players display them on cover images."
 msgstr ""
 
-#: addons/dokan/player_options.php:201 views/global_options.php:550
-#: views/player_options.php:290
+#: addons/dokan/player_options.php:201 views/global_options.php:537
+#: views/player_options.php:292
 msgid ""
 "(This feature is experimental, and will depend on the theme active on the "
 "website.)"
 msgstr ""
 
-#: addons/dokan/player_options.php:206 views/global_options.php:557
-#: views/player_options.php:297
+#: addons/dokan/player_options.php:206 inc/landing.inc.php:465
+#: views/global_options.php:550 views/player_options.php:305
 msgid "Display the player's title"
 msgstr ""
 
@@ -367,21 +370,21 @@ msgstr ""
 msgid "Display player title"
 msgstr ""
 
-#: addons/mvx.addon.php:50
+#: addons/mvx.addon.php:44
 msgid "Activate the MultiVendorX add-on"
 msgstr ""
 
-#: addons/mvx.addon.php:50
+#: addons/mvx.addon.php:44
 msgid "Activate the MultiVendorX add-on (Experimental add-on)"
 msgstr ""
 
-#: addons/mvx.addon.php:50
+#: addons/mvx.addon.php:44
 msgid ""
 "If the \"MultiVendorX\" plugin is installed on the website, tick the "
 "checkbox to allow vendors to configure their music players."
 msgstr ""
 
-#: addons/mvx.addon.php:91 addons/wcfm.addon.php:51
+#: addons/mvx.addon.php:85 addons/wcfm.addon.php:51
 msgid "Music Player"
 msgstr ""
 
@@ -407,6 +410,157 @@ msgstr ""
 msgid ""
 "If the \"WC Vendors\" plugin is installed on the website, check the checkbox "
 "to allow vendors to configure their music players."
+msgstr ""
+
+#: inc/landing.inc.php:366
+msgid "close the landing page"
+msgstr ""
+
+#: inc/landing.inc.php:369
+msgid "Welcome to the Music Player for WooCommerce"
+msgstr ""
+
+#: inc/landing.inc.php:406
+msgid ""
+"You are currently using the free version of Music Player for WooCommerce, "
+"which allows audio players only on downloadable products that include at "
+"least one audio file."
+msgstr ""
+
+#: inc/landing.inc.php:407 inc/landing.inc.php:408
+msgid ""
+"Upgrade to the commercial version to unlock full flexibility: enable audio "
+"players on any WooCommerce product, whether downloadable or physical, and "
+"present your audio content exactly where it drives the most value."
+msgstr ""
+
+#: inc/landing.inc.php:413
+msgid ""
+"You currently have no downloadable products in your store. Please note that "
+"the free version of our plugin only supports downloadable products that "
+"include at least one audio file."
+msgstr ""
+
+#: inc/landing.inc.php:418
+msgid "Downloadable Products"
+msgstr ""
+
+#: inc/landing.inc.php:420
+msgid "Compatible with the Music Player for WooCommerce Free"
+msgstr ""
+
+#: inc/landing.inc.php:424
+msgid "Other Products"
+msgstr ""
+
+#: inc/landing.inc.php:426
+msgid "Compatible with the Music Player for WooCommerce Pro"
+msgstr ""
+
+#: inc/landing.inc.php:429
+msgid ""
+"Using this dialog, you can automatically enable the audio player for all "
+"downloadable products that contain one or more associated audio files."
+msgstr ""
+
+#: inc/landing.inc.php:434
+msgid "Select a player skin:"
+msgstr ""
+
+#: inc/landing.inc.php:455
+msgid "Other options:"
+msgstr ""
+
+#: inc/landing.inc.php:457 views/global_options.php:542
+#: views/player_options.php:297
+msgid "Visualizer control"
+msgstr ""
+
+#: inc/landing.inc.php:458
+msgid "Display the visualizer component over the player."
+msgstr ""
+
+#: inc/landing.inc.php:465 views/global_options.php:552
+#: views/player_options.php:307
+msgid "Display the player title"
+msgstr ""
+
+#: inc/landing.inc.php:472
+msgid "Enabling the audio player"
+msgstr ""
+
+#: inc/landing.inc.php:475
+msgid "Go to your products list"
+msgstr ""
+
+#: inc/landing.inc.php:488
+msgid "Thanks!!!"
+msgstr ""
+
+#: inc/landing.inc.php:492
+msgid "Visit your store"
+msgstr ""
+
+#: inc/landing.inc.php:509
+msgid "Why Upgrade?"
+msgstr ""
+
+#: inc/landing.inc.php:513
+msgid "(One-time purchase, lifetime access plugin updates)"
+msgstr ""
+
+#: inc/landing.inc.php:519
+msgid "Display players on non-downloadable products"
+msgstr ""
+
+#: inc/landing.inc.php:519
+msgid "Allow audio players to be enabled on non-downloadable products."
+msgstr ""
+
+#: inc/landing.inc.php:520
+msgid "Protect the audio files"
+msgstr ""
+
+#: inc/landing.inc.php:520
+msgid ""
+"Generate new demo audio files to ensure that unauthorized access only "
+"exposes demo versions, not the full sales audio."
+msgstr ""
+
+#: inc/landing.inc.php:521
+msgid "Audio watermark"
+msgstr ""
+
+#: inc/landing.inc.php:521
+msgid "Allows you to apply audio watermarks to demo files."
+msgstr ""
+
+#: inc/landing.inc.php:524
+msgid "Demo specific audio files"
+msgstr ""
+
+#: inc/landing.inc.php:524
+msgid ""
+"Assign specific audio files as demo versions, keeping them separate from the "
+"original audio files."
+msgstr ""
+
+#: inc/landing.inc.php:525
+msgid "Allow accessing purchased files"
+msgstr ""
+
+#: inc/landing.inc.php:525
+msgid ""
+"Allows verified buyers to listen to the original audio files rather than "
+"demo versions."
+msgstr ""
+
+#: inc/landing.inc.php:530
+msgid "LIFETIME"
+msgstr ""
+
+#: inc/landing.inc.php:531
+msgid "UPGRADE!"
 msgstr ""
 
 #: inc/skingenerator.inc.php:47
@@ -437,7 +591,7 @@ msgstr ""
 #: pagebuilders/beaverbuilder/wcmp/wcmp.pb.php:11
 #: pagebuilders/beaverbuilder/wcmp/wcmp.pb.php:12 pagebuilders/builders.php:126
 #: pagebuilders/divi/divi.pb.php:9
-#: pagebuilders/siteorigin/siteorigin-wcmp/siteorigin-wcmp.php:16 wcmp.php:366
+#: pagebuilders/siteorigin/siteorigin-wcmp/siteorigin-wcmp.php:16 wcmp.php:387
 msgid "Music Player for WooCommerce"
 msgstr ""
 
@@ -591,8 +745,8 @@ msgstr ""
 msgid "The general settings affect only the PRO version of the plugin"
 msgstr ""
 
-#: views/global_options.php:106 views/global_options.php:563
-#: views/player_options.php:70 views/player_options.php:303
+#: views/global_options.php:106 views/global_options.php:556
+#: views/player_options.php:71 views/player_options.php:311
 msgid "CLICK HERE TO GET THE PRO VERSION OF THE PLUGIN"
 msgstr ""
 
@@ -689,49 +843,32 @@ msgstr ""
 
 #: views/global_options.php:225
 msgid ""
-"Q: Are the store or product templates created with WooCommerce Gutenberg "
-"Blocks hiding the audio players? Check the box to force the plugin to load "
-"the players next to product titles."
-msgstr ""
-
-#: views/global_options.php:231
-msgid ""
-"For the WooCommerce Gutenberg Blocks, include the main player in the "
-"products titles"
-msgstr ""
-
-#: views/global_options.php:233
-msgid "Includes the main player in front of products titles"
-msgstr ""
-
-#: views/global_options.php:239
-msgid ""
 "Q: Have you installed a custom WordPress theme that doesn't use the standard "
 "WooCommerce hooks and players are not visible on shop pages? If so, please "
 "enter the hook names separated by commas that the plugin should check to "
 "load the audio players on the shop pages."
 msgstr ""
 
-#: views/global_options.php:244
+#: views/global_options.php:230
 msgid "WooCommerce hook used to display the players in the shop pages"
 msgstr ""
 
-#: views/global_options.php:245
+#: views/global_options.php:231
 msgid ""
 "The plugin uses by default the <b>woocommerce_shop_loop_item_title</b> hook. "
 "If the player is not being displayed, enter the hook used by the theme "
 "active on your website."
 msgstr ""
 
-#: views/global_options.php:247
+#: views/global_options.php:233
 msgid "Force the player in the title"
 msgstr ""
 
-#: views/global_options.php:248
+#: views/global_options.php:234
 msgid "Forces the audio player to be displayed in the product title."
 msgstr ""
 
-#: views/global_options.php:254
+#: views/global_options.php:240
 msgid ""
 "Q: Have you installed a custom WordPress theme that doesn't use the standard "
 "WooCommerce hooks and players are not visible on product pages? If so, "
@@ -739,18 +876,18 @@ msgid ""
 "to load the audio players on the product pages."
 msgstr ""
 
-#: views/global_options.php:259
+#: views/global_options.php:245
 msgid "WooCommerce hook used to display the players in the products pages"
 msgstr ""
 
-#: views/global_options.php:260
+#: views/global_options.php:246
 msgid ""
 "The plugin uses by default the <b>woocommerce_single_product_summary</b> "
 "hook. If the player is not being displayed, enter the hook used by the theme "
 "active on your website."
 msgstr ""
 
-#: views/global_options.php:265
+#: views/global_options.php:251
 msgid ""
 "Click on the <a href=\"https://docs.woocommerce.com/wc-apidocs/hook-"
 "docs.html\" target=\"_blank\">THIS LINK</a> for the list of available <a "
@@ -759,290 +896,291 @@ msgid ""
 "Hooks</a>"
 msgstr ""
 
-#: views/global_options.php:270
+#: views/global_options.php:256
 msgid ""
 "Q: Are the audio players visible but not working correctly? Try disabling "
 "302 redirects."
 msgstr ""
 
-#: views/global_options.php:276
+#: views/global_options.php:262
 msgid "Disable 302 redirection"
 msgstr ""
 
-#: views/global_options.php:278
+#: views/global_options.php:264
 msgid "Load demo files with PHP code instead of redirecting browsers to them."
 msgstr ""
 
-#: views/global_options.php:283
+#: views/global_options.php:269
 msgid ""
 "Q: Are the demo files outdated or were they generated incorrectly? Delete "
 "the previously generated demo files to allow the plugin to regenerate them."
 msgstr ""
 
-#: views/global_options.php:288
+#: views/global_options.php:274
 msgid "Delete the demo files generated previously"
 msgstr ""
 
-#: views/global_options.php:288
+#: views/global_options.php:274
 msgid "only applied to demo files stored locally on the website"
 msgstr ""
 
-#: views/global_options.php:294
+#: views/global_options.php:280
 msgid "Attention !!!"
 msgstr ""
 
-#: views/global_options.php:294
+#: views/global_options.php:280
 msgid ""
 "After modifying the troubleshooting area attributes, it is recommended to "
 "clear the website and browser caches."
 msgstr ""
 
-#: views/global_options.php:299
+#: views/global_options.php:285
 msgid "Player Settings"
 msgstr ""
 
-#: views/global_options.php:301
+#: views/global_options.php:287
 msgid "Include music player in all products"
 msgstr ""
 
-#: views/global_options.php:307
+#: views/global_options.php:293
 msgid "Products pages only"
 msgstr ""
 
-#: views/global_options.php:310
+#: views/global_options.php:296
 msgid "Multiple-entry pages"
 msgstr ""
 
-#: views/global_options.php:313
+#: views/global_options.php:299
 msgid "Product and multiple-entry pages"
 msgstr ""
 
-#: views/global_options.php:318 views/global_options.php:320
+#: views/global_options.php:304 views/global_options.php:306
 msgid "Include players in cart"
 msgstr ""
 
-#: views/global_options.php:347 views/player_options.php:228
-#: views/player_options.php:229
+#: views/global_options.php:333 views/player_options.php:229
+#: views/player_options.php:230
 msgid "Custom Skin"
 msgstr ""
 
-#: views/global_options.php:349
+#: views/global_options.php:335
 msgid "Custom Skin (BETA)"
 msgstr ""
 
-#: views/global_options.php:350 views/global_options.php:352
+#: views/global_options.php:336 views/global_options.php:338
 msgid "Enter the Google AI API Key"
 msgstr ""
 
-#: views/global_options.php:350
+#: views/global_options.php:336
 msgid "Click here to access the Google AI Studio and generate an API key."
 msgstr ""
 
-#: views/global_options.php:353
+#: views/global_options.php:339
 msgid "Save API Key"
 msgstr ""
 
-#: views/global_options.php:354
+#: views/global_options.php:340
 msgid "Clear API Key"
 msgstr ""
 
-#: views/global_options.php:356
+#: views/global_options.php:342
 msgid "Video tutorial:"
 msgstr ""
 
-#: views/global_options.php:356
+#: views/global_options.php:342
 msgid "Click Here"
 msgstr ""
 
-#: views/global_options.php:357
+#: views/global_options.php:343
 msgid "Custom Skin Description"
 msgstr ""
 
-#: views/global_options.php:359 views/global_options.php:368
+#: views/global_options.php:345 views/global_options.php:354
 msgid "Enter the skin description"
 msgstr ""
 
-#: views/global_options.php:364
+#: views/global_options.php:350
 msgid "Generate Skin"
 msgstr ""
 
-#: views/global_options.php:366
+#: views/global_options.php:352
 msgid "Custom Skin Code"
 msgstr ""
 
-#: views/global_options.php:373
+#: views/global_options.php:359
 msgid "Preview"
 msgstr ""
 
-#: views/global_options.php:481 views/global_options.php:482
-#: views/player_options.php:233 views/player_options.php:234
+#: views/global_options.php:467 views/global_options.php:468
+#: views/player_options.php:234 views/player_options.php:235
 msgid "Show a single player instead of one player per audio file."
 msgstr ""
 
-#: views/global_options.php:512 views/global_options.php:515
-#: views/player_options.php:264 views/player_options.php:267
+#: views/global_options.php:498 views/global_options.php:501
+#: views/player_options.php:265 views/player_options.php:268
 msgid "Loop"
 msgstr ""
 
-#: views/global_options.php:521 views/global_options.php:524
+#: views/global_options.php:507 views/global_options.php:510
 msgid "Allow multiple players to play simultaneously"
 msgstr ""
 
-#: views/global_options.php:527
+#: views/global_options.php:513
 msgid ""
 "By default, only one player would be playing at once. By pressing the play "
 "button of a player, the other players would stop. By ticking the checkbox, "
 "multiple players could play simultaneously."
 msgstr ""
 
-#: views/global_options.php:532 views/player_options.php:272
+#: views/global_options.php:518 views/player_options.php:273
 msgid "Player volume (from 0 to 1)"
 msgstr ""
 
-#: views/global_options.php:534 views/player_options.php:274
+#: views/global_options.php:520 views/player_options.php:275
 msgid "Player volume"
 msgstr ""
 
-#: views/global_options.php:544 views/player_options.php:284
+#: views/global_options.php:531 views/player_options.php:286
 msgid "On cover"
 msgstr ""
 
-#: views/global_options.php:559 views/player_options.php:299
-msgid "Display the player title"
+#: views/global_options.php:543 views/player_options.php:298
+msgid ""
+"For \"all controls\" mode, display the visualizer component over the player."
 msgstr ""
 
-#: views/global_options.php:563 views/player_options.php:303
+#: views/global_options.php:556 views/player_options.php:311
 msgid "The security feature is only available in the PRO version of the plugin"
 msgstr ""
 
-#: views/global_options.php:568
+#: views/global_options.php:561
 msgid "Files Protection"
 msgstr ""
 
-#: views/global_options.php:570 views/global_options.php:571
-#: views/player_options.php:306 views/player_options.php:307
+#: views/global_options.php:563 views/global_options.php:564
+#: views/player_options.php:314 views/player_options.php:315
 msgid "Protect the file"
 msgstr ""
 
-#: views/global_options.php:574 views/global_options.php:576
-#: views/player_options.php:310 views/player_options.php:312
+#: views/global_options.php:567 views/global_options.php:569
+#: views/player_options.php:318 views/player_options.php:320
 msgid "Percent of audio used for protected playbacks"
 msgstr ""
 
-#: views/global_options.php:577 views/player_options.php:313
+#: views/global_options.php:570 views/player_options.php:321
 msgid ""
 "To prevent unauthorized copying of audio files, the files will be partially "
 "accessible"
 msgstr ""
 
-#: views/global_options.php:582
+#: views/global_options.php:575
 msgid ""
 "Text to display beside the player explaining that demos are partial versions "
 "of the original files"
 msgstr ""
 
-#: views/global_options.php:584
+#: views/global_options.php:577
 msgid "Explaining that demos are partial versions of the original files"
 msgstr ""
 
-#: views/global_options.php:591 views/global_options.php:592
+#: views/global_options.php:584 views/global_options.php:585
 msgid "Truncate the audio files for demo with ffmpeg"
 msgstr ""
 
-#: views/global_options.php:595 views/global_options.php:596
+#: views/global_options.php:588 views/global_options.php:589
 msgid "ffmpeg path"
 msgstr ""
 
-#: views/global_options.php:599 views/global_options.php:601
+#: views/global_options.php:592 views/global_options.php:594
 msgid "Watermark audio"
 msgstr ""
 
-#: views/global_options.php:601
+#: views/global_options.php:594
 msgid "Select"
 msgstr ""
 
-#: views/global_options.php:602
+#: views/global_options.php:595
 msgid ""
 "Select an audio file if you want to apply a watermark to the audio files for "
 "demos. The watermark will be applied to the protected demos (Experimental "
 "feature)."
 msgstr ""
 
-#: views/global_options.php:610
+#: views/global_options.php:603
 msgid "Scope"
 msgstr ""
 
-#: views/global_options.php:611
+#: views/global_options.php:604
 msgid ""
 "Ticking the checkbox the previous settings are applied to all products, even "
 "if they have a player enabled."
 msgstr ""
 
-#: views/global_options.php:611
+#: views/global_options.php:604
 msgid "Apply the previous settings to all products"
 msgstr ""
 
-#: views/global_options.php:611
+#: views/global_options.php:604
 msgid ""
 "Apply the above settings to all product pages on the website, including "
 "existing ones."
 msgstr ""
 
-#: views/global_options.php:627
+#: views/global_options.php:620
 msgid "Analytics"
 msgstr ""
 
-#: views/global_options.php:631 views/global_options.php:632
+#: views/global_options.php:624 views/global_options.php:625
 msgid "Show \"playback Counter\" in the WooCommerce products list"
 msgstr ""
 
-#: views/global_options.php:637
+#: views/global_options.php:630
 msgid ""
 "Allows the integration with Google Analytics for registering new events when "
 "the songs are played. The event information would include: the URL to the "
 "audio file as the event label and the product's id as its value."
 msgstr ""
 
-#: views/global_options.php:638
+#: views/global_options.php:631
 msgid "Note"
 msgstr ""
 
-#: views/global_options.php:638
+#: views/global_options.php:631
 msgid ""
 "If the preload option is configured as Metadata or Auto in the players "
 "settings, the event would be registered when the audio file is loaded by the "
 "player and not exactly when they are playing."
 msgstr ""
 
-#: views/global_options.php:643
+#: views/global_options.php:636
 msgid "Universal Analytics"
 msgstr ""
 
-#: views/global_options.php:644
+#: views/global_options.php:637
 msgid "Measurement Protocol (Google Analytics 4)"
 msgstr ""
 
-#: views/global_options.php:649 views/global_options.php:650
+#: views/global_options.php:642 views/global_options.php:643
 msgid "Measurement Id"
 msgstr ""
 
-#: views/global_options.php:655 views/global_options.php:656
+#: views/global_options.php:648 views/global_options.php:649
 msgid "API Secret"
 msgstr ""
 
-#: views/global_options.php:668
+#: views/global_options.php:661
 msgid "Add ons"
 msgstr ""
 
-#: views/global_options.php:675
+#: views/global_options.php:668
 msgid "Save settings"
 msgstr ""
 
-#: views/player_options.php:61
+#: views/player_options.php:62
 msgid "<p>The player uses the audio files associated with the product.</p>"
 msgstr ""
 
-#: views/player_options.php:62
+#: views/player_options.php:63
 msgid ""
 "<hr style=\"border: 0;border-top: 1px solid #E6DB55;\"><p style=\"font-"
 "size:1.2em;\"><i>The free distribution of the \"Music Player for "
@@ -1051,7 +1189,7 @@ msgid ""
 "style=\"border: 0;border-top: 1px solid #E6DB55;\">"
 msgstr ""
 
-#: views/player_options.php:65
+#: views/player_options.php:66
 msgid ""
 "<p style=\"font-size:1.1em;\"><i>If you designed the products template with "
 "<b>Elementor</b>, insert the playlist shortcode in the template without the "
@@ -1060,7 +1198,7 @@ msgid ""
 "#E6DB55;\">"
 msgstr ""
 
-#: views/player_options.php:68
+#: views/player_options.php:69
 msgid ""
 "<p>If you want to protect the audio files, tick the \"Protect file\" "
 "checkbox. In this case, the plugin will generate a shortened version of the "
@@ -1069,13 +1207,13 @@ msgid ""
 "for protected playbacks\"</b> attribute.</p>"
 msgstr ""
 
-#: views/player_options.php:70
+#: views/player_options.php:71
 msgid ""
 "The security feature and particular files for demo are only available in the "
 "PRO version of the plugin"
 msgstr ""
 
-#: views/player_options.php:71
+#: views/player_options.php:72
 msgid ""
 "For testing the premium version of the plugin, visit the online demo:<br/> "
 "<a href=\"https://demos.dwbooster.com/music-player-for-woocommerce/wp-"
@@ -1085,85 +1223,85 @@ msgid ""
 "WooCommerce Store</a>"
 msgstr ""
 
-#: views/player_options.php:91
+#: views/player_options.php:92
 msgid ""
 "Go to Drive, press the right click on the file to use, and select the "
 "option: "
 msgstr ""
 
-#: views/player_options.php:99
+#: views/player_options.php:100
 msgid "The previous action will generate an url with the structure: "
 msgstr ""
 
-#: views/player_options.php:135
+#: views/player_options.php:136
 msgid "Sign in to "
 msgstr ""
 
-#: views/player_options.php:152
+#: views/player_options.php:153
 msgid ""
 "If a link hasn't been created, click Create a link. (If a link was already "
 "created, click Copy link)"
 msgstr ""
 
-#: views/player_options.php:189
+#: views/player_options.php:190
 msgid ""
 "The player is shown only if the product is \"downloadable\", and there is at "
 "least an audio file between the \"Downloadable files\""
 msgstr ""
 
-#: views/player_options.php:194
+#: views/player_options.php:195
 msgid "Include on products pages"
 msgstr ""
 
-#: views/player_options.php:200
+#: views/player_options.php:201
 msgid "Include on product and multiple-entry pages"
 msgstr ""
 
-#: views/player_options.php:229
+#: views/player_options.php:230
 msgid "Configure custom skin"
 msgstr ""
 
-#: views/player_options.php:325
+#: views/player_options.php:333
 msgid "Own demo files"
 msgstr ""
 
-#: views/player_options.php:325
+#: views/player_options.php:333
 msgid "Select my own demo files"
 msgstr ""
 
-#: views/player_options.php:329
+#: views/player_options.php:337
 msgid "Demo files"
 msgstr ""
 
-#: views/player_options.php:333
+#: views/player_options.php:341
 msgid "Name"
 msgstr ""
 
-#: views/player_options.php:334 views/player_options.php:344
+#: views/player_options.php:342 views/player_options.php:352
 msgid "File URL"
 msgstr ""
 
-#: views/player_options.php:341
+#: views/player_options.php:349
 msgid "File name"
 msgstr ""
 
-#: views/player_options.php:357
+#: views/player_options.php:365
 msgid "Add File"
 msgstr ""
 
-#: wcmp.php:376
+#: wcmp.php:397
 msgid "Playback Counter"
 msgstr ""
 
-#: wcmp.php:397
+#: wcmp.php:418
 msgid "Help"
 msgstr ""
 
-#: wcmp.php:1163
+#: wcmp.php:1269
 msgid "download"
 msgstr ""
 
-#: wcmp.php:1619
+#: wcmp.php:1768
 msgid "There are no products that satisfy the block's settings"
 msgstr ""
 

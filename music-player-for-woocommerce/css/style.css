@@ -20,7 +20,7 @@
 .wcmp-player.track.mejs-wmp{width:40px !important;height:40px !important;}
 .wcmp-player.track.mejs-wmp .mejs-controls{height:40px !important; width:40px !important; background:transparent !important;}
 
-.wcmp-player:not(.track){min-width:200px !important;}
+.wcmp-player:not(.track){min-width:200px !important;position:relative;}
 
 .wcmp-player .mejs-currenttime,
 .wcmp-player .mejs-duration{white-space:nowrap;}
@@ -92,3 +92,63 @@
 .wcmp-single-player.merge_in_grouped_products .wcmp-column-player-title>table{margin:0 !important;}
 
 .wcmp-download-link{font-weight:700;}
+
+/* wcmp-player-visualizer */
+
+.wcmp-player-visualizer {
+	width: 100%;
+	height: 80px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position:relative;
+}
+
+.wcmp-player-visualizer-bars-container {
+	top: 0;
+	bottom: 0;
+	left:0;
+	right:0;
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: flex-end;
+	gap: 4px;
+	background: transparent;
+	padding: 5px 0;
+	box-sizing: border-box;
+	overflow: hidden;
+	position:absolute;
+}
+
+.wcmp-player-visualizer-bar {
+	flex: 0 0 4px;
+	height: 0;
+	background: repeating-linear-gradient(
+		to top,
+		rgba(255, 255, 255, 0) 0px,
+		rgba(255, 255, 255, 0) 1px,
+		rgba(0, 115, 170, 1) 2px,
+		rgba(0, 115, 170, 1) 3px
+	  );
+	opacity: 0.85;
+	box-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
+	border-radius: 3px;
+	transition: height 0.08s ease-out, opacity 0.08s ease-out;
+}
+
+ .wcmp-player-container:has( .mejs-wmp ) .wcmp-player-visualizer{padding-left:20px; padding-right:20px;}
+ .wcmp-player-container:has( .mejs-ted ) .wcmp-player-visualizer{padding:10px 10px 5px 10px;background:#eee;height:50px;}
+ .wcmp-player-container:has( .mejs-ted ) .wcmp-player-visualizer-bar{
+	background: linear-gradient(to top, #606368, #a1a4a8);
+	background: repeating-linear-gradient(
+		to top,
+		rgba(255, 255, 255, 0) 0px,
+		rgba(255, 255, 255, 0) 1px,
+		rgba(0, 0, 0, 0.5) 2px,
+		rgba(0, 0, 0, 0.5) 3px
+	  );
+	box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.25);
+	opacity: 0.5 !important;
+}

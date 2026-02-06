@@ -76,8 +76,8 @@ class Elementor_WCMP_Widget extends Widget_Base {
 				error_log( $err->getMessage() );
 			}
 
-			$url  = WCMP_WEBSITE_URL;
-			$url .= ( ( strpos( $url, '?' ) === false ) ? '?' : '&' ) . 'wcmp-preview=' . urlencode( $shortcode );
+			$url  = \WCMP_BUILDERS::get_preview_url();
+			$url .= '&wcmp-preview=' . urlencode( $shortcode );
 			?>
 			<div class="wcmp-iframe-container" style="position:relative;">
 				<div class="wcmp-iframe-overlay" style="position:absolute;top:0;right:0;bottom:0;left:0;"></div>

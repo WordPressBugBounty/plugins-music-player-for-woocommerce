@@ -3,8 +3,8 @@ Contributors: codepeople
 Donate link: https://wcmp.dwbooster.com
 Tags:WooCommerce,music player,audio,music,song,player,audio player,media player,mp3,m3u,m3u8,wav,oga,ogg,dokan,wcfm
 Requires at least: 3.5.0
-Tested up to: 6.8
-Stable tag: 1.7.3
+Tested up to: 6.9
+Stable tag: 1.7.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,7 @@ The global settings are accessible through the menu option: "Settings/Music Play
 *	Play all: play all players in the page (one after the other).
 *	Loop: plays the audio player on the product page in a loop.
 *   Player controls: determines the controls to include in the music player.
+*   Visualizer: For "all controls" mode, display the visualizer component over the player.
 *   Display the player's title: show/hide the name associated to the downloadable file.
 *   Protect the file: checkbox to playback the songs in secure mode (only available in the pro version of the plugin).
 *   Percent of audio used for protected playbacks: integer number from 0 to 100, that represents the percent of the size of the original audio file that will be used in the audio file for demo (only available in the pro version of the plugin).
@@ -116,6 +117,7 @@ The Music Players are configured from the products pages, the Dokan interface, W
 *	Play all: play all players in the page (one after the other).
 *	Loop: plays the audio player on the product page in a loop.
 *   Player controls: determines the controls to include in the music player.
+*   Visualizer: For "all controls" mode, display the visualizer component over the player.
 *   Display the player's title: show/hide the name associated to the downloadable file.
 *   Protect the file: checkbox to playback the songs in secure mode (only available in the pro version of the plugin).
 *   Percent of audio used for protected playbacks: integer number from 0 to 100, that represents the percent of the size of the original audio file that will be used in the audio file for demo (only available in the pro version of the plugin).
@@ -263,6 +265,32 @@ Each time save the data of a product, the files for demo are deleted and generat
 
 == Changelog ==
 
+= 1.7.9 =
+
+* Implements the Divi 5 Playlist module.
+* Improves the security of the playlist preview generation module.
+
+= 1.7.8 =
+
+* Enhances the initial setup.
+
+= 1.7.7 =
+
+* Enables players quickly with a simple, intuitive setup.
+
+= 1.7.6 =
+
+* Resolved a conflict with the latest WooCommerce minicart implementation.
+
+= 1.7.5 =
+
+* Prevents a positioning issue when using the player in certain WordPress themes.
+* Fixes an issue with the visualizer on playlists.
+
+= 1.7.4 =
+
+* Implements a visualizer component over the player.
+
 = 1.7.3 =
 
 * Modifies the skin generator module to use a better AI model.
@@ -323,53 +351,3 @@ Each time save the data of a product, the files for demo are deleted and generat
 = 1.4.0 =
 
 * Implements two new attributes in the Playlist shortcode for filtering the products by the product categories and tags.
-
-= 1.3.11 =
-
-* Enhances the user experience when editing the global player settings.
-
-= 1.3.10 =
-
-* Resolves a compatibility issue with WordPress version previous to 5.5.
-
-= 1.3.9 =
-
-* Resolves a notice by ensuring the language files are properly loaded.
-
-= 1.3.8 =
-
-* Fixes a conflict with Elementor's cache which is currently in Beta.
-
-= 1.3.7 =
-
-* Accepts a new attribute in the playlist shortcode to display/hide the audio durations from the playlist.
-
-= 1.3.6 =
-
-* Modifies the playlists, including additional information like the original file duration  (do not confuse it with the duration of the demos files)
-
-= 1.3.5 =
-
-* Modifies the player settings to enhance its accessibility and user experience.
-
-= 1.3.4 =
-
-* Changes the method by which the plugin identifies the product currently being edited.
-
-= 1.3.3 =
-
-* Prevents the LiteSpeed Cache plugin to affect the players.
-
-= 1.3.2 =
-
-* Modifies the module to load the language files to ensure compatibility with WP 6.7.
-
-= 1.3.1 =
-
-* Improves the plugin settings page.
-* Modifies the FFmpeg integration (Professional version).
-
-= 1.3.0 =
-
-* Updates the plugin settings page to make it more user-friendly.
-* Enhance the troubleshooting area to make it easier to resolve conflicts with third-party plugins and themes.
