@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.7.9
+Version: 1.8.0
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.7.9' );
+define( 'WCMP_VERSION', '1.8.0' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -1809,7 +1809,8 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			if ( is_dir( $this->_files_directory_path ) ) {
 				if ( ! file_exists( $this->_files_directory_path . '.htaccess' ) ) {
 					try {
-						file_put_contents( $this->_files_directory_path . '.htaccess', 'Options -Indexes' );
+                        $_htaccess_content = 'Options -Indexes' . "\n\n" . '<FilesMatch "\.(mp3|mp4|ogg|m4a|mpga|wav)$">' . "\n" . '    FileETag None' . "\n" . '    Header unset ETag' . "\n" . '    Header set Cache-Control "public, must-revalidate"' . "\n" . '</FilesMatch>' . "\n";
+						file_put_contents( $this->_files_directory_path . '.htaccess', $_htaccess_content );
 					} catch ( Exception $err ) {}
 				}
 			}
