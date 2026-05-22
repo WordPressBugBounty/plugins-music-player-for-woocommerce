@@ -7,12 +7,70 @@ if ( !is_admin() ) {
 if ( ! class_exists( 'WCMP_SKIN_GENERATOR' ) ) {
 	class WCMP_SKIN_GENERATOR {
 
-		static private $model 			= "models/gemini-2.5-flash-lite"; // models/gemini-2.0-flash-001
-		static private $base_url		= "https://generativelanguage.googleapis.com/v1beta/";
+		static private $gemini_model 	= "models/gemini-3.5-flash";
+		static private $gemini_url		= "https://generativelanguage.googleapis.com/v1beta/";
 
-		static public function model_inference( $skin_description, $api_key ) {
+		static private function gemini_inference( $prompt, $api_key ) {
+			$inference_url 	= self::$gemini_url . self::$gemini_model . ":generateContent?key=" . $api_key;
+			$data = [ 'contents' => [[ 'parts' => [[ 'text' => $prompt ]] ]], "generationConfig" => [ "temperature" => 0.0, "topP" => 0.9 ] ];
 
-			$inference_url 	= self::$base_url . self::$model . ":generateContent?key=" . $api_key;
+			// Inferring the model to generate the form.
+			$body = json_encode( $data );
+
+			$response = wp_remote_post( $inference_url, [
+				'headers' => [ 'Content-Type' => 'application/json' ],
+				'body' => $body,
+				'timeout' => 120,
+			]);
+
+			if ( is_wp_error( $response ) ) {
+				throw new Exception( $response->get_error_message() );
+			}
+
+			$exception = new Exception( __( 'Empty AI model answer', 'music-player-for-woocommerce' ) );
+
+			$data = json_decode(wp_remote_retrieve_body($response), true);
+			if( empty( $data ) ) throw $exception;
+			if ( ! empty( $data[ 'error' ] ) ) throw new Exception( $data['error']['message'] );
+
+			try {
+				$output = $data['candidates'][0]['content']['parts'][0]['text'];
+				// Remove markdown characters from the beginning and end:
+				$output = preg_replace('/^```css\s*(.*?)\s*```$/s', '$1', $output);
+				$output = str_replace( '.wcmp-custom-skin .mejs-container', '.wcmp-custom-skin.mejs-container', $output );
+			} catch ( Exception $err ) {
+				throw $exception;
+			}
+			return $output;
+		} // End gemini_inference.
+
+		static private function wp_connector_inference( $prompt ) {
+			$_set_timeout = function($timeout){ return 120; };
+			add_filter('wp_ai_client_default_request_timeout', $_set_timeout, 999);
+
+			try {
+				$output = wp_ai_client_prompt($prompt)->generate_text();
+			} finally {
+				remove_filter('wp_ai_client_default_request_timeout', $_set_timeout, 999);
+			}
+
+            if (is_wp_error($output)) throw new Exception( $output->get_error_message() );
+            return $output;
+		} // End wp_connector_inference.
+
+		static public function is_wp_connector_available() {
+			// Check if there are models registered using the WordPress Connector API.
+			if ( function_exists('wp_ai_client_prompt') ) {
+				$builder = wp_ai_client_prompt('test');
+				if ($builder->is_supported_for_text_generation()) {
+					return true;
+				}
+			}
+
+			return false;
+		} // End is_wp_connector_available
+
+		static public function model_inference( $inference_data ) {
 
 			// Base CSS.
 			$base_url  		= includes_url() . 'js/mediaelement/';
@@ -23,38 +81,23 @@ if ( ! class_exists( 'WCMP_SKIN_GENERATOR' ) ) {
 
 			// Update the URLs of
 			// Generate the prompt.
-			$prompt = "Generate CSS styles for a MediaElementPlayer skin based on the CSS styles:\n\n$schema\n\n";
-			$prompt .= "The output must be in CSS format. You must use the scoping class name .wcmp-custom-skin. Do NOT use Markdown or enclose the response in triple backticks. Do not include any description or extra information.\n";
-			$prompt .= "Skin description: $skin_description\nReturn only the CSS code:";
+			$prompt = "Generate CSS styles for a MediaElementPlayer skin based on the CSS styles:\n\n$schema\n\n"
+					. "The following rules ALWAYS apply regardless of the skin description:\n"
+					. "- Only modify color, background, border-radius, box-shadow, and font properties.\n"
+					. "- Do NOT alter position, z-index, height, width, display, transform, or animation values.\n"
+					. "- Preserve all SVG background-image URLs exactly as they appear in the source CSS.\n"
+					. "- Do not add selectors or properties that are not present in the source CSS.\n"
+					. "- Infer a coherent color palette from the description and apply it consistently across all components (control bar, progress bar, buttons, volume slider, captions).\n\n"
+					. "Output instructions:\n"
+					. "Return only valid CSS code scoped under .wcmp-custom-skin. No comments, no explanations, no description, no extra information, no Markdown, no enclose the response in triple backticks.\n\n"
+					. "Skin description:\n{$inference_data['skin_description']}";
 
-			$data = [ 'contents' => [[ 'parts' => [[ 'text' => $prompt ]] ]], "generationConfig" => [ "temperature" => 0.0, "topP" => 0.9 ] ];
-
-			// Inferring the model to generate the form.
-			$body = json_encode( $data );
-
-			$response = wp_remote_post( $inference_url, [
-				'headers' => [ 'Content-Type' => 'application/json' ],
-				'body' => $body,
-				'timeout' => 60,
-			]);
-
-			if ( is_wp_error( $response ) ) {
-				throw new Exception( $response->get_error_message() );
-			}
-
-			$data = json_decode(wp_remote_retrieve_body($response), true);
-
-			$exception = new Exception( __( 'Empty AI model answer', 'music-player-for-woocommerce' ) );
-
-			if( empty( $data ) ) throw $exception;
-			if ( ! empty( $data[ 'error' ] ) ) throw new Exception( $data['error']['message'] );
-			try {
-				$output = $data['candidates'][0]['content']['parts'][0]['text'];
-				// Remove markdown characters from the beginning and end:
-				$output = preg_replace('/^```css\s*(.*?)\s*```$/s', '$1', $output);
-				$output = str_replace( '.wcmp-custom-skin .mejs-container', '.wcmp-custom-skin.mejs-container', $output );
-			} catch ( Exception $err ) {
-				throw $exception;
+			if ( self::is_wp_connector_available() ) {
+				$output = self::wp_connector_inference( $prompt );
+			} else if ( ! empty( $inference_data['api_key'] ) ) {
+				$output = self::gemini_inference( $prompt, $inference_data['api_key'] );
+			} else {
+				throw new Exception( __( 'There is no enought information to generate the custom skin', 'music-player-for-woocommerce' ) );
 			}
 
 			return $output;
@@ -67,30 +110,38 @@ if ( ! class_exists( 'WCMP_SKIN_GENERATOR' ) ) {
 // Main code
 
 /** CALL THE AI SKIN GENERATOR **/
-if (
-	! empty( $_POST['wcmp_skin_generator_description'] ) &&
-	! empty( $_POST['wcmp_skin_generator_api_key'] )
-) {
-
-	$output = [];
+if ( ! empty( $_POST['wcmp_skin_generator_description'] ) ) {
 
 	remove_all_actions( 'shutdown' );
 	check_admin_referer( 'wcmp-ai-skin-generator', '_wcmp_nonce' );
 
-	$skin_description = sanitize_textarea_field( wp_unslash( $_POST['wcmp_skin_generator_description'] ) );
-	$api_key		  = sanitize_text_field( wp_unslash( $_POST['wcmp_skin_generator_api_key'] ) );
+	function prepare_inference_data() {
+		$output = [];
 
-	// Re-check they are not empty.
-	if ( ! empty( $skin_description ) && ! empty( $api_key ) ) {
-		try {
-			$output['success'] 	= WCMP_SKIN_GENERATOR::model_inference( $skin_description, $api_key );
-		} catch ( Exception $err ) {
-			$output['error'] = $err->getMessage();
+		if ( current_user_can( 'manage_options' ) ) new Exception(__( 'You don\'t have enought privileges to generate custom skins.', 'music-player-for-woocommerce' ));
+
+		if ( ! WCMP_SKIN_GENERATOR::is_wp_connector_available() ) {
+			if ( ! isset( $_POST['wcmp_skin_generator_api_key'] ) ) new Exception( __( 'The AI Provider API Key is required.', 'music-player-for-woocommerce' ));
+
+			$api_key = sanitize_text_field( wp_unslash( $_POST['wcmp_skin_generator_api_key'] ) );
+			if ( empty( $api_key ) ) new Exception( __( 'The AI Provider API Key is required.', 'music-player-for-woocommerce' ));
+			$output['api_key'] = $api_key;
 		}
 
-	} else {
-		$output['error'] = __( 'Empty API Key or skin description', 'music-player-for-woocommerce' );
+		$skin_description = sanitize_textarea_field( wp_unslash( $_POST['wcmp_skin_generator_description'] ) );
+		if ( empty( $skin_description ) ) new Exception( __( 'The Skin description is required.', 'music-player-for-woocommerce' ));
+		$output['skin_description'] = $skin_description;
+
+		return $output;
 	}
+
+	try {
+		$inference_data = prepare_inference_data();
+		$output['success'] 	= WCMP_SKIN_GENERATOR::model_inference( $inference_data );
+	} catch( Exception $err ) {
+		$output['error'] = $err->getMessage();
+	}
+
 	print json_encode( $output );
 	exit;
 } elseif (

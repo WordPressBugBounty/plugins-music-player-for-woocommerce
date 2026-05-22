@@ -1,10 +1,10 @@
 ﻿=== Music Player for WooCommerce ===
 Contributors: codepeople
 Donate link: https://wcmp.dwbooster.com
-Tags:WooCommerce,music player,audio,music,song,player,audio player,media player,mp3,m3u,m3u8,wav,oga,ogg,dokan,wcfm
+Tags: woocommerce, audio player, music player, playlists, multivendor
 Requires at least: 3.5.0
-Tested up to: 6.9
-Stable tag: 1.8.0
+Tested up to: 7.0
+Stable tag: 1.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -264,6 +264,10 @@ Each time save the data of a product, the files for demo are deleted and generat
 10. Inserting the playlist Visual Composer
 
 == Changelog ==
+
+= 1.8.1 =
+
+* Implements integration with the new WordPress Connectors API, allowing custom skins to be generated using the AI providers configured in WordPress.
 
 = 1.8.0 =
 
