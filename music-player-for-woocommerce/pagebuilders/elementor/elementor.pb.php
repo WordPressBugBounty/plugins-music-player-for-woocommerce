@@ -50,6 +50,10 @@ class Elementor_WCMP_Widget extends Widget_Base {
 		$this->end_controls_section();
 	} // End register_controls
 
+	public function has_widget_inner_wrapper(): bool {
+		return false;
+	}
+
 	private function _get_shortcode() {
 		 $settings = $this->get_settings_for_display();
 		$shortcode = $settings['shortcode'];
@@ -59,13 +63,7 @@ class Elementor_WCMP_Widget extends Widget_Base {
 
 	protected function render() {
 		$shortcode = sanitize_text_field( $this->_get_shortcode() );
-		if (
-			isset( $_REQUEST['action'] ) &&
-			(
-				'elementor' == $_REQUEST['action'] ||
-				'elementor_ajax' == $_REQUEST['action']
-			)
-		) {
+		if( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
 			try {
 				if ( stripos( $shortcode, 'products_ids' ) === false ) {
 					if ( ! empty( $GLOBALS['post'] ) && is_object( $GLOBALS['post'] ) ) {
