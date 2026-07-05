@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.8.5
+Version: 1.8.6
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.8.5' );
+define( 'WCMP_VERSION', '1.8.6' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -126,7 +126,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 						is_serialized( $_value )
 					) {
 						try {
-							$data[ $_key ] = unserialize( $_value );
+							$data[ $_key ] = is_serialized($_value) ? unserialize( $_value, array('allowed_classes' => false) ) : $_value;
 						} catch ( Exception $err ) {
 							$data[ $_key ] = $_value;
 						} catch ( Error $err ) {
@@ -279,7 +279,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 						$product_id = @intval( $_REQUEST['wcmp-product'] );
 						if ( ! empty( $product_id ) ) {
 							$product = wc_get_product( $product_id );
-							if ( false !== $product ){
+							if ( false !== $product && ('publish' === $product->get_status() || current_user_can('edit_product', $product_id)) ) {
 								$this->update_playback_counter( $product_id );
 								if ( isset( $_REQUEST['wcmp-file'] ) ) {
 									$files = $this->_get_product_files(
@@ -2091,6 +2091,14 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		 * Create a temporal file and redirect to the new file
 		 */
 		private function _output_file( $args ) {
+			$_current_user_id = get_current_user_id();
+			if (
+				$this->get_global_attr( '_wcmp_registered_only', 0 ) &&
+				0 == $_current_user_id
+			) {
+				return;
+			}
+
 			if ( empty( $args['url'] ) ) {
 				return;
 			}
@@ -2125,7 +2133,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					if ( ( $path = $this->_is_local( $url_fixed ) ) !== false ) { // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments
 						$c = copy( $path, $file_path );
 					} else {
-						$response = wp_remote_get(
+						$response = wp_safe_remote_get(
 							$url_fixed,
 							array(
 								'timeout'  => WCMP_REMOTE_TIMEOUT,

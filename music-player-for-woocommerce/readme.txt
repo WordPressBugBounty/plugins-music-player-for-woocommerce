@@ -4,7 +4,7 @@ Donate link: https://wcmp.dwbooster.com
 Tags: woocommerce, audio player, music player, playlists, multivendor
 Requires at least: 3.5.0
 Tested up to: 7.0
-Stable tag: 1.8.5
+Stable tag: 1.8.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -268,6 +268,10 @@ Each time save the data of a product, the files for demo are deleted and generat
 10. Inserting the playlist Visual Composer
 
 == Changelog ==
+
+= 1.8.6 =
+
+* Improved the plugin's security by implementing the recommendations from the WordPress automated security review.
 
 = 1.8.5 =
 = 1.8.4 =
