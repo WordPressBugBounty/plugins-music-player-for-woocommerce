@@ -4,11 +4,11 @@ Donate link: https://wcmp.dwbooster.com
 Tags: woocommerce, audio player, music player, playlists, multivendor
 Requires at least: 3.5.0
 Tested up to: 7.0
-Stable tag: 1.8.3
+Stable tag: 1.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Music Player for WooCommerce includes the MediaElement.js music player in the pages of the products with audio files associated.
+Audio player for WooCommerce products with Dokan & WCFM Marketplace support, plus AI-generated skins.
 
 == Description ==
 
@@ -233,6 +233,10 @@ Note: In mobiles devices where the direct action of user is required for playing
 
 == Frequently Asked Questions ==
 
+= Q: How do I generate a player skin with AI? =
+
+A: From the plugin's settings, describe the look you want (colors, style, mood) and the AI Skin Generator creates a matching player skin automatically.
+
 = Q: Why the audio file is played partially? =
 
 A: If you decide to protect the audio files, the plugin creates a truncated version of the file to be used as demo and prevent that the original file be copied by unauthorized users.
@@ -264,6 +268,11 @@ Each time save the data of a product, the files for demo are deleted and generat
 10. Inserting the playlist Visual Composer
 
 == Changelog ==
+
+= 1.8.5 =
+= 1.8.4 =
+
+* Prevents the autcomplete forced by browsers in the plugin and player settings.
 
 = 1.8.3 =
 
@@ -362,8 +371,3 @@ Each time save the data of a product, the files for demo are deleted and generat
 = 1.4.2 =
 
 * Introduces a title attribute in the Playlist shortcode, allowing users to specify a title that will be displayed prominently above the playlist.
-
-= 1.4.1 =
-= 1.4.0 =
-
-* Implements two new attributes in the Playlist shortcode for filtering the products by the product categories and tags.

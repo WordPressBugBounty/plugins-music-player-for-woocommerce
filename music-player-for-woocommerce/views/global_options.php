@@ -98,7 +98,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 				</tr>
 				<tr>
 					<td width="30%"><label for="_wcmp_purchased_times_text"><?php esc_html_e( 'Text for product purchased times in playlists', 'music-player-for-woocommerce' ); ?></label></td>
-					<td><input aria-label="<?php esc_attr_e( 'Purchased times text', 'music-player-for-woocommerce' ); ?>" type="text" id="_wcmp_purchased_times_text" name="_wcmp_purchased_times_text" value="<?php print esc_attr( $purchased_times_text ); ?>" style="width:100%;" /><br>
+					<td><input aria-label="<?php esc_attr_e( 'Purchased times text', 'music-player-for-woocommerce' ); ?>" type="text" autocomplete="new-password" id="_wcmp_purchased_times_text" name="_wcmp_purchased_times_text" value="<?php print esc_attr( $purchased_times_text ); ?>" style="width:100%;" /><br>
 					<i><?php esc_html_e( 'Texts to display when the playlist shortcode includes the purchased_times attribute.<br>Ex.', 'music-player-for-woocommerce' ); ?>[wcmp-playlist products_ids="*" controls="track" purchased_times="1"]</i>
 					</td>
 				</tr>
@@ -227,7 +227,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 				</tr>
 				<tr>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'WooCommerce hook used to display the players in the shop pages', 'music-player-for-woocommerce' ); ?>" type="text" name="_wcmp_main_player_hook" value="<?php print esc_attr( $include_main_player_hook ); ?>" style="width:100%" /><br />
+						<input aria-label="<?php esc_attr_e( 'WooCommerce hook used to display the players in the shop pages', 'music-player-for-woocommerce' ); ?>" type="text" autocomplete="new-password" name="_wcmp_main_player_hook" value="<?php print esc_attr( $include_main_player_hook ); ?>" style="width:100%" /><br />
 						<i><?php _e( 'The plugin uses by default the <b>woocommerce_shop_loop_item_title</b> hook. If the player is not being displayed, enter the hook used by the theme active on your website.', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></i><br><br>
 						<label>
 						<input type="checkbox" name="_wcmp_main_player_hook_title" aria-label="<?php esc_attr_e( 'Force the player in the title', 'music-player-for-woocommerce' ); ?>" <?php if ( $main_player_hook_title ) {
@@ -242,7 +242,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 				</tr>
 				<tr>
 					<td>
-						<input aria-label="<?php esc_attr_e( 'WooCommerce hook used to display the players in the products pages', 'music-player-for-woocommerce' ); ?>" type="text" name="_wcmp_all_players_hook" value="<?php print esc_attr( $include_all_players_hook ); ?>" style="width:100%" /><br />
+						<input aria-label="<?php esc_attr_e( 'WooCommerce hook used to display the players in the products pages', 'music-player-for-woocommerce' ); ?>" type="text" autocomplete="new-password" name="_wcmp_all_players_hook" value="<?php print esc_attr( $include_all_players_hook ); ?>" style="width:100%" /><br />
 						<i><?php _e( 'The plugin uses by default the <b>woocommerce_single_product_summary</b> hook. If the player is not being displayed, enter the hook used by the theme active on your website.', 'music-player-for-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></i>
 					</td>
 				</tr>
@@ -349,7 +349,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 									?>
 										<label for="wcmp_skin_generator_api_key" style="display:block;margin-top:10px;"><b><?php esc_html_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?></b> (<a href="https://aistudio.google.com/apikey" target="_blank"><?php esc_html_e( 'Click here to access the Google AI Studio and generate an API key.', 'music-player-for-woocommerce' ); ?></a>)</label>
 										<div style="display:flex;flex-direction:row;gap:5px;margin-top:10px;">
-											<input type="password" id="wcmp_skin_generator_api_key" name="wcmp_skin_generator_api_key" style="flex-grow:1;" placeholder="<?php esc_attr_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?>">
+											<input type="password" autocomplete="new-password" id="wcmp_skin_generator_api_key" name="wcmp_skin_generator_api_key" style="flex-grow:1;" placeholder="<?php esc_attr_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?>">
 											<button class="button-primary" type="button" onclick="wcmp_save_api_key();"><?php esc_html_e( 'Save API Key', 'music-player-for-woocommerce') ?></button>
 											<button class="button-secondary" type="button" onclick="wcmp_clear_api_key();"><?php esc_html_e( 'Clear API Key', 'music-player-for-woocommerce') ?></button>
 										</div>
@@ -685,13 +685,13 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 				<tr>
 					<td>
 						<div><?php esc_html_e( 'Measurement Id', 'music-player-for-woocommerce' ); ?></div>
-						<div><input aria-label="<?php esc_attr_e( 'Measurement Id', 'music-player-for-woocommerce' ); ?>" type="text" name="_wcmp_analytics_property" value="<?php print esc_attr( $analytics_property ); ?>" style="width:100%;" placeholder=""></div>
+						<div><input aria-label="<?php esc_attr_e( 'Measurement Id', 'music-player-for-woocommerce' ); ?>" type="text" autocomplete="new-password" name="_wcmp_analytics_property" value="<?php print esc_attr( $analytics_property ); ?>" style="width:100%;" placeholder=""></div>
 					</td>
 				</tr>
 				<tr class="wcmp-analytics-g4" style="display:<?php print esc_attr( 'ua' == $analytics_integration ? 'none' : 'table-row' ); ?>;">
 					<td style="width:100%;">
 						<div><?php esc_html_e( 'API Secret', 'music-player-for-woocommerce' ); ?></div>
-						<div><input aria-label="<?php esc_attr_e( 'API Secret', 'music-player-for-woocommerce' ); ?>" type="text" name="_wcmp_analytics_api_secret" value="<?php print esc_attr( $analytics_api_secret ); ?>" style="width:100%;"></div>
+						<div><input aria-label="<?php esc_attr_e( 'API Secret', 'music-player-for-woocommerce' ); ?>" type="text" autocomplete="new-password" name="_wcmp_analytics_api_secret" value="<?php print esc_attr( $analytics_api_secret ); ?>" style="width:100%;"></div>
 					</td>
 				</tr>
 			</table>
