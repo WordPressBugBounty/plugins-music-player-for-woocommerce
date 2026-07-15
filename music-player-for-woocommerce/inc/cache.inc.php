@@ -1,6 +1,6 @@
 <?php
 
-if ( !is_admin() )
+if ( ! defined( 'ABSPATH' ) || !is_admin() )
 {
     print 'Direct access not allowed.';
     exit;
@@ -23,6 +23,7 @@ if ( function_exists('w3tc_flush_all') ) {
 
 // LiteSpeed Cache
 do_action('litespeed_purge_all');
+do_action( 'litespeed_purge_all_object' );
 
 // SiteGround Optimizer
 if ( function_exists('sg_cachepress_purge_cache') ) {
@@ -38,7 +39,7 @@ if ( function_exists('wpfc_clear_all_cache') ) {
 if ( class_exists('\Elementor\Plugin') ) {
 	try {
 		\Elementor\Plugin::$instance->files_manager->clear_cache();
-	} catch ( Exception $err ) {}
+	} catch ( \Throwable $err ) {}
 }
 
 // Cache Enabler
