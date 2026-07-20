@@ -4,7 +4,7 @@ Donate link: https://wcmp.dwbooster.com
 Tags: woocommerce, audio player, music player, playlists, multivendor
 Requires at least: 3.5.0
 Tested up to: 7.0
-Stable tag: 1.8.7
+Stable tag: 1.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -231,6 +231,23 @@ Note: In mobiles devices where the direct action of user is required for playing
 * If your project is a music store, and WooCommerce is more than you need it is possible to use [Music Store plugin](https://wordpress.org/plugins/music-store/ "Music Store")
 * Or if you need a general purpose music and video player, not especific for WooCommerce, [CP Media Player - Audio Player and Video Player plugin](https://wordpress.org/plugins/audio-and-video-player/ "CP Media Player - Audio Player and Video Player")
 
+== Multilingual Support (WPML) ==
+
+The plugin ships with a wpml-config.xml file in the plugin root that registers the three custom fields used by the "Select my own demo files" feature with WPML:
+
+* _wcmp_demos_list
+* _wcmp_own_demos
+* _wcmp_direct_own_demos
+
+All three are registered with action="copy-once", which means:
+
+* When a new translation is created, the demo files and their activation flags are copied from the source language to the new translation at creation time.
+* Once the translation exists, subsequent updates to the source language do NOT overwrite the translation. Editors can customise per-language demos (for example, to use a sample with a different voiceover or accent) without losing their changes on the next source save.
+
+This is the conservative default that does not change behaviour for sites that do not explicitly opt in. If your site should propagate demo file changes from the source language to all translations on every update, go to **WPML -> Settings -> Custom Field Translation** and change the action for each of the three fields above from "Copy once" to "Copy".
+
+After updating the plugin (or after first activation on a site that has WPML installed), go to **WPML -> Support -> Troubleshooting** and click **Clear cache in WPML** so the new configuration is picked up.
+
 == Frequently Asked Questions ==
 
 = Q: How do I generate a player skin with AI? =
@@ -255,6 +272,10 @@ A: In the pro version of the plugin the files for demo are generated dynamically
 
 Each time save the data of a product, the files for demo are deleted and generated again, so, you simply should modify the percentage of the audio file to be used for demo in the product's page.
 
+= Q: How do I make changes to the "Select my own demo files" propagate to all language versions when using WPML? =
+
+A: The plugin uses the "copy-once" action by default, which copies the demo files to a new translation at creation time but does not overwrite them when the source is updated. To enable full sync, go to **WPML -> Settings -> Custom Field Translation** and change the action for "_wcmp_demos_list", "_wcmp_own_demos", and "_wcmp_direct_own_demos" from "Copy once" to "Copy". Remember to clear the WPML cache afterwards under **WPML -> Support -> Troubleshooting -> Clear cache in WPML**.
+
 == Screenshots ==
 01. Music players in the store's pages
 02. Music player in the products pages
@@ -268,6 +289,10 @@ Each time save the data of a product, the files for demo are deleted and generat
 10. Inserting the playlist Visual Composer
 
 == Changelog ==
+
+= 1.8.8 =
+
+* Adds WPML compatibility for the "Select my own demo files" feature by shipping a wpml-config.xml file that registers the relevant custom fields with action="copy-once".
 
 = 1.8.7 =
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wpml-config>
+    <custom-fields>
+        <!--
+            Own-demo files and their activation flags.
+
+            action="copy-once" makes WPML copy each meta value from the
+            source language to a new translation at creation time, and
+            then leave the translation's value alone. Subsequent updates
+            to the source do NOT overwrite the translation, so the
+            editor can customise per-language demos without losing them
+            on the next source save.
+
+            This is the conservative default that preserves the current
+            behaviour for sites that do not explicitly opt in to source-
+            to-translation propagation. Sites that want full sync
+            (updates in the source propagate to translations) can
+            change the action to "copy" in:
+                WPML -> Settings -> Custom Field Translation
+            for each of the three fields below.
+        -->
+        <custom-field action="copy-once">_wcmp_demos_list</custom-field>
+        <custom-field action="copy-once">_wcmp_own_demos</custom-field>
+        <custom-field action="copy-once">_wcmp_direct_own_demos</custom-field>
+    </custom-fields>
+</wpml-config>
