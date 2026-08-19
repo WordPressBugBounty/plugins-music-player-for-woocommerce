@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.8.8
+Version: 1.8.9
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.8.8' );
+define( 'WCMP_VERSION', '1.8.9' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -721,7 +721,54 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 		public function esc_html( $safe_text, $text ) {
 			if ( strpos( $safe_text, 'wcmp-player-container' ) !== false ) {
-				return $text;
+				// The allowlist below is intentionally restricted to the exact
+				// tags and attributes the player produces. Anything else --
+				// <a>, <img>, <iframe>, <script>, event handlers, javascript:
+				// URLs, <form>, <input>, <style> -- is stripped by kses. The
+				// worst residual attack is a styled overlay <div> with text
+				// content, which kses still allows because the player itself
+				// uses the style attribute on div/td/span for layout.
+				$player_only = array(
+					'div'    => array(
+						'class'          => true,
+						'id'             => true,
+						'style'          => true,
+						'data-wcfm-pair' => true,
+						'data-loop'      => true,
+						'data-audio-url' => true,
+					),
+					'audio'  => array(
+						'src'              => true,
+						'volume'           => true,
+						'id'               => true,
+						'preload'          => true,
+						'controlslist'     => true,
+						'class'            => true,
+						'data-lazyloading' => true,
+						'data-duration'    => true,
+						'data-product'     => true,
+					),
+					'source' => array(
+						'src'  => true,
+						'type' => true,
+					),
+					'table'  => array(
+						'class'     => true,
+						'data-loop' => true,
+					),
+					'tr'     => array(
+						'class' => true,
+					),
+					'td'     => array(
+						'class' => true,
+						'style' => true,
+					),
+					'span'   => array(
+						'class' => true,
+						'style' => true,
+					),
+				);
+				return wp_kses( $text, $player_only );
 			}
 			return $safe_text;
 		} // End esc_html
