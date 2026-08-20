@@ -4,7 +4,7 @@ Donate link: https://wcmp.dwbooster.com
 Tags: woocommerce, audio player, music player, playlists, multivendor
 Requires at least: 3.5.0
 Tested up to: 7.1
-Stable tag: 1.8.9
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -290,6 +290,7 @@ A: The plugin uses the "copy-once" action by default, which copies the demo file
 
 == Changelog ==
 
+= 1.9.0 =
 = 1.8.9 =
 
 * Updates the esc_html filter to ensure that only tags required by the audio player are preserved. (Thanks to daroo and the Patchstack team)

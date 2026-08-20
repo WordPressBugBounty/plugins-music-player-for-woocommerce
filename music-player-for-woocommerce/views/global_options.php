@@ -15,6 +15,7 @@ $troubleshoot_onload            = $GLOBALS['WooCommerceMusicPlayer']->get_global
 $include_main_player_hook       = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_main_player_hook', '' ) );
 $main_player_hook_title         = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_main_player_hook_title', 1 ) );
 $disable_302         			= trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_disable_302', 0 ) );
+$escape_html_filter         	= trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_esc_html_filter', 0 ) );
 $include_all_players_hook       = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_all_players_hook', '' ) );
 
 $enable_player   = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_enable_player', true );
@@ -262,6 +263,22 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 						<input aria-label="<?php esc_attr_e( 'Disable 302 redirection', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_disable_302" <?php if ( $disable_302 ) {
 							print 'CHECKED';} ?>/>
 						<?php esc_html_e( 'Load demo files with PHP code instead of redirecting browsers to them.', 'music-player-for-woocommerce' ); ?>
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-weight:600;">
+						<?php esc_html_e( 'Q: Are player tags being displayed as plain text instead of being rendered as an audio player?', 'music-player-for-woocommerce' ); ?>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p><?php esc_html_e( 'This issue is caused by the WordPress esc_html() function, which converts the player tags into plain text instead of allowing them to be rendered.', 'music-player-for-woocommerce'); ?></p>
+						<p><?php esc_html_e( 'You can either modify the relevant section of your theme that calls esc_html(), or enable the checkbox below. When enabled, the plugin sanitizes the content using wp_kses() instead, preserving the tags required by the audio player.', 'music-player-for-woocommerce' ); ?></p>
+						<label>
+						<input aria-label="<?php esc_attr_e( 'Apply custom escape', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_esc_html_filter" <?php if ( $disable_302 ) {
+							print 'CHECKED';} ?>/>
+						<?php esc_html_e( 'Apply custom escape.', 'music-player-for-woocommerce' ); ?>
 						</label>
 					</td>
 				</tr>

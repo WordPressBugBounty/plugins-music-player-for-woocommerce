@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.8.9
+Version: 1.9.0
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.8.9' );
+define( 'WCMP_VERSION', '1.9.0' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -511,6 +511,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
                     $include_main_player_hook       = ( isset( $_REQUEST['_wcmp_main_player_hook'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_main_player_hook'] ) ) : '';
                     $main_player_hook_title         = ( isset( $_REQUEST['_wcmp_main_player_hook_title'] ) ) ? 1 : 0;
                     $disable_302         			= ( isset( $_REQUEST['_wcmp_disable_302'] ) ) ? 1 : 0;
+                    $esc_html_filter         		= ( isset( $_REQUEST['_wcmp_esc_html_filter'] ) ) ? 1 : 0;
                     $include_all_players_hook       = ( isset( $_REQUEST['_wcmp_all_players_hook'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_all_players_hook'] ) ) : '';
 
                     $enable_player    = ( isset( $_REQUEST['_wcmp_enable_player'] ) ) ? 1 : 0;
@@ -570,9 +571,10 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
                         '_wcmp_onload'                     => $troubleshoot_onload,
                         '_wcmp_main_player_hook'           => $include_main_player_hook,
                         '_wcmp_main_player_hook_title'     => $main_player_hook_title,
-                        '_wcmp_disable_302'     			=> $disable_302,
+                        '_wcmp_disable_302'     		   => $disable_302,
+                        '_wcmp_esc_html_filter'     	   => $esc_html_filter,
                         '_wcmp_all_players_hook'           => $include_all_players_hook,
-                        '_wcmp_playback_counter_column'      => ( isset( $_REQUEST['_wcmp_playback_counter_column'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_playback_counter_column'] ) ) : 0,
+                        '_wcmp_playback_counter_column'    => ( isset( $_REQUEST['_wcmp_playback_counter_column'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_playback_counter_column'] ) ) : 0,
                         '_wcmp_analytics_integration'      => ( isset( $_REQUEST['_wcmp_analytics_integration'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_integration'] ) ) : 'ua',
                         '_wcmp_analytics_property'         => ( isset( $_REQUEST['_wcmp_analytics_property'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_property'] ) ) : '',
                         '_wcmp_analytics_api_secret'       => ( isset( $_REQUEST['_wcmp_analytics_api_secret'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_analytics_api_secret'] ) ) : '',
@@ -720,7 +722,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		} // End delete_post
 
 		public function esc_html( $safe_text, $text ) {
-			if ( strpos( $safe_text, 'wcmp-player-container' ) !== false ) {
+			if ( $this->get_global_attr( '_wcmp_esc_html_filter', 0 ) && strpos( $safe_text, 'wcmp-player-container' ) !== false ) {
 				// The allowlist below is intentionally restricted to the exact
 				// tags and attributes the player produces. Anything else --
 				// <a>, <img>, <iframe>, <script>, event handlers, javascript:
