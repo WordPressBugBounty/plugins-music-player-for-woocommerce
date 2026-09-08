@@ -15,13 +15,15 @@ $troubleshoot_onload            = $GLOBALS['WooCommerceMusicPlayer']->get_global
 $include_main_player_hook       = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_main_player_hook', '' ) );
 $main_player_hook_title         = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_main_player_hook_title', 1 ) );
 $disable_302         			= trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_disable_302', 0 ) );
-$escape_html_filter         	= trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_esc_html_filter', 0 ) );
+$esc_html_filter         		= trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_esc_html_filter', 0 ) );
 $include_all_players_hook       = trim( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_all_players_hook', '' ) );
 
 $enable_player   = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_enable_player', true );
 $show_in         = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_show_in', 'all' );
 $players_in_cart = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_players_in_cart', false );
 $player_style    = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_player_layout', WCMP_DEFAULT_PLAYER_LAYOUT );
+$skin_generate_ai_provider = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_skin_generator_ai_provider', 'wordpress' );
+
 $volume          = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_player_volume', WCMP_DEFAULT_PLAYER_VOLUME );
 $player_controls = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_player_controls', WCMP_DEFAULT_PLAYER_CONTROLS );
 $single_player   = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_single_player', false );
@@ -276,7 +278,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 						<p><?php esc_html_e( 'This issue is caused by the WordPress esc_html() function, which converts the player tags into plain text instead of allowing them to be rendered.', 'music-player-for-woocommerce'); ?></p>
 						<p><?php esc_html_e( 'You can either modify the relevant section of your theme that calls esc_html(), or enable the checkbox below. When enabled, the plugin sanitizes the content using wp_kses() instead, preserving the tags required by the audio player.', 'music-player-for-woocommerce' ); ?></p>
 						<label>
-						<input aria-label="<?php esc_attr_e( 'Apply custom escape', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_esc_html_filter" <?php if ( $disable_302 ) {
+						<input aria-label="<?php esc_attr_e( 'Apply custom escape', 'music-player-for-woocommerce' ); ?>" type="checkbox" name="_wcmp_esc_html_filter" <?php if ( $esc_html_filter ) {
 							print 'CHECKED';} ?>/>
 						<?php esc_html_e( 'Apply custom escape.', 'music-player-for-woocommerce' ); ?>
 						</label>
@@ -362,17 +364,40 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 											$wp_ai_client_prompt_available = true;
 										}
 									}
-									if ( ! $wp_ai_client_prompt_available ):
+									if ( $wp_ai_client_prompt_available ):
 									?>
+										<div style="display:flex;gap:20px;align-items:flex-start;margin-top:20px;margin-bottom:20px;">
+											<label>
+												<input type="radio" name="_wcmp_skin_generator_ai_provider" value="wordpress" <?php print $skin_generate_ai_provider == 'wordpress' ? 'CHECKED' : ''; ?>>
+												<?php
+													esc_html_e( 'Use the AI provider configured in WordPress connectors', 'music-player-for-woocommerce' );
+													print '&nbsp;(<a href="' . esc_attr( admin_url( 'options-connectors.php' ) ) . '" target="_blank">' . esc_html__( 'Click Here', 'music-player-for-woocommerce' ) . '</a>)';
+												?>
+											</label>
+											<label>
+												<input type="radio" name="_wcmp_skin_generator_ai_provider" value="gemini" <?php print $skin_generate_ai_provider != 'wordpress' ? 'CHECKED' : ''; ?>>
+												<?php
+													esc_html_e( 'Use my own Gemini account', 'music-player-for-woocommerce' );
+												?>
+											</label>
+										</div>
+									<?php
+									endif;
+									?>
+									<div id="_wcmp_skin_generator_gemini_provider_settings" style="display:<?php
+										print esc_attr(
+											($wp_ai_client_prompt_available && $skin_generate_ai_provider == 'wordpress')
+											? 'none'
+											: 'block'
+										)
+									?>;">
 										<label for="wcmp_skin_generator_api_key" style="display:block;margin-top:10px;"><b><?php esc_html_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?></b> (<a href="https://aistudio.google.com/apikey" target="_blank"><?php esc_html_e( 'Click here to access the Google AI Studio and generate an API key.', 'music-player-for-woocommerce' ); ?></a>)</label>
 										<div style="display:flex;flex-direction:row;gap:5px;margin-top:10px;">
 											<input type="password" autocomplete="new-password" id="wcmp_skin_generator_api_key" name="wcmp_skin_generator_api_key" style="flex-grow:1;" placeholder="<?php esc_attr_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?>">
 											<button class="button-primary" type="button" onclick="wcmp_save_api_key();"><?php esc_html_e( 'Save API Key', 'music-player-for-woocommerce') ?></button>
 											<button class="button-secondary" type="button" onclick="wcmp_clear_api_key();"><?php esc_html_e( 'Clear API Key', 'music-player-for-woocommerce') ?></button>
 										</div>
-									<?php
-									endif;
-									?>
+									</div>
 									<!-- / End AI Provider -->
 
 									<label for="_wcmp_skin_generator_description"><b><?php esc_html_e( 'Custom Skin Description', 'music-player-for-woocommerce' ); ?></b></label>
@@ -518,6 +543,17 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 												apiKeyField.addEventListener('blur', function () {
 													this.type = 'password';
 												});
+											}
+
+											// AI Provider selected
+											const options = document.getElementsByName('_wcmp_skin_generator_ai_provider');
+											function takeAction(event) {
+												const value = event.target.value;
+												document.getElementById('_wcmp_skin_generator_gemini_provider_settings').style.display = (value == 'wordpress') ? 'none' : 'block';
+											}
+
+											for (let i = 0; i < options.length; i++) {
+												options[i].addEventListener('change', takeAction);
 											}
 										})();
 									</script>

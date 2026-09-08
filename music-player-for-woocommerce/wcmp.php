@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.9.0
+Version: 1.9.1
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.9.0' );
+define( 'WCMP_VERSION', '1.9.1' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -521,6 +521,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
                             isset( $_REQUEST['_wcmp_player_layout'] ) &&
                             in_array( $_REQUEST['_wcmp_player_layout'], $this->_player_layouts )
                         ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_player_layout'] ) ) : WCMP_DEFAULT_PLAYER_LAYOUT;
+					$skin_generate_ai_provider = isset( $_REQUEST['_wcmp_skin_generator_ai_provider'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_skin_generator_ai_provider'] ) ) : '';
                     $custom_skin_desc = ( isset( $_REQUEST['_wcmp_skin_generator_description'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_skin_generator_description'] ) ) : '' );
                     $custom_skin 	  = ( isset( $_REQUEST['_wcmp_custom_skin'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_custom_skin'] ) ) : '' );
                     $single_player   = ( isset( $_REQUEST['_wcmp_single_player'] ) ) ? 1 : 0;
@@ -553,8 +554,9 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
                         '_wcmp_show_in'                    => $show_in,
                         '_wcmp_players_in_cart'            => $players_in_cart,
                         '_wcmp_player_layout'              => $player_style,
+						'_wcmp_skin_generator_ai_provider' => $skin_generate_ai_provider,
                         '_wcmp_skin_generator_description'	=> $custom_skin_desc,
-                        '_wcmp_custom_skin'				=> $custom_skin,
+                        '_wcmp_custom_skin'					=> $custom_skin,
                         '_wcmp_player_volume'              => $volume,
                         '_wcmp_single_player'              => $single_player,
                         '_wcmp_player_controls'            => $player_controls,
