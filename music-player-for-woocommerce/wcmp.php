@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.9.1
+Version: 1.9.2
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.9.1' );
+define( 'WCMP_VERSION', '1.9.2' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -119,6 +119,17 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 			}, 10, 4 );
 
 			add_filter( 'woocommerce_product_importer_pre_expand_data', function( $data ){
+				$unset_objects = function($v) use ( &$unset_objects) {
+					if ( is_scalar($v) ) return $v;
+					if ( is_object($v) ) return null;
+					if ( is_array($v) ) {
+						foreach($v as $key => $value) {
+							$v[$key] = $unset_objects($value);
+						}
+					}
+					return $v;
+				};
+
 				foreach ( $data as $_key => $_value ) {
 					if (
 						preg_match( '/^' . preg_quote( 'meta:_wcmp_' ) . '/i', $_key ) &&
@@ -126,11 +137,16 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 						is_serialized( $_value )
 					) {
 						try {
-							$data[ $_key ] = is_serialized($_value) ? unserialize( $_value, array('allowed_classes' => false) ) : $_value;
+							$_value = is_serialized($_value) ? unserialize( $_value, array('allowed_classes' => false) ) : $_value;
+							$_value = $unset_objects($_value);
+
+							if ( is_null( $_value ) ) unset( $data[ $_key ] );
+							else $data[ $_key ] = $_value;
+
 						} catch ( Exception $err ) {
-							$data[ $_key ] = $_value;
+							unset( $data[ $_key ] );
 						} catch ( Error $err ) {
-							$data[ $_key ] = $_value;
+							unset( $data[ $_key ] );
 						}
 					}
 				}
