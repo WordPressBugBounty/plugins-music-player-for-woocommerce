@@ -32,6 +32,23 @@
 			}
 		}
 
+		function _dataSourceToSource( e ) {
+			let data_src = e.attr( 'data-src' );
+			if( data_src ) {
+				e.attr( 'src', data_src );
+				e.removeAttr( 'data-src' );
+			}
+			// If the source is a child <source> element, set its src attribute as well
+			e.find( 'source' ).each(function() {
+				let source = $(this);
+				let src = source.attr( 'data-src' );
+				if( src ) {
+					source.attr( 'src', src );
+					source.removeAttr( 'data-src' );
+				}
+			});
+		};
+
 		function _createVisualizer() {
 			$('.wcmp-player-visualizer').each(function() {
 				let e = $(this);
@@ -40,7 +57,7 @@
 				$(this).append('<div class="wcmp-player-visualizer-bars-container"></div>');
 				const NUM_BARS = 32; // # bars per side (total = 64)
 				const visualizer = $(this).find('.wcmp-player-visualizer-bars-container')[0];
-				const audioElem = $(this).next("audio")[0];
+				const audioElem = $(this).siblings("audio")[0];
 
 				// Create bars
 				for (let i = 0; i < NUM_BARS * 2; i++) {
@@ -327,8 +344,9 @@
 				},
 			selector = '.product-type-grouped :regex(name,quantity\\[\\d+\\])';
 		s.each(function(){
-			var e 	= $(this),
-				src = e.find( 'source' ).attr( 'src' );
+			var e = $(this), src;
+			_dataSourceToSource( e );
+			src = e.find( 'source' ).attr( 'src' );
 
 			e.attr('playernumber', wcmp_player_counter);
 
@@ -347,8 +365,9 @@
 
 
 		m.each(function(){
-			var e = $(this),
-				src = e.find( 'source' ).attr( 'src' );
+			var e = $(this), src;
+			_dataSourceToSource( e );
+			src = e.find( 'source' ).attr( 'src' );
 
 			e.attr('playernumber', wcmp_player_counter);
 
