@@ -4,7 +4,7 @@ Donate link: https://wcmp.dwbooster.com
 Tags: woocommerce, audio player, music player, playlists, multivendor
 Requires at least: 3.5.0
 Tested up to: 7.1
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -289,6 +289,10 @@ A: The plugin uses the "copy-once" action by default, which copies the demo file
 10. Inserting the playlist Visual Composer
 
 == Changelog ==
+
+= 1.9.4 =
+
+* Supports multiple AI providers to generate custom skins (Gemini, OpenAi, Claude/Anthropic, and DeepSeek).
 
 = 1.9.3 =
 

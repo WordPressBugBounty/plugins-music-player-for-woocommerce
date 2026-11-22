@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.9.3
+Version: 1.9.4
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.9.3' );
+define( 'WCMP_VERSION', '1.9.4' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -409,7 +409,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 			$manage_product_posts_columns = function( $columns ) {
 				if ( $this->get_global_attr( '_wcmp_playback_counter_column', 1 ) ) {
-					wp_enqueue_style( 'wcmp-Playback-counter', plugin_dir_url( __FILE__ ) . 'css/style.admin.css', array(), '1.0.175' );
+					wp_enqueue_style( 'wcmp-Playback-counter', plugin_dir_url( __FILE__ ) . 'css/style.admin.css', array(), WCMP_VERSION );
 					$columns = array_merge( $columns, [ 'wcmp_playback_counter' => __( 'Playback Counter', 'music-player-for-woocommerce' ) ] );
 				}
 				return $columns;
@@ -441,6 +441,8 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		} // End menu_links
 
 		public function settings_page() {
+			require_once __DIR__ . '/inc/skingenerator.inc.php';
+
             $delete_landing_page_transient = false;
             if ( isset( $_GET['close-landing-page'] ) ) delete_transient('wcmp-landing-page');
 			if (
@@ -537,7 +539,11 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
                             isset( $_REQUEST['_wcmp_player_layout'] ) &&
                             in_array( $_REQUEST['_wcmp_player_layout'], $this->_player_layouts )
                         ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_player_layout'] ) ) : WCMP_DEFAULT_PLAYER_LAYOUT;
-					$skin_generate_ai_provider = isset( $_REQUEST['_wcmp_skin_generator_ai_provider'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_skin_generator_ai_provider'] ) ) : '';
+					$skin_generate_ai_provider = 'wordpress' === ( $_REQUEST['_wcmp_skin_generator_ai_provider'] ?? '' ) ? 'wordpress' : 'direct';
+					$skin_generate_direct_provider = sanitize_text_field( wp_unslash( $_REQUEST['_wcmp_skin_generator_direct_provider'] ?? $this->get_global_attr( '_wcmp_skin_generator_direct_provider', 'gemini' ) ) );
+					if ( ! isset( WCMP_SKIN_GENERATOR::DIRECT_PROVIDERS[$skin_generate_direct_provider] ) ) {
+						$skin_generate_direct_provider = 'gemini';
+					}
                     $custom_skin_desc = ( isset( $_REQUEST['_wcmp_skin_generator_description'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_skin_generator_description'] ) ) : '' );
                     $custom_skin 	  = ( isset( $_REQUEST['_wcmp_custom_skin'] ) ? sanitize_textarea_field( wp_unslash( $_REQUEST['_wcmp_custom_skin'] ) ) : '' );
                     $single_player   = ( isset( $_REQUEST['_wcmp_single_player'] ) ) ? 1 : 0;
@@ -571,6 +577,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
                         '_wcmp_players_in_cart'            => $players_in_cart,
                         '_wcmp_player_layout'              => $player_style,
 						'_wcmp_skin_generator_ai_provider' => $skin_generate_ai_provider,
+						'_wcmp_skin_generator_direct_provider' => $skin_generate_direct_provider,
                         '_wcmp_skin_generator_description'	=> $custom_skin_desc,
                         '_wcmp_custom_skin'					=> $custom_skin,
                         '_wcmp_player_volume'              => $volume,
@@ -850,7 +857,8 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 
 			$wcmp_custom_skin = wp_strip_all_tags( $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_custom_skin', '' ) );
 			if ( ! empty( $wcmp_custom_skin ) ) {
-				wp_add_inline_style( 'wcmp-style', $wcmp_custom_skin );
+				// Escape a closing HTML style tag in the CSS raw-text context.
+				wp_add_inline_style( 'wcmp-style', str_ireplace( '</style', '\3C /style', $wcmp_custom_skin ) );
 			}
 		} // End enqueue_resources
 

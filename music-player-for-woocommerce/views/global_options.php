@@ -4,8 +4,8 @@ if ( ! defined( 'WCMP_PLUGIN_URL' ) ) {
 	exit; }
 
 // include resources
-wp_enqueue_style( 'wcmp-admin-style', plugin_dir_url( __FILE__ ) . '../css/style.admin.css', array(), '1.0.175' );
-wp_enqueue_script( 'wcmp-admin-js', plugin_dir_url( __FILE__ ) . '../js/admin.js', array(), '1.0.175' );
+wp_enqueue_style( 'wcmp-admin-style', plugin_dir_url( __FILE__ ) . '../css/style.admin.css', array(), WCMP_VERSION );
+wp_enqueue_script( 'wcmp-admin-js', plugin_dir_url( __FILE__ ) . '../js/admin.js', array(), WCMP_VERSION );
 
 $ffmpeg_system_path = defined( 'PHP_OS' ) && strtolower( PHP_OS ) == 'linux' && function_exists( 'shell_exec' ) ? @shell_exec( 'which ffmpeg' ) : '';
 
@@ -23,6 +23,11 @@ $show_in         = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_s
 $players_in_cart = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_players_in_cart', false );
 $player_style    = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_player_layout', WCMP_DEFAULT_PLAYER_LAYOUT );
 $skin_generate_ai_provider = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_skin_generator_ai_provider', 'wordpress' );
+$skin_direct_providers = WCMP_SKIN_GENERATOR::DIRECT_PROVIDERS;
+$skin_direct_provider = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_skin_generator_direct_provider', 'gemini' );
+if ( ! is_string( $skin_direct_provider ) || ! isset( $skin_direct_providers[$skin_direct_provider] ) ) {
+	$skin_direct_provider = 'gemini';
+}
 
 $volume          = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_player_volume', WCMP_DEFAULT_PLAYER_VOLUME );
 $player_controls = $GLOBALS['WooCommerceMusicPlayer']->get_global_attr( '_wcmp_player_controls', WCMP_DEFAULT_PLAYER_CONTROLS );
@@ -356,46 +361,49 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 
 									<!-- AI Provider -->
 									<?php
-									$wp_ai_client_prompt_available = false;
-									// Check if there are models registered using the WordPress Connector API.
-									if ( function_exists('wp_ai_client_prompt') ) {
-										$builder = wp_ai_client_prompt('test');
-										if ($builder->is_supported_for_text_generation()) {
-											$wp_ai_client_prompt_available = true;
-										}
-									}
+									$wp_ai_client_prompt_available = WCMP_SKIN_GENERATOR::is_wp_connector_available();
 									if ( $wp_ai_client_prompt_available ):
 									?>
-										<div style="display:flex;gap:20px;align-items:flex-start;margin-top:20px;margin-bottom:20px;">
+										<div class="wcmp-skin-provider-modes">
 											<label>
 												<input type="radio" name="_wcmp_skin_generator_ai_provider" value="wordpress" <?php print $skin_generate_ai_provider == 'wordpress' ? 'CHECKED' : ''; ?>>
 												<?php
 													esc_html_e( 'Use the AI provider configured in WordPress connectors', 'music-player-for-woocommerce' );
-													print '&nbsp;(<a href="' . esc_attr( admin_url( 'options-connectors.php' ) ) . '" target="_blank">' . esc_html__( 'Click Here', 'music-player-for-woocommerce' ) . '</a>)';
+													print '&nbsp;(<a href="' . esc_url( admin_url( 'options-connectors.php' ) ) . '" target="_blank">' . esc_html__( 'Click Here', 'music-player-for-woocommerce' ) . '</a>)';
 												?>
 											</label>
 											<label>
-												<input type="radio" name="_wcmp_skin_generator_ai_provider" value="gemini" <?php print $skin_generate_ai_provider != 'wordpress' ? 'CHECKED' : ''; ?>>
+												<input type="radio" name="_wcmp_skin_generator_ai_provider" value="direct" <?php print $skin_generate_ai_provider != 'wordpress' ? 'CHECKED' : ''; ?>>
 												<?php
-													esc_html_e( 'Use my own Gemini account', 'music-player-for-woocommerce' );
+													esc_html_e( 'Use my own AI provider account', 'music-player-for-woocommerce' );
 												?>
 											</label>
 										</div>
 									<?php
 									endif;
 									?>
-									<div id="_wcmp_skin_generator_gemini_provider_settings" style="display:<?php
-										print esc_attr(
-											($wp_ai_client_prompt_available && $skin_generate_ai_provider == 'wordpress')
-											? 'none'
-											: 'block'
-										)
-									?>;">
-										<label for="wcmp_skin_generator_api_key" style="display:block;margin-top:10px;"><b><?php esc_html_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?></b> (<a href="https://aistudio.google.com/apikey" target="_blank"><?php esc_html_e( 'Click here to access the Google AI Studio and generate an API key.', 'music-player-for-woocommerce' ); ?></a>)</label>
-										<div style="display:flex;flex-direction:row;gap:5px;margin-top:10px;">
-											<input type="password" autocomplete="new-password" id="wcmp_skin_generator_api_key" name="wcmp_skin_generator_api_key" style="flex-grow:1;" placeholder="<?php esc_attr_e( 'Enter the Google AI API Key', 'music-player-for-woocommerce' ); ?>">
-											<button class="button-primary" type="button" onclick="wcmp_save_api_key();"><?php esc_html_e( 'Save API Key', 'music-player-for-woocommerce') ?></button>
-											<button class="button-secondary" type="button" onclick="wcmp_clear_api_key();"><?php esc_html_e( 'Clear API Key', 'music-player-for-woocommerce') ?></button>
+									<div id="_wcmp_skin_generator_direct_provider_settings" class="wcmp-skin-provider-panel"<?php echo $wp_ai_client_prompt_available && 'wordpress' === $skin_generate_ai_provider ? ' hidden' : ''; ?>>
+										<div class="wcmp-skin-provider-choice">
+											<label for="_wcmp_skin_generator_direct_provider"><?php esc_html_e( 'AI Provider', 'music-player-for-woocommerce' ); ?></label>
+											<select id="_wcmp_skin_generator_direct_provider" name="_wcmp_skin_generator_direct_provider">
+												<?php foreach ( $skin_direct_providers as $provider_id => $provider_data ) : ?>
+													<option value="<?php echo esc_attr( $provider_id ); ?>" data-keys-url="<?php echo esc_url( $provider_data['keys_url'] ); ?>" <?php selected( $skin_direct_provider, $provider_id ); ?>>
+														<?php echo esc_html( $provider_data['label'] ); ?>
+													</option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div class="wcmp-skin-provider-credentials">
+											<div class="wcmp-skin-provider-key-label">
+												<label for="wcmp_skin_generator_api_key"><?php esc_html_e( 'API Key', 'music-player-for-woocommerce' ); ?></label>
+												<a id="wcmp_skin_generator_api_keys_link" href="<?php echo esc_url( $skin_direct_providers[$skin_direct_provider]['keys_url'] ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Get an API key', 'music-player-for-woocommerce' ); ?></a>
+											</div>
+											<input type="password" autocomplete="new-password" id="wcmp_skin_generator_api_key" maxlength="1024" placeholder="<?php esc_attr_e( 'Enter your API key', 'music-player-for-woocommerce' ); ?>">
+											<p id="wcmp_skin_generator_anthropic_key_hint" class="description"<?php echo 'anthropic' === $skin_direct_provider ? '' : ' hidden'; ?>><?php esc_html_e( 'Use a Claude API key scoped to a workspace.', 'music-player-for-woocommerce' ); ?></p>
+											<div class="wcmp-skin-provider-key-actions">
+												<button class="button button-secondary" type="button" onclick="wcmp_save_api_key();"><?php esc_html_e( 'Save API Key', 'music-player-for-woocommerce' ); ?></button>
+												<button class="button-link" type="button" onclick="wcmp_clear_api_key();"><?php esc_html_e( 'Clear API Key', 'music-player-for-woocommerce' ); ?></button>
+											</div>
 										</div>
 									</div>
 									<!-- / End AI Provider -->
@@ -420,14 +428,18 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 									</div>
 									<div class="wcmp_custom_skin_preview"></div>
 									<script>
+										function wcmp_skin_key_storage_name() {
+											const provider = document.getElementById('_wcmp_skin_generator_direct_provider').value;
+											return provider === 'gemini' ? 'wcmp_skin_generator_api_key' : 'wcmp_skin_generator_api_key_' + provider;
+										}
 										function wcmp_save_api_key() {
-											let api_key = String(document.getElementsByName('wcmp_skin_generator_api_key')[0].value).trim();
-											localStorage.setItem('wcmp_skin_generator_api_key', api_key);
+											const api_key = document.getElementById('wcmp_skin_generator_api_key').value.trim();
+											localStorage.setItem(wcmp_skin_key_storage_name(), api_key);
 											alert( '<?php print esc_js( 'API Key stored in the browser.', 'music-player-for-woocommerce' ); ?>' );
 										}
 										function wcmp_clear_api_key() {
-											localStorage.removeItem('wcmp_skin_generator_api_key');
-											document.getElementsByName('wcmp_skin_generator_api_key')[0].value = '';
+											localStorage.removeItem(wcmp_skin_key_storage_name());
+											document.getElementById('wcmp_skin_generator_api_key').value = '';
 										}
 										async function wcmp_player_preview(btn) {
 											let previewContainer = jQuery('.wcmp_custom_skin_preview');
@@ -459,7 +471,7 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 											if ( response.ok ) {
 												const output = await response.text();
 												try {
-													const iframe  = jQuery( '<iframe style="width:100%;border:none;display:block;"></iframe>' );
+													const iframe  = jQuery( '<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" style="width:100%;border:none;display:block;"></iframe>' );
 													const encodedHTML = encodeURIComponent(output);
 													iframe.appendTo(previewContainer);
 													iframe.attr('src', 'data:text/html;charset=utf-8,' + encodedHTML);
@@ -490,10 +502,16 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 											}
 											formData.append( 'wcmp_skin_generator_description', description );
 
-											let api_key_field = document.getElementsByName('wcmp_skin_generator_api_key');
-											if (api_key_field.length) {
-												let api_key = String(api_key_field[0].value).trim();
-												if ( '' == api_key ) {
+											const provider_option = document.querySelector('input[name="_wcmp_skin_generator_ai_provider"]:checked');
+											const provider = provider_option && provider_option.value === 'wordpress'
+											? 'wordpress'
+											: document.getElementById('_wcmp_skin_generator_direct_provider').value;
+											formData.append( 'wcmp_skin_generator_ai_provider', provider );
+
+											if ( 'wordpress' !== provider ) {
+												const api_key_field = document.getElementById('wcmp_skin_generator_api_key');
+												const api_key = api_key_field ? api_key_field.value.trim() : '';
+												if ( '' === api_key ) {
 													alert( '<?php print esc_js( 'API Key is required.', 'music-player-for-woocommerce' ); ?>' );
 													return;
 												}
@@ -501,55 +519,46 @@ _e( 'For reporting any issue or to request a customization, <a href="https://wcm
 											}
 
 											btn.disabled = true;
-											const response = await fetch(
-												url,
-												{
-													'method' : 'POST',
-													'body'   : formData
+											try {
+												const response = await fetch(url, {method: 'POST', body: formData});
+												if ( ! response.ok ) {
+													throw new Error( '<?php print esc_js( __( 'The skin could not be generated.', 'music-player-for-woocommerce' ) ); ?>' );
 												}
-											);
 
-											if ( response.ok ) {
-												const output = await response.text();
-												try {
-													let result = JSON.parse( output );
-													if ( 'error' in result ) {
-														throw new Error( result['error'] );
-													}
-
-													if ( 'success' in result ) {
-														document.getElementsByName('_wcmp_custom_skin')[0].value = result['success'];
-														// Display the player preview.
-														document.querySelector('.wcmp-skin-preview-btn').click();
-													}
-												} catch ( err ) {
-													alert( err.message );
+												const result = await response.json();
+												if ( 'error' in result ) {
+													throw new Error( result['error'] );
 												}
+
+												if ( 'success' in result ) {
+													document.getElementsByName('_wcmp_custom_skin')[0].value = result['success'];
+													document.querySelector('.wcmp-skin-preview-btn').click();
+												}
+											} catch ( err ) {
+												alert( err.message );
+											} finally {
+												btn.disabled = false;
 											}
-											btn.disabled = false;
 										}
 										(function() {
-											let api_key = localStorage.getItem('wcmp_skin_generator_api_key');
-											let api_key_field = document.getElementsByName('wcmp_skin_generator_api_key');
-											if(api_key && api_key_field.length) api_key_field[0].value = api_key;
-
+											const providerSelect = document.getElementById('_wcmp_skin_generator_direct_provider');
 											const apiKeyField = document.getElementById('wcmp_skin_generator_api_key');
-
-											if (apiKeyField) {
-												apiKeyField.addEventListener('focus', function () {
-													this.type = 'text';
-												});
-
-												apiKeyField.addEventListener('blur', function () {
-													this.type = 'password';
-												});
+											const keysLink = document.getElementById('wcmp_skin_generator_api_keys_link');
+											const anthropicHint = document.getElementById('wcmp_skin_generator_anthropic_key_hint');
+											function loadProviderKey() {
+												const option = providerSelect.options[providerSelect.selectedIndex];
+												apiKeyField.value = localStorage.getItem(wcmp_skin_key_storage_name()) || '';
+												keysLink.href = option.dataset.keysUrl;
+												anthropicHint.hidden = providerSelect.value !== 'anthropic';
 											}
+											providerSelect.addEventListener('change', loadProviderKey);
+											loadProviderKey();
 
 											// AI Provider selected
 											const options = document.getElementsByName('_wcmp_skin_generator_ai_provider');
 											function takeAction(event) {
 												const value = event.target.value;
-												document.getElementById('_wcmp_skin_generator_gemini_provider_settings').style.display = (value == 'wordpress') ? 'none' : 'block';
+												document.getElementById('_wcmp_skin_generator_direct_provider_settings').hidden = value === 'wordpress';
 											}
 
 											for (let i = 0; i < options.length; i++) {

@@ -4,7 +4,7 @@ if ( ! defined( 'WCMP_PLUGIN_URL' ) ) {
 	exit; }
 
 // include resources
-wp_enqueue_style( 'wcmp-admin-style', plugin_dir_url( __FILE__ ) . '../css/style.admin.css', array(), '1.0.175' );
+wp_enqueue_style( 'wcmp-admin-style', plugin_dir_url( __FILE__ ) . '../css/style.admin.css', array(), WCMP_VERSION );
 
 if (
 	isset( $_REQUEST['post'] ) &&
