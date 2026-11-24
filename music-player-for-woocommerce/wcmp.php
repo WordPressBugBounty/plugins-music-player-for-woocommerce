@@ -2,7 +2,7 @@
 /*
 Plugin Name: Music Player for WooCommerce
 Plugin URI: https://wcmp.dwbooster.com
-Version: 1.9.4
+Version: 1.9.5
 Text Domain: music-player-for-woocommerce
 Author: CodePeople
 Author URI: https://wcmp.dwbooster.com
@@ -41,7 +41,7 @@ define( 'WCMP_DEFAULT_PLAYER_VOLUME', 1 );
 define( 'WCMP_DEFAULT_PLAYER_CONTROLS', 'default' );
 define( 'WCMP_DEFAULT_PlAYER_TITLE', 1 );
 define( 'WCMP_REMOTE_TIMEOUT', 120 );
-define( 'WCMP_VERSION', '1.9.4' );
+define( 'WCMP_VERSION', '1.9.5' );
 
 // Load Tools
 require_once 'inc/tools.inc.php';
@@ -2208,16 +2208,23 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					if ( ( $path = $this->_is_local( $url_fixed ) ) !== false ) { // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments
 						$c = copy( $path, $file_path );
 					} else {
+						$tmp_path = $file_path . '.tmp';
 						$response = wp_safe_remote_get(
 							$url_fixed,
 							array(
 								'timeout'  => WCMP_REMOTE_TIMEOUT,
 								'stream'   => true,
-								'filename' => $file_path,
+								'filename' => $tmp_path,
 							)
 						);
 						if ( ! is_wp_error( $response ) && 200 == $response['response']['code'] ) {
-							$c = true;
+							$c = @rename( $tmp_path, $file_path );
+							if ( ! $c ) {
+								$c = @copy( $tmp_path, $file_path );
+							}
+						}
+						if ( file_exists( $tmp_path ) ) {
+							@unlink( $tmp_path );
 						}
 					}
 
@@ -2276,7 +2283,7 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 		 * Print not found page if file it is not accessible
 		 */
 		private function _print_page_not_found( $text = 'The requested URL was not found on this server' ) {
-			header( 'Status: 404 Not Found' );
+			status_header( 404 );
 			echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 				  <HTML><HEAD>
 				  <TITLE>404 Not Found</TITLE>
@@ -2318,6 +2325,18 @@ if ( ! class_exists( 'WooCommerceMusicPlayer' ) ) {
 					}
 				}
 			}
+
+			// Security: only files inside the uploads folder can be served locally.
+            if ( false !== $file_path ) {
+               $real    = realpath( $file_path );
+               $uploads = wp_upload_dir();
+               $root    = isset( $uploads['basedir'] ) ? realpath( $uploads['basedir'] ) : false;
+               if ( false === $real || false === $root || 0 !== strpos( wp_normalize_path( $real ) . '/', wp_normalize_path( $root ) . '/' ) ) {
+                  $file_path = false;
+               } else {
+                  $file_path = $real;
+               }
+            }
 
 			return apply_filters( 'wcmp_is_local', $file_path, $url );
 		} // End _is_local
